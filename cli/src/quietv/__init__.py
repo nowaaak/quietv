@@ -1,4 +1,4 @@
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 
 PACKAGE = "io.github.nowaaak.quietv"
 REPO = "nowaaak/quietv"
