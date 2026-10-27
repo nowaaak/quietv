@@ -12,7 +12,6 @@ import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
 import android.widget.FrameLayout
@@ -77,6 +76,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private var lastFocused = 0
     private var movingPos = -1
     private var tileMenu: DropdownMenu? = null
+    private var afterLayout: (() -> Unit)? = null
 
     private val handler = Handler(Looper.getMainLooper())
     private val minuteTick = object : Runnable {
@@ -118,7 +118,14 @@ class MainActivity : Activity(), TileAdapter.Listener {
         val tileWidth = min(MAX_TILE_WIDTH_DP * density, cell - MIN_TILE_GAP_DP * density).roundToInt()
         tileHeight = (tileWidth * 9f / 16f).roundToInt()
 
-        grid.layoutManager = GridLayoutManager(this, columns)
+        grid.layoutManager = object : GridLayoutManager(this, columns) {
+            override fun onLayoutCompleted(state: RecyclerView.State) {
+                super.onLayoutCompleted(state)
+                val action = afterLayout ?: return
+                afterLayout = null
+                grid.post(action)
+            }
+        }
         grid.setHasFixedSize(true)
         grid.itemAnimator = null
         grid.addItemDecoration(SectionDecoration(this, columns))
@@ -339,21 +346,17 @@ class MainActivity : Activity(), TileAdapter.Listener {
             else -> return true
         }
         val target = navigator.moveTarget(position, adapter.itemCount, direction) ?: return true
-        adapter.move(position, target)
-        movingPos = target
-        grid.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                grid.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                val holder = grid.findViewHolderForAdapterPosition(target)
-                if (holder == null) {
-                    focusTile(target)
-                    return
-                }
-                val moved = holder.itemView.findViewById<View>(R.id.card)
+        afterLayout = {
+            val moved = grid.findViewHolderForAdapterPosition(target)?.itemView?.findViewById<View>(R.id.card)
+            if (moved == null) {
+                focusTile(target)
+            } else {
                 moved.requestFocus()
                 onTileFocused(target, moved)
             }
-        })
+        }
+        adapter.move(position, target)
+        movingPos = target
         return true
     }
 

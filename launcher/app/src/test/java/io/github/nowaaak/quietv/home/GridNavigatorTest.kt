@@ -39,4 +39,11 @@ class GridNavigatorTest {
         assertEquals(9, nav.moveTarget(7, count = 10, direction = Direction.DOWN))
         assertNull(nav.moveTarget(9, count = 10, direction = Direction.DOWN))
     }
+
+    @Test
+    fun moveDownOnTheLastRowStaysInPlace() {
+        assertNull(nav.moveTarget(8, count = 10, direction = Direction.DOWN))
+        assertNull(nav.moveTarget(8, count = 12, direction = Direction.DOWN))
+        assertEquals(11, nav.moveTarget(7, count = 12, direction = Direction.DOWN))
+    }
 }

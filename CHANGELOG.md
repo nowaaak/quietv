@@ -5,6 +5,12 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+
+- Moving a tile between the favourites row and the app grid: the focus ring follows the tile, the
+  "Selected" name above the row disappears, and names and spacing match the new row.
+- Down on the last row no longer pushes a moving tile sideways.
+
 ## [0.1.1] - 2026-10-27
 
 ### Changed
