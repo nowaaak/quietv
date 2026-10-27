@@ -20,7 +20,11 @@ class GridNavigator(private val columns: Int) {
             Direction.LEFT -> position - 1
             Direction.RIGHT -> position + 1
             Direction.UP -> position - columns
-            Direction.DOWN -> minOf(position + columns, count - 1)
+            Direction.DOWN -> {
+                val lastRowStart = ((count - 1) / columns) * columns
+                if (position >= lastRowStart) return null
+                minOf(position + columns, count - 1)
+            }
         }
         return target.takeIf { it in 0 until count && it != position }
     }

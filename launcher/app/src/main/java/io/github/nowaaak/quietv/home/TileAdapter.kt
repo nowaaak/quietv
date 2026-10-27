@@ -44,6 +44,8 @@ class TileAdapter(
         if (from == to || from !in items.indices || to !in items.indices) return
         items.add(to, items.removeAt(from))
         notifyItemMoved(from, to)
+        val first = minOf(from, to)
+        notifyItemRangeChanged(first, maxOf(from, to) - first + 1, SECTION_CHANGED)
     }
 
     fun entryAt(position: Int): AppEntry? = items.getOrNull(position)
@@ -55,13 +57,18 @@ class TileAdapter(
         return Holder(view)
     }
 
+    override fun onBindViewHolder(holder: Holder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isNotEmpty() && payloads.all { it == SECTION_CHANGED }) {
+            holder.showName(position < dockSize, holder.card.isFocused)
+        } else {
+            onBindViewHolder(holder, position)
+        }
+    }
+
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val entry = items[position]
-        val dock = position < dockSize
         holder.name.text = entry.label
-        holder.name.alpha = if (dock) 1f else 0f
-        holder.name.translationY = if (dock) 0f else -6 * holder.density
-        holder.name.setTextColor(if (dock) holder.dimText else holder.text)
+        holder.showName(position < dockSize, focused = false)
         holder.card.scaleX = 1f
         holder.card.scaleY = 1f
         if (entry.banner != null) {
@@ -142,10 +149,22 @@ class TileAdapter(
             }
         }
 
+        fun showName(dock: Boolean, focused: Boolean) {
+            name.animate().cancel()
+            name.alpha = if (dock || focused) 1f else 0f
+            name.translationY = when {
+                focused -> density * 4f
+                dock -> 0f
+                else -> -density * 6f
+            }
+            name.setTextColor(if (dock && !focused) dimText else text)
+        }
+
         private fun position(): Int? = bindingAdapterPosition.takeIf { it != RecyclerView.NO_POSITION }
     }
 
     companion object {
+        private val SECTION_CHANGED = Any()
         const val FOCUS_SCALE = 1.06f
         const val CORNER_DP = 14f
         const val NAME_GAP_DP = 9f
