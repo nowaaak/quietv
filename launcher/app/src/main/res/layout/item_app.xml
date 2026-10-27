@@ -12,8 +12,6 @@
         android:layout_width="148dp"
         android:layout_height="83dp"
         android:layout_gravity="center_horizontal|top"
-        android:background="@drawable/tile_bg"
-        android:foreground="@drawable/tile_edge"
         android:focusable="true"
         android:clickable="true">
 
@@ -44,7 +42,6 @@
             android:gravity="center"
             android:singleLine="true"
             android:ellipsize="end"
-            android:textColor="?attr/qvText"
             android:textSize="13sp"
             android:fontFamily="@font/geist"
             android:visibility="gone" />
@@ -61,7 +58,6 @@
         android:ellipsize="end"
         android:alpha="0"
         android:translationY="-6dp"
-        android:textColor="?attr/qvText"
         android:textSize="13sp"
         android:fontFamily="@font/geist"
         android:fontVariationSettings="'wght' 500"

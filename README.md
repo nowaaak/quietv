@@ -65,7 +65,9 @@ No computer? See [docs/phone-install.md](docs/phone-install.md).
 - One focus ring that springs from tile to tile. The focused favourite's name stands above the row.
 - Hold OK on a tile to move it, hide it or open its app info.
 - Inputs menu with HDMI ports, AV and Live TV through the TV input framework.
-- Settings on the TV: Graphite (dark) or Paper (light) theme, accent colour, tiles per row, hidden apps.
+- Six themes, your own colours, tile corners and an optional wallpaper that stays readable.
+  [Themes](docs/themes.md).
+- Settings on the TV: theme, accent colour, tile corners, tiles per row, wallpaper, hidden apps.
 - Clock, date and greeting in [Geist](https://vercel.com/font). English and German.
 
 Everything is configurable on the TV. To set up many TVs the same way, keep a JSON file and push it:
@@ -108,6 +110,7 @@ others) and Amazon Fire TV. Not Samsung Tizen or LG webOS. Android 8.0 or newer.
 ## Documentation
 
 - [Configuration](docs/configuration.md)
+- [Themes](docs/themes.md)
 - [Fire TV](docs/fire-tv.md)
 - [Troubleshooting](docs/troubleshooting.md)
 - [Install from a phone](docs/phone-install.md)

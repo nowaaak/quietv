@@ -6,11 +6,6 @@ import org.json.JSONObject
 
 class InvalidConfigException(message: String) : Exception(message)
 
-enum class ThemeMode(val key: String) {
-    DARK("dark"),
-    LIGHT("light"),
-}
-
 enum class CompanionMode(val key: String) {
     OFF("off"),
     SEND("send"),
@@ -40,13 +35,26 @@ data class CompanionConfig(
     }
 }
 
+data class WallpaperConfig(
+    val enabled: Boolean = false,
+    val dim: Int = DEFAULT_DIM,
+) {
+    companion object {
+        const val DEFAULT_DIM = 30
+        const val MAX_DIM = 80
+    }
+}
+
 data class LauncherConfig(
     val favorites: List<String> = emptyList(),
     val hidden: List<String> = emptyList(),
     val extraApps: List<String> = emptyList(),
     val columns: Int = DEFAULT_COLUMNS,
     val accent: Int = DEFAULT_ACCENT,
-    val theme: ThemeMode = ThemeMode.DARK,
+    val theme: ThemePreset = ThemePreset.GRAPHITE,
+    val colors: Map<String, Int> = emptyMap(),
+    val tileRadius: Int = DEFAULT_TILE_RADIUS,
+    val wallpaper: WallpaperConfig = WallpaperConfig(),
     val liveTvPackage: String = "",
     val fireTv: FireTvConfig = FireTvConfig(),
     val companion: CompanionConfig = CompanionConfig(),
@@ -60,6 +68,9 @@ data class LauncherConfig(
         .put("columns", columns)
         .put("accent", formatColor(accent))
         .put("theme", theme.key)
+        .put("colors", JSONObject().also { json -> colors.toSortedMap().forEach { (k, v) -> json.put(k, formatColor(v)) } })
+        .put("tileRadius", tileRadius)
+        .put("wallpaper", JSONObject().put("enabled", wallpaper.enabled).put("dim", wallpaper.dim))
         .put("liveTvPackage", liveTvPackage)
         .put(
             "fireTv",
@@ -85,15 +96,24 @@ data class LauncherConfig(
         const val MIN_COLUMNS = 3
         const val MAX_COLUMNS = 8
         const val DEFAULT_ACCENT = 0xFF6EE7B7.toInt()
+        const val DEFAULT_TILE_RADIUS = 14
+        const val MAX_TILE_RADIUS = 24
+        const val COLOR_BACKGROUND = "background"
+        const val COLOR_SURFACE = "surface"
+        const val COLOR_TEXT = "text"
+        const val COLOR_TEXT_MUTED = "textMuted"
+        const val COLOR_LINE = "line"
+        val COLOR_KEYS = setOf(COLOR_BACKGROUND, COLOR_SURFACE, COLOR_TEXT, COLOR_TEXT_MUTED, COLOR_LINE)
 
         private val PACKAGE = Regex("^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+$")
         private val COLOR = Regex("^#[0-9A-Fa-f]{6}$")
         private val HOST = Regex("^[A-Za-z0-9.:-]+$")
         private val TOKEN = Regex("^[A-Za-z0-9_-]{${CompanionConfig.MIN_TOKEN_LENGTH},}$")
         private val TOP_KEYS = setOf(
-            "version", "favorites", "hidden", "extraApps", "columns", "accent", "theme", "liveTvPackage",
-            "fireTv", "companion",
+            "version", "favorites", "hidden", "extraApps", "columns", "accent", "theme", "colors", "tileRadius",
+            "wallpaper", "liveTvPackage", "fireTv", "companion",
         )
+        private val WALLPAPER_KEYS = setOf("enabled", "dim")
         private val FIRE_TV_KEYS = setOf("redirectHome", "stockHomePackage", "stockHomeClassHint", "showStockHomeTile")
         private val COMPANION_KEYS = setOf("mode", "host", "port", "token")
 
@@ -120,8 +140,21 @@ data class LauncherConfig(
             }
             val accent = parseColor(root.optString("accent", formatColor(DEFAULT_ACCENT)))
             if (accent == null) problems += "accent must look like #RRGGBB"
-            val theme = ThemeMode.entries.firstOrNull { it.key == root.optString("theme", ThemeMode.DARK.key) }
-            if (theme == null) problems += "theme must be 'dark' or 'light'"
+            val theme = ThemePreset.fromKey(root.optString("theme", ThemePreset.GRAPHITE.key))
+            if (theme == null) problems += "theme must be one of ${ThemePreset.entries.joinToString { it.key }}"
+            val colors = colors(root, problems)
+            val tileRadius = root.opt("tileRadius") ?: DEFAULT_TILE_RADIUS
+            if (tileRadius !is Int || tileRadius !in 0..MAX_TILE_RADIUS) {
+                problems += "tileRadius must be a whole number from 0 to $MAX_TILE_RADIUS"
+            }
+            val wallpaperJson = objectOrEmpty(root, "wallpaper", problems)
+            unknownKeys(wallpaperJson, WALLPAPER_KEYS, "wallpaper.", problems)
+            val wallpaperOn = wallpaperJson.opt("enabled") ?: false
+            if (wallpaperOn !is Boolean) problems += "wallpaper.enabled must be true or false"
+            val dim = wallpaperJson.opt("dim") ?: WallpaperConfig.DEFAULT_DIM
+            if (dim !is Int || dim !in 0..WallpaperConfig.MAX_DIM) {
+                problems += "wallpaper.dim must be a whole number from 0 to ${WallpaperConfig.MAX_DIM}"
+            }
             val liveTv = optionalPackage(root, "liveTvPackage", "liveTvPackage", problems)
 
             val fireJson = objectOrEmpty(root, "fireTv", problems)
@@ -165,6 +198,9 @@ data class LauncherConfig(
                 columns = columns as Int,
                 accent = accent!!,
                 theme = theme!!,
+                colors = colors,
+                tileRadius = tileRadius as Int,
+                wallpaper = WallpaperConfig(wallpaperOn as Boolean, dim as Int),
                 liveTvPackage = liveTv,
                 fireTv = fireTv,
                 companion = CompanionConfig(mode!!, host, port as Int, token),
@@ -186,6 +222,17 @@ data class LauncherConfig(
             val value = obj.optString(key, "")
             if (value.isNotEmpty() && !isPackageName(value)) problems += "$name must be a package name or empty"
             return value
+        }
+
+        private fun colors(root: JSONObject, problems: MutableList<String>): Map<String, Int> {
+            val json = objectOrEmpty(root, "colors", problems)
+            unknownKeys(json, COLOR_KEYS, "colors.", problems)
+            val result = mutableMapOf<String, Int>()
+            for (key in json.keys().asSequence().filter { it in COLOR_KEYS }) {
+                val color = (json.opt(key) as? String)?.let { parseColor(it) }
+                if (color == null) problems += "colors.$key must look like #RRGGBB" else result[key] = color
+            }
+            return result
         }
 
         private fun packages(root: JSONObject, key: String, problems: MutableList<String>): List<String> {

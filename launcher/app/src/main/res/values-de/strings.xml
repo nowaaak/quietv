@@ -34,8 +34,20 @@
 
     <string name="settings_appearance">Darstellung</string>
     <string name="settings_theme">Design</string>
-    <string name="theme_dark">Graphit</string>
-    <string name="theme_light">Papier</string>
+    <string name="theme_graphite">Graphit</string>
+    <string name="theme_paper">Papier</string>
+    <string name="theme_midnight">Mitternacht</string>
+    <string name="theme_slate">Schiefer</string>
+    <string name="theme_forest">Wald</string>
+    <string name="theme_sand">Sand</string>
+    <string name="theme_custom">%1$s, angepasst</string>
+    <string name="settings_tile_shape">Kachelecken</string>
+    <string name="tile_square">Eckig</string>
+    <string name="tile_soft">Leicht gerundet</string>
+    <string name="tile_rounded">Gerundet</string>
+    <string name="tile_round">Stark gerundet</string>
+    <string name="settings_wallpaper">Hintergrundbild</string>
+    <string name="settings_wallpaper_dim">Hintergrund dämpfen</string>
     <string name="settings_accent">Akzentfarbe</string>
     <string name="settings_columns">Kacheln pro Reihe</string>
     <string name="settings_apps">Apps</string>

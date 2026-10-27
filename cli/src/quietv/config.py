@@ -23,12 +23,21 @@ TOP_KEYS = {
     "columns",
     "accent",
     "theme",
+    "colors",
+    "tileRadius",
+    "wallpaper",
     "liveTvPackage",
     "fireTv",
     "companion",
 }
 FIRE_TV_KEYS = {"redirectHome", "stockHomePackage", "stockHomeClassHint", "showStockHomeTile"}
 COMPANION_KEYS = {"mode", "host", "port", "token"}
+THEMES = ("graphite", "paper", "midnight", "slate", "forest", "sand")
+LEGACY_THEMES = ("dark", "light")
+COLOR_KEYS = ("background", "surface", "text", "textMuted", "line")
+WALLPAPER_KEYS = {"enabled", "dim"}
+MAX_TILE_RADIUS = 24
+MAX_DIM = 80
 
 
 class ConfigError(Exception):
@@ -50,8 +59,27 @@ def validate(config: Any) -> list[str]:
         problems.append("columns must be a whole number from 3 to 8")
     if not COLOR_RE.match(str(config.get("accent", "#6EE7B7"))):
         problems.append("accent must look like #RRGGBB")
-    if config.get("theme", "dark") not in ("dark", "light"):
-        problems.append("theme must be 'dark' or 'light'")
+    if config.get("theme", "graphite") not in THEMES + LEGACY_THEMES:
+        problems.append(f"theme must be one of {', '.join(THEMES)}")
+    colors = config.get("colors", {})
+    if not isinstance(colors, dict):
+        problems.append("colors must be an object")
+    else:
+        problems += [f"colors: unknown key {k!r}" for k in sorted(set(colors) - set(COLOR_KEYS))]
+        for key in COLOR_KEYS:
+            if key in colors and not COLOR_RE.match(str(colors[key])):
+                problems.append(f"colors.{key} must look like #RRGGBB")
+    if not _whole(config.get("tileRadius", 14), 0, MAX_TILE_RADIUS):
+        problems.append(f"tileRadius must be a whole number from 0 to {MAX_TILE_RADIUS}")
+    wallpaper = config.get("wallpaper", {})
+    if not isinstance(wallpaper, dict):
+        problems.append("wallpaper must be an object")
+    else:
+        problems += [f"wallpaper: unknown key {k!r}" for k in sorted(set(wallpaper) - WALLPAPER_KEYS)]
+        if not isinstance(wallpaper.get("enabled", False), bool):
+            problems.append("wallpaper.enabled must be true or false")
+        if not _whole(wallpaper.get("dim", 30), 0, MAX_DIM):
+            problems.append(f"wallpaper.dim must be a whole number from 0 to {MAX_DIM}")
     live = config.get("liveTvPackage", "")
     if live and not is_package(str(live)):
         problems.append("liveTvPackage must be a package name or empty")
@@ -85,6 +113,10 @@ def validate(config: Any) -> list[str]:
         if mode == "send" and not (isinstance(companion.get("host"), str) and HOST_RE.match(companion["host"])):
             problems.append("companion.host is required when companion.mode is 'send'")
     return problems
+
+
+def _whole(value: Any, low: int, high: int) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and low <= value <= high
 
 
 def parse_broadcast(output: str) -> tuple[int, str]:

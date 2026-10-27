@@ -3,20 +3,7 @@
     <color name="accent">#FF6EE7B7</color>
 
     <color name="graphite_background">#FF0E1014</color>
-    <color name="graphite_surface">#FF171A20</color>
     <color name="graphite_text">#FFF3F4F6</color>
-    <color name="graphite_text_muted">#FF9AA1AD</color>
-    <color name="graphite_text_dim">#FF8B93A0</color>
-    <color name="graphite_line">#FF3A404B</color>
-    <color name="graphite_stroke">#14FFFFFF</color>
-    <color name="graphite_on_text_dim">#B30E1014</color>
 
     <color name="paper_background">#FFF4F4F1</color>
-    <color name="paper_surface">#FFFFFFFF</color>
-    <color name="paper_text">#FF15171C</color>
-    <color name="paper_text_muted">#FF5F6673</color>
-    <color name="paper_text_dim">#FF6B7280</color>
-    <color name="paper_line">#FFD4D7DD</color>
-    <color name="paper_stroke">#1A000000</color>
-    <color name="paper_on_text_dim">#B3F4F4F1</color>
 </resources>

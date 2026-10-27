@@ -15,11 +15,26 @@ import android.widget.TextView
 import androidx.annotation.DrawableRes
 import io.github.nowaaak.quietv.R
 
-class DropdownMenu(private val activity: Activity, root: ViewGroup, private val accent: Int) {
+class DropdownMenu(
+    private val activity: Activity,
+    root: ViewGroup,
+    private val palette: Palette,
+    private val accent: Int,
+) {
 
     private val density = activity.resources.displayMetrics.density
     private val panel: View = activity.layoutInflater.inflate(R.layout.popup_menu, root, false)
     private val rows: LinearLayout = panel.findViewById(R.id.rows)
+    private val content = ThemeColors.pillContent(palette)
+
+    init {
+        panel.background = ThemeColors.rounded(
+            palette.surface,
+            PANEL_RADIUS_DP * density,
+            palette.stroke,
+            density.toInt().coerceAtLeast(1),
+        )
+    }
     private val popup = PopupWindow(panel, (WIDTH_DP * density).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT, true)
         .apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -34,7 +49,7 @@ class DropdownMenu(private val activity: Activity, root: ViewGroup, private val 
 
     fun addSeparator() {
         val line = View(activity)
-        line.setBackgroundColor(activity.themeColor(R.attr.qvLine))
+        line.setBackgroundColor(palette.line)
         val margin = (6 * density).toInt()
         val inset = (12 * density).toInt()
         val lp = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, density.toInt().coerceAtLeast(1))
@@ -50,9 +65,17 @@ class DropdownMenu(private val activity: Activity, root: ViewGroup, private val 
         action: () -> Unit,
     ) {
         val row = activity.layoutInflater.inflate(R.layout.item_menu, rows, false)
-        row.findViewById<ImageView>(R.id.icon).setImageResource(icon)
-        row.findViewById<TextView>(R.id.title).text = title
+        row.backgroundTintList = ThemeColors.rowBackground(palette)
+        row.findViewById<ImageView>(R.id.icon).apply {
+            setImageResource(icon)
+            imageTintList = content
+        }
+        row.findViewById<TextView>(R.id.title).apply {
+            text = title
+            setTextColor(content)
+        }
         val statusView = row.findViewById<TextView>(R.id.status)
+        statusView.setTextColor(ThemeColors.pillContentDim(palette))
         val dot = row.findViewById<View>(R.id.dot)
         dot.backgroundTintList = ColorStateList.valueOf(accent)
         dot.visibility = if (active) View.VISIBLE else View.GONE
@@ -98,5 +121,6 @@ class DropdownMenu(private val activity: Activity, root: ViewGroup, private val 
     private companion object {
         const val WIDTH_DP = 240f
         const val DEFAULT_GAP_DP = 10f
+        const val PANEL_RADIUS_DP = 18f
     }
 }

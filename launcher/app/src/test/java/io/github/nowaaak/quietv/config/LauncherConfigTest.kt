@@ -30,7 +30,10 @@ class LauncherConfigTest {
             extraApps = listOf("com.amazon.cloud9"),
             columns = 4,
             accent = 0xFF93C5FD.toInt(),
-            theme = ThemeMode.LIGHT,
+            theme = ThemePreset.SAND,
+            colors = mapOf("background" to 0xFF101820.toInt(), "textMuted" to 0xFFA0A8B0.toInt()),
+            tileRadius = 6,
+            wallpaper = WallpaperConfig(enabled = true, dim = 45),
             liveTvPackage = "com.mediatek.wwtv.tvcenter",
             fireTv = FireTvConfig(redirectHome = false, stockHomePackage = "com.amazon.tv.launcher", showStockHomeTile = true),
             companion = CompanionConfig(CompanionMode.SEND, "192.168.1.20", 47202, "abcdefghijklmnop"),
@@ -53,6 +56,28 @@ class LauncherConfigTest {
         }
         val message = error.message.orEmpty()
         listOf("columns", "accent", "theme", "unknown key 'dock'", "favorites").forEach {
+            assertTrue("missing '$it' in: $message", message.contains(it))
+        }
+    }
+
+    @Test
+    fun legacyThemeNamesStillWork() {
+        assertEquals(ThemePreset.GRAPHITE, LauncherConfig.parse("""{"theme": "dark"}""").theme)
+        assertEquals(ThemePreset.PAPER, LauncherConfig.parse("""{"theme": "light"}""").theme)
+        assertEquals(ThemePreset.MIDNIGHT, LauncherConfig.parse("""{"theme": "midnight"}""").theme)
+    }
+
+    @Test
+    fun appearanceValuesAreChecked() {
+        val error = assertThrows(InvalidConfigException::class.java) {
+            LauncherConfig.parse(
+                """{"colors": {"text": "white", "glow": "#FFFFFF"}, "tileRadius": 40,
+                   "wallpaper": {"enabled": "yes", "dim": 95, "blur": 3}}""",
+            )
+        }
+        val message = error.message.orEmpty()
+        listOf("colors.text", "unknown key 'colors.glow'", "tileRadius", "wallpaper.enabled", "wallpaper.dim",
+            "unknown key 'wallpaper.blur'").forEach {
             assertTrue("missing '$it' in: $message", message.contains(it))
         }
     }

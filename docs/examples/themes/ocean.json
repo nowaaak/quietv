@@ -1,0 +1,13 @@
+{
+  "name": "Ocean",
+  "theme": "slate",
+  "accent": "#5EEAD4",
+  "colors": {
+    "background": "#071A2B",
+    "surface": "#0E2A40",
+    "text": "#EAF4FB",
+    "textMuted": "#9DB8CC",
+    "line": "#1F4560"
+  },
+  "tileRadius": 22
+}

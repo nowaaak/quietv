@@ -4,29 +4,11 @@
         <item name="android:windowBackground">@color/graphite_background</item>
         <item name="android:colorBackground">@color/graphite_background</item>
         <item name="android:windowAnimationStyle">@null</item>
-        <item name="qvBackground">@color/graphite_background</item>
-        <item name="qvSurface">@color/graphite_surface</item>
-        <item name="qvText">@color/graphite_text</item>
-        <item name="qvTextMuted">@color/graphite_text_muted</item>
-        <item name="qvTextDim">@color/graphite_text_dim</item>
-        <item name="qvLine">@color/graphite_line</item>
-        <item name="qvStroke">@color/graphite_stroke</item>
-        <item name="qvOnText">@color/graphite_background</item>
-        <item name="qvOnTextDim">@color/graphite_on_text_dim</item>
     </style>
 
     <style name="Theme.Quietv.Light">
         <item name="android:windowBackground">@color/paper_background</item>
         <item name="android:colorBackground">@color/paper_background</item>
-        <item name="qvBackground">@color/paper_background</item>
-        <item name="qvSurface">@color/paper_surface</item>
-        <item name="qvText">@color/paper_text</item>
-        <item name="qvTextMuted">@color/paper_text_muted</item>
-        <item name="qvTextDim">@color/paper_text_dim</item>
-        <item name="qvLine">@color/paper_line</item>
-        <item name="qvStroke">@color/paper_stroke</item>
-        <item name="qvOnText">@color/paper_background</item>
-        <item name="qvOnTextDim">@color/paper_on_text_dim</item>
     </style>
 
     <style name="TopIconButton">
@@ -36,7 +18,6 @@
         <item name="android:padding">11dp</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:background">@drawable/pill_bg</item>
-        <item name="android:tint">@color/pill_content</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
     </style>
