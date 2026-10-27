@@ -60,6 +60,21 @@ Every command that changes the TV must ask first (or take `--yes`) and must be r
 Strings live in `launcher/app/src/main/res/values/strings.xml`. Add a `values-<language>/strings.xml`
 with the same names. Keep them short: they have to fit on a TV tile.
 
+## Releases
+
+For maintainers:
+
+1. Raise `versionCode` and `versionName` in `launcher/app/build.gradle.kts` and `version` in
+   `cli/pyproject.toml` and `cli/src/quietv/__init__.py`. All three use the same version.
+2. Move the entries under `[Unreleased]` in [CHANGELOG.md](CHANGELOG.md) to a new version heading.
+3. Commit, then tag and push: `git tag -a v0.1.1 -m "quietv 0.1.1"` and `git push origin v0.1.1`.
+
+The release workflow refuses to run if the tag and the versions do not match. It builds, signs and
+verifies the APK and publishes it with `SHA256SUMS` and the certificate fingerprint. The signing key
+lives in the repository secrets `QUIETV_KEYSTORE_BASE64`, `QUIETV_KEYSTORE_PASSWORD`,
+`QUIETV_KEY_ALIAS` and `QUIETV_KEY_PASSWORD`. Never replace it: Android refuses updates signed
+with a different key.
+
 ## Pull requests
 
 - One topic per pull request. Small is fine.

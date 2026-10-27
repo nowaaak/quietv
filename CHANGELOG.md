@@ -5,6 +5,15 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-27
+
+### Changed
+
+- Android Gradle Plugin 9.4.1.
+- org.json 20260814 for the unit tests.
+
+## [0.1.0] - 2026-10-27
+
 ### Added
 
 - Launcher rewritten in Kotlin, package `io.github.nowaaak.quietv`.
