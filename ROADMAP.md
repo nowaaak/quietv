@@ -20,23 +20,37 @@ anything here.
 
 ## 0.2: Themes
 
-- Theme files (colours, wallpaper image, tile shape) pushed with `quietv theme apply`
-- A small set of bundled themes
-- Optional wallpaper with automatic text contrast
+- [x] Theme files (colours, wallpaper image, tile shape) pushed with `quietv theme apply`
+- [x] A small set of bundled themes
+- [x] Optional wallpaper with automatic text contrast
 
-## 0.3: Everyday comfort
+## 0.3: Google TV and reliability
+
+- Home redirect for TVs whose stock home cannot be replaced, Google TV first
+- Redirect that survives reboots and firmware quirks
+- Safer home handover and debloat guards for packages that break a TV
+- `quietv check`: find packages a firmware update re-enabled and offer to disable them again
+- `quietv report`: collect what a device report needs in one go
+- `quietv pair`: wireless debugging pairing for TVs without a debugging switch for the network
+
+## 0.4: Everyday comfort
 
 - Screensaver with clock and date (DreamService)
 - App search with the remote
 - Remote key shortcuts: long press a colour or number key to open an app
-- Inputs menu that remembers the last used HDMI port
+- Inputs menu that remembers the last used HDMI port, optional input or app on start
 
-## 0.4: More languages
+## 0.5: Device lists
+
+- Lists for the TVs people ask about most: TCL, Sony, Chromecast with Google TV, Google TV Streamer,
+  onn, Xiaomi, Philips and Hisense
+
+## 0.6: More languages
 
 - Translations through a hosted translation platform
 - Right-to-left layouts
 
-## 0.5: Distribution
+## 0.7: Distribution
 
 - F-Droid and IzzyOnDroid
 - Reproducible builds
@@ -44,6 +58,5 @@ anything here.
 
 ## Later
 
-- `quietv check`: find packages a firmware update re-enabled and offer to disable them again
 - Privacy report: which apps can use the microphone, which talk to known tracking hosts
-- More device lists, especially Google TV, Sony, TCL, Hisense and Philips
+- A guide for TVs quietv cannot debloat (Samsung, LG, Roku)
