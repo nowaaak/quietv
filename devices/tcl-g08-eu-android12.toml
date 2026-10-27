@@ -1,0 +1,259 @@
+schema = 1
+
+[device]
+name = "TCL Smart TV Pro (G08, EU firmware)"
+brand = "TCL"
+model = "Smart TV Pro (G08)"
+platform = "googletv"
+os = "Google TV (Android 12)"
+firmware = "STT2.221228.001 AS34"
+stock_launcher = "com.google.android.apps.tv.launcherx"
+notes = """
+Imported from cleanyourtv (examples/tcl-g08-eu-android12, MIT, Gathin and contributors). Not yet verified with quietv on this device.
+MediaTek G08 board, product G08_4K_GB, EU and UK firmware. The source list was used on a 75Q7C (AS36), a 50C805X1 (AS34) and a 55C7K.
+Preloads differ by set and region, so some packages on this list may be missing on yours.
+Keep launcherx enabled and let quietv install set up the Home redirect. With launcherx disabled the remote's Netflix,
+Prime Video, YouTube and TCL buttons do nothing, and key helpers that bring them back cost the volume key auto-repeat.
+Never disable com.tcl.suspension, com.tcl.interactive or com.tcl.ttvs on this firmware. The Source key stops opening
+the input panel and the TV input service logs errors ten times a second.
+com.tcl.partnercustomizer must stay: without it com.mediatek.tv.service crash-loops (cleanyourtv issue #2138).
+The setup wizard (setupwraith) can own the saved Wi-Fi network. Leave it enabled.
+TCL remote keys can be remapped through the global setting CustomKeyList (cleanyourtv issue #812).
+HDMI and Live TV come out black in screenshots.
+"""
+
+[[package]]
+id = "com.tcl.logkit"
+category = "telemetry"
+tier = "recommended"
+note = "TCL log capture and upload"
+
+[[package]]
+id = "com.tcl.dashboard"
+category = "content"
+tier = "recommended"
+note = "home screen push messages, the G09 and G10 lists keep it"
+
+[[package]]
+id = "com.tcl.messagebox"
+category = "content"
+tier = "recommended"
+note = "TCL push messages and promos"
+
+[[package]]
+id = "com.tcl.waterfall.overseas"
+category = "content"
+tier = "recommended"
+note = "TCL Channel recommendations, the remote's TCL Channel button opens it"
+
+[[package]]
+id = "com.tcl.channelplus"
+category = "ads"
+tier = "recommended"
+note = "TCL Live FAST channels with ads"
+
+[[package]]
+id = "com.tcl.exhibit"
+category = "vendor"
+tier = "recommended"
+note = "store demo mode"
+
+[[package]]
+id = "com.tcl.esticker"
+category = "vendor"
+tier = "recommended"
+note = "store demo stickers"
+
+[[package]]
+id = "com.tcl.usercenter"
+category = "vendor"
+tier = "recommended"
+note = "TCL account sign-in"
+
+[[package]]
+id = "com.tcl.ocean.instructions"
+category = "vendor"
+tier = "recommended"
+note = "tips overlay and e-manual"
+
+[[package]]
+id = "com.tcl.repairguide"
+category = "vendor"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.feedback"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.play.games"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.onetimeinitializer"
+category = "preloaded"
+tier = "recommended"
+note = "runs once during first setup"
+
+[[package]]
+id = "com.android.printspooler"
+category = "preloaded"
+tier = "recommended"
+note = "print service"
+
+[[package]]
+id = "com.google.android.videos"
+category = "preloaded"
+tier = "advanced"
+note = "Google TV and Play Movies store, needed for bought or rented films"
+
+[[package]]
+id = "com.google.android.syncadapters.calendar"
+category = "preloaded"
+tier = "advanced"
+
+[[package]]
+id = "com.google.android.tts"
+category = "preloaded"
+tier = "advanced"
+note = "text to speech, TalkBack and spoken feedback need it"
+
+[[package]]
+id = "com.google.android.apps.tv.dreamx"
+category = "content"
+tier = "advanced"
+note = "Ambient mode screensaver"
+
+[[package]]
+id = "com.google.android.youtube.tvmusic"
+category = "streaming"
+tier = "advanced"
+note = "YouTube Music"
+
+[[package]]
+id = "tv.wuaki.apptv"
+category = "streaming"
+tier = "advanced"
+note = "Rakuten TV"
+
+[[package]]
+id = "com.tcl.browser"
+category = "preloaded"
+tier = "advanced"
+note = "TCL web browser, not on every set"
+
+[[package]]
+id = "com.tcl.ui_mediaCenter"
+category = "preloaded"
+tier = "advanced"
+note = "USB media player"
+
+[[package]]
+id = "com.tcl.gallery"
+category = "preloaded"
+tier = "advanced"
+note = "TCL photo viewer"
+
+[[package]]
+id = "com.tcl.gamebar"
+category = "preloaded"
+tier = "advanced"
+note = "game mode overlay for consoles"
+
+[[package]]
+id = "com.tcl.hearaid"
+category = "preloaded"
+tier = "advanced"
+note = "hearing test and volume adaptation"
+
+[[package]]
+id = "com.tcl.smartalexa"
+category = "assistant"
+tier = "advanced"
+note = "Alexa client"
+
+[[package]]
+id = "com.tcl.eva"
+category = "assistant"
+tier = "advanced"
+note = "TCL voice layer, the mic and Google voice commands keep working without it"
+
+[[package]]
+id = "com.google.android.apps.mediashell"
+category = "cast"
+tier = "advanced"
+note = "Chromecast built-in"
+
+[[package]]
+id = "com.tcl.miracast"
+category = "cast"
+tier = "advanced"
+note = "Miracast screen mirroring"
+
+[[package]]
+id = "com.tcl.magiconnectfree"
+category = "cast"
+tier = "advanced"
+note = "MagiConnect phone companion and screen sharing"
+
+[[package]]
+id = "com.mediatek.airplaydaemon"
+category = "cast"
+tier = "advanced"
+note = "AirPlay, disable together with com.mediatek.AirplayAPK and com.tcl.airplay2"
+
+[[package]]
+id = "com.mediatek.AirplayAPK"
+category = "cast"
+tier = "advanced"
+note = "AirPlay"
+
+[[package]]
+id = "com.tcl.airplay2"
+category = "cast"
+tier = "advanced"
+note = "AirPlay"
+
+[[package]]
+id = "com.tcl.UpdatePeripheral"
+category = "updates"
+tier = "advanced"
+note = "firmware updates for a TCL soundbar"
+
+[[keep]]
+id = "com.tcl.partnercustomizer"
+reason = "com.mediatek.tv.service crash-loops without it (cleanyourtv issue #2138)"
+
+[[keep]]
+id = "com.google.android.tungsten.setupwraith"
+reason = "setup wizard, can own the saved Wi-Fi network and claims Home when launcherx is disabled"
+
+[[keep]]
+id = "com.tcl.suspension"
+reason = "hosts the input panel, the remote's Source key does nothing without it"
+
+[[keep]]
+id = "com.tcl.interactive"
+reason = "Live TV binds its service for source and HbbTV overlays, without it the TV input service logs errors at 10 Hz"
+
+[[keep]]
+id = "com.tcl.ttvs"
+reason = "same chain as com.tcl.interactive, disabling it breaks the Live TV source overlays"
+
+[[keep]]
+id = "com.tcl.guard"
+reason = "disabled, the system retries its memory manager service every 5 seconds"
+
+[[keep]]
+id = "com.tcl.autopair"
+reason = "Bluetooth remote pairing, an unpaired remote cannot pair again without it"
+
+[[keep]]
+id = "com.tcl.tv"
+reason = "Live TV and HDMI playback"
+
+[[keep]]
+id = "com.tcl.tvinput"
+reason = "provides the HDMI and tuner inputs"

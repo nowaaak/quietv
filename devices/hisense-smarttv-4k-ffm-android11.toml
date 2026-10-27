@@ -1,0 +1,160 @@
+schema = 1
+
+[device]
+name = "Hisense SmartTV 4K FFM (Android 11)"
+brand = "Hisense"
+model = "SmartTV 4K FFM (songshan)"
+platform = "googletv"
+os = "Google TV 11"
+firmware = "RTT2.220118.001"
+stock_launcher = "com.google.android.apps.tv.launcherx"
+notes = """
+Imported from cleanyourtv (examples/hisense-smarttv-4k-ffm-android11, MIT, Gathin and contributors). Not yet verified with quietv on this device.
+MediaTek board m7632. Also sold in the US as the Hisense 50A6H4, which reports the model string "SmartTV 4K".
+The Android TV 10 FFM (huangshan) shares the model string but has a different package set. Do not mix the lists.
+Never disable com.hisense.tv.smartsense, com.vt.tv.smartsense.ui or com.vt.tv.aiot: on the sibling FFM this sent the TV
+into Android Recovery ("Can't load Android system") on the next boot.
+Leave every com.mediatek.* package and the Hisense input services alone: they provide HDMI, AV and the tuner.
+Standby kills every third-party app except the one on screen, the launcher's key helpers included.
+com.hisense.evservice (ACR), com.vidaa.oemtabcontentprovider and the assistant and cast entries were tested on two of three
+units for one session with reboots, not over several days.
+The DLNA renderer keeps its ports (38400, 39500) open until the next reboot after it is disabled.
+Remote: YouTube is keycode 293, Prime Video 295, the gear 83, Input is KEYCODE_TV_INPUT. Netflix is handled by the firmware.
+If you disable the setup wizard by hand, set Settings > Privacy > Usage & diagnostics first: the page no longer opens after.
+Firmware updaters (com.hisense.tv.ota, com.hisense.remoteupgrade, com.vt.tv.usbota) were left on in the source and are not listed.
+"""
+
+[[package]]
+id = "com.hisense.evservice"
+category = "ads"
+tier = "recommended"
+note = "Enhanced Viewing, automatic content recognition (ACR)"
+
+[[package]]
+id = "com.google.android.feedback"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.partnersetup"
+category = "telemetry"
+tier = "recommended"
+note = "Google partner referral tracking"
+
+[[package]]
+id = "com.vidaa.oemtabcontentprovider"
+category = "content"
+tier = "recommended"
+note = "feed of the Hisense (VIDAA) tab on the Google TV home"
+
+[[package]]
+id = "com.hisense.storemode"
+category = "vendor"
+tier = "recommended"
+note = "retail store demo mode"
+
+[[package]]
+id = "fusion.android.tv.demo"
+category = "vendor"
+tier = "recommended"
+note = "retail store demo"
+
+[[package]]
+id = "com.hisense.fte"
+category = "vendor"
+tier = "recommended"
+note = "first-time setup experience, not needed once setup is done"
+
+[[package]]
+id = "android.autoinstalls.config.google.gtvpai"
+category = "vendor"
+tier = "recommended"
+note = "silent Play auto-install of partner apps"
+
+[[package]]
+id = "com.mstar.android.tv.disclaimercustomization"
+category = "vendor"
+tier = "recommended"
+note = "on-screen disclaimer app"
+
+[[package]]
+id = "com.google.android.play.games"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.videos"
+category = "preloaded"
+tier = "advanced"
+note = "Google TV movie store and purchased films"
+
+[[package]]
+id = "com.hisense.hibrowser"
+category = "preloaded"
+tier = "advanced"
+note = "Hisense web browser"
+
+[[package]]
+id = "com.google.android.katniss"
+category = "assistant"
+tier = "advanced"
+note = "Google Assistant and voice search, the microphone button stops working"
+
+[[package]]
+id = "com.google.android.tv.assistant"
+category = "assistant"
+tier = "advanced"
+
+[[package]]
+id = "com.hisense.alexa"
+category = "assistant"
+tier = "advanced"
+note = "Alexa bridge"
+
+[[package]]
+id = "com.google.android.apps.mediashell"
+category = "cast"
+tier = "advanced"
+note = "Chromecast built-in"
+
+[[package]]
+id = "com.hisense.tv.dlna"
+category = "cast"
+tier = "advanced"
+note = "DLNA renderer, AirPlay is separate and keeps working"
+
+[[keep]]
+id = "com.hisense.tv.smartsense"
+reason = "disabling it on the sibling FFM boots the TV into Android Recovery"
+
+[[keep]]
+id = "com.vt.tv.smartsense.ui"
+reason = "disabling it on the sibling FFM boots the TV into Android Recovery"
+
+[[keep]]
+id = "com.vt.tv.aiot"
+reason = "disabling it on the sibling FFM boots the TV into Android Recovery"
+
+[[keep]]
+id = "com.mediatek.wwtv.tvcenter"
+reason = "Live TV and HDMI app"
+
+[[keep]]
+id = "com.hisense.tv.hitvinput"
+reason = "TV input service for HDMI, AV and the tuner"
+
+[[keep]]
+id = "com.vt.tv.input"
+reason = "TV input service"
+
+[[keep]]
+id = "com.hisense.tv.smartservice"
+reason = "Hisense system service, kept by the source"
+
+[[keep]]
+id = "com.hisense.tv.customerlauncher"
+reason = "Hisense system component, kept by the source"
+
+[[keep]]
+id = "com.hisense.tv.protector"
+reason = "Hisense system component, kept by the source"

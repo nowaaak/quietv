@@ -1,0 +1,228 @@
+schema = 1
+
+[device]
+name = "TCL 4K Google TV (G10)"
+brand = "TCL"
+model = "G10_4K_US_NF (G10)"
+platform = "googletv"
+os = "Google TV (Android 12)"
+firmware = "STT2.230203.001"
+stock_launcher = "com.google.android.apps.tv.launcherx"
+notes = """
+Imported from cleanyourtv (examples/tcl-g10-google-tv, MIT, Gathin and contributors). Not yet verified with quietv on this device.
+Realtek RTD2875P, 2023 model year. The source names the product, not ro.product.model. The list was used on a US 55" set
+(G10_4K_US_NF), a 55P6K in Spain and a 43P69K in the Netherlands (G10_4K_GB_NF_32BIT), a C69B (G10_4K_GB) and a 43T6C.
+Samba TV ACR, com.tcl.logkit and com.tcl.ttvs ship disabled on some sets and enabled on others.
+Keep launcherx enabled and let quietv install set up the Home redirect. With launcherx disabled the remote's
+YouTube, Netflix, Prime Video and Web buttons do nothing, and the setup wizard (setupwraith) claims Home.
+setupwraith can own the saved Wi-Fi network. Leave it enabled.
+com.tcl.partnercustomizer must stay: without it com.mediatek.tv.service crash-loops (cleanyourtv issue #2138).
+The source list disables it, this list does not.
+com.google.android.tv.remote.service must stay for the remote's mic button.
+Disabling dreamx leaves the screensaver setting pointing at it and removed the screensaver menu from Settings on the 43P69K.
+TclAppBoot blocks apps from starting at boot until they have the APP_AUTO_START app-op.
+TCL remote keys can be remapped through the global setting CustomKeyList (cleanyourtv issue #812).
+HDMI and Live TV come out black in screenshots. Press Home first.
+"""
+
+[[package]]
+id = "tv.samba.ssm.ui"
+category = "ads"
+tier = "recommended"
+note = "Samba TV automatic content recognition (ACR)"
+
+[[package]]
+id = "com.tcl.logkit"
+category = "telemetry"
+tier = "recommended"
+note = "TCL log capture and upload"
+
+[[package]]
+id = "com.tcl.channelplus"
+category = "ads"
+tier = "recommended"
+note = "TCL Live FAST channels with ads, also removes them from Live TV"
+
+[[package]]
+id = "com.tcl.tv.plus"
+category = "content"
+tier = "recommended"
+note = "TCL TV+ content app"
+
+[[package]]
+id = "com.tcl.tv.tclhome_passive"
+category = "content"
+tier = "recommended"
+note = "pushes TCL content to the home screen at boot"
+
+[[package]]
+id = "com.tcl.waterfall.overseas"
+category = "content"
+tier = "recommended"
+note = "TCL Channel content feed"
+
+[[package]]
+id = "com.tcl.smartlink.core"
+category = "vendor"
+tier = "recommended"
+note = "bundles a silent app installer"
+
+[[package]]
+id = "android.autoinstalls.config.google.gtvpai"
+category = "vendor"
+tier = "recommended"
+note = "partner app auto-installs"
+
+[[package]]
+id = "com.tcl.exhibit"
+category = "vendor"
+tier = "recommended"
+note = "store demo mode"
+
+[[package]]
+id = "com.tcl.esticker"
+category = "vendor"
+tier = "recommended"
+note = "store demo stickers"
+
+[[package]]
+id = "com.tcl.ocean.instructions"
+category = "vendor"
+tier = "recommended"
+note = "e-manual"
+
+[[package]]
+id = "com.tcl.repairguide"
+category = "vendor"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.feedback"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.tcl.guard"
+category = "vendor"
+tier = "advanced"
+note = "TGuard memory cleaner"
+
+[[package]]
+id = "com.google.android.apps.tv.dreamx"
+category = "content"
+tier = "advanced"
+note = "Ambient mode screensaver, see notes"
+
+[[package]]
+id = "com.google.android.marvin.talkback"
+category = "preloaded"
+tier = "advanced"
+note = "TalkBack screen reader"
+
+[[package]]
+id = "com.tcl.gamebar"
+category = "preloaded"
+tier = "advanced"
+note = "game mode overlay for consoles"
+
+[[package]]
+id = "com.tcl.ui_mediaCenter"
+category = "preloaded"
+tier = "advanced"
+note = "USB media player"
+
+[[package]]
+id = "com.netflix.ninja"
+category = "streaming"
+tier = "advanced"
+note = "Netflix"
+
+[[package]]
+id = "com.netflix.tokenmanager"
+category = "streaming"
+tier = "advanced"
+note = "Netflix sign-in helper, disable only together with Netflix"
+
+[[package]]
+id = "com.amazon.amazonvideo.livingroom"
+category = "streaming"
+tier = "advanced"
+note = "Prime Video"
+
+[[package]]
+id = "com.google.android.youtube.tv"
+category = "streaming"
+tier = "advanced"
+note = "YouTube"
+
+[[package]]
+id = "com.tcl.magiconnectfree"
+category = "cast"
+tier = "advanced"
+note = "MagiConnect phone companion and screen sharing"
+
+[[package]]
+id = "com.tcl.airplay2"
+category = "cast"
+tier = "advanced"
+note = "AirPlay, disable together with com.realtek.airplay2"
+
+[[package]]
+id = "com.realtek.airplay2"
+category = "cast"
+tier = "advanced"
+note = "AirPlay"
+
+[[package]]
+id = "com.tcl.UpdatePeripheral"
+category = "updates"
+tier = "advanced"
+note = "firmware updates for a TCL soundbar"
+
+[[package]]
+id = "com.tcl.ttvs"
+category = "telemetry"
+tier = "expert"
+note = "TCL analytics. The source says to re-enable it if firmware updates stop arriving, and on the G08 it breaks the Source key"
+
+[[package]]
+id = "com.tcl.interactive"
+category = "telemetry"
+tier = "expert"
+note = "TCL TIAS service. Fine on G10 in the source, but on the G08 disabling it broke the Live TV source overlays"
+
+[[keep]]
+id = "com.tcl.partnercustomizer"
+reason = "com.mediatek.tv.service crash-loops without it (cleanyourtv issue #2138)"
+
+[[keep]]
+id = "com.google.android.tungsten.setupwraith"
+reason = "setup wizard, can own the saved Wi-Fi network and claims Home when launcherx is disabled"
+
+[[keep]]
+id = "com.google.android.tv.remote.service"
+reason = "the remote's mic button starts its voice service, phone remote apps pair through it"
+
+[[keep]]
+id = "com.tcl.tv"
+reason = "Live TV, HDMI and antenna playback"
+
+[[keep]]
+id = "com.tcl.tvinput"
+reason = "provides the HDMI and tuner inputs"
+
+[[keep]]
+id = "com.tcl.suspension"
+reason = "hosts the input panel the remote's Input key opens"
+
+[[keep]]
+id = "com.tcl.autopair"
+reason = "Bluetooth remote pairing"
+
+[[keep]]
+id = "com.tcl.systemserver"
+reason = "handles the mic hotkeys on the G09, the source keeps it here too"
+
+[[keep]]
+id = "com.tcl.dashboard"
+reason = "the source list keeps it on this firmware"

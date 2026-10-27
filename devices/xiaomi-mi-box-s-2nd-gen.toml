@@ -1,0 +1,125 @@
+schema = 1
+
+[device]
+name = "Xiaomi Mi Box S 2nd gen"
+brand = "Xiaomi"
+model = "MiTV-AFKR0 (jaws)"
+platform = "googletv"
+os = "Google TV 11"
+stock_launcher = "com.google.android.apps.tv.launcherx"
+notes = """
+Imported from cleanyourtv (examples/xiaomi-mi-box-s-2nd-gen, MIT, Gathin and contributors). Not yet verified with quietv on this device.
+Streaming box with Amlogic SoC and 2 GB RAM. The source tested builds RTT0.211222.001 incremental 737 and 772.
+No HDMI input and no tuner, so the launcher's Inputs entry has nothing to show.
+The source disabled the setup wizard (com.google.android.tungsten.setupwraith) to swap the launcher. quietv protects it
+and redirects Home on Google TV instead. If you disable it by hand anyway, check first that it does not own the Wi-Fi
+network in use: the source lost Wi-Fi once and had to forget an old hidden network that belonged to it.
+Prime Video comes back enabled after a reboot on build 772. Disable it again or hide it in the launcher.
+Remote buttons (Bluetooth remote "Xiaomi RC"): Netflix sends keycode 193, YouTube 190, Prime Video 194, Xiaomi TV+ 192,
+Apps 284. The stock Google TV home handles these. With the stock home disabled they do nothing until mapped.
+The remote drops the first press that wakes it.
+com.xiaomi.tvqs.overseas is a log and crash uploader, but it has not been tested disabled, so it is not listed.
+Kept working in the source: Google Assistant, Chromecast, the phone remote, USB media apps and Miracast.
+"""
+
+[[package]]
+id = "com.miui.tv.analytics"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.xiaomi.statistic"
+category = "telemetry"
+tier = "recommended"
+note = "Xiaomi usage statistics uploader"
+
+[[package]]
+id = "com.google.android.feedback"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.partnersetup"
+category = "telemetry"
+tier = "recommended"
+note = "Google partner attribution (RLZ) pings"
+
+[[package]]
+id = "com.mitv.tvhome.oemtab"
+category = "ads"
+tier = "recommended"
+note = "Xiaomi ad row on the Google TV home"
+
+[[package]]
+id = "com.mitv.tvhome.atv"
+category = "content"
+tier = "recommended"
+note = "PatchWall content rows"
+
+[[package]]
+id = "com.mitv.tvhome.michannel"
+category = "content"
+tier = "recommended"
+
+[[package]]
+id = "com.mitv.tvhome.mitvplus"
+category = "content"
+tier = "recommended"
+note = "Xiaomi TV+ ad-funded channels"
+
+[[package]]
+id = "com.xm.webcontent"
+category = "content"
+tier = "recommended"
+note = "Xiaomi web promotions"
+
+[[package]]
+id = "android.autoinstalls.config.xioami.mibox3"
+category = "vendor"
+tier = "recommended"
+note = "Play auto-install of partner apps (the typo is in the package name)"
+
+[[package]]
+id = "com.google.android.play.games"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.android.printspooler"
+category = "preloaded"
+tier = "recommended"
+note = "print service"
+
+[[package]]
+id = "com.google.android.videos"
+category = "preloaded"
+tier = "advanced"
+note = "Google TV movie store and purchased films"
+
+[[package]]
+id = "com.amazon.amazonvideo.livingroom"
+category = "streaming"
+tier = "advanced"
+note = "Prime Video, re-enabled by the firmware after a reboot on some builds"
+
+[[package]]
+id = "com.xiaomi.mitv.updateservice"
+category = "updates"
+tier = "advanced"
+note = "re-enable to check for firmware updates"
+
+[[keep]]
+id = "com.xiaomi.android.tvsetup.partnercustomizer"
+reason = "remote shortcut buttons (Netflix, YouTube, Prime Video)"
+
+[[keep]]
+id = "com.mi.bluetooth"
+reason = "Bluetooth and the remote"
+
+[[keep]]
+id = "com.xiaomi.gtv.settings"
+reason = "Xiaomi system settings"
+
+[[keep]]
+id = "com.google.android.tv.remote.service"
+reason = "phone remote (Google Home, Google TV app)"

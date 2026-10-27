@@ -1,0 +1,184 @@
+schema = 1
+
+[device]
+name = "Sony BRAVIA 4K VH21 (EU)"
+brand = "Sony"
+model = "XR-55A80K (BRAVIA_VH21)"
+platform = "googletv"
+os = "Google TV 12"
+firmware = "STT2.230505.001.S136"
+stock_launcher = "com.google.android.apps.tv.launcherx"
+notes = """
+Imported from cleanyourtv (examples/sony-bravia-4k-vh21-eu, MIT, Gathin and contributors). Not yet verified with quietv on this device.
+2022 OLED, MediaTek mt5895, 3 GB RAM, EU firmware. The EU preloads (ARD, All 4, ITV, My5, iPlayer, YouView,
+HD+, YouTube Music) were already disabled at the factory on the source TV, so they are not listed.
+Live TV is com.sony.dtv.tvx. Leave the com.sony.dtv.tvinput.* services, tvapi, sonysystemservice,
+sonyvendorservice, imeproxy, settingsprovider, the system update packages, braviasync* and every com.mediatek.*
+package alone: they drive HDMI, the tuner, the Input overlay, Bravia Sync, updates and the remote's app buttons.
+The Netflix, YouTube, Prime Video and Disney+ buttons are routed by sonyvendorservice, so they keep working with
+the stock launcher disabled. YouTube, Prime Video and Disney+ all send keycode 196 (scancodes 485, 490, 491):
+remapping one of them needs the scancode, a keycode remap takes all three.
+The Settings key does nothing once the stock launcher is disabled. The Input key opens Sony's own input overlay.
+The source also disabled com.google.android.tungsten.setupwraith, which quietv protects. It owned the Wi-Fi network
+saved during first setup on the source TV: forget and re-join that network before disabling it, or the TV drops off Wi-Fi.
+"""
+
+[[package]]
+id = "tv.samba.ssm"
+category = "ads"
+tier = "recommended"
+note = "Samba TV automatic content recognition (ACR)"
+
+[[package]]
+id = "tv.samba.ssm.ui"
+category = "ads"
+tier = "recommended"
+note = "Samba TV ACR interface"
+
+[[package]]
+id = "com.sonyericsson.idd.agent"
+category = "telemetry"
+tier = "recommended"
+note = "Sony IDD usage-data agent"
+
+[[package]]
+id = "com.sony.dtv.usercontext"
+category = "telemetry"
+tier = "recommended"
+note = "user context providers, boot receiver only"
+
+[[package]]
+id = "com.qterics.da.product"
+category = "telemetry"
+tier = "recommended"
+note = "Qterics device agent"
+
+[[package]]
+id = "com.google.android.feedback"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.sony.dtv.sonyselect"
+category = "content"
+tier = "recommended"
+note = "Sony Select app recommendations"
+
+[[package]]
+id = "com.sony.dtv.demosupport"
+category = "vendor"
+tier = "recommended"
+note = "retail demo mode"
+
+[[package]]
+id = "com.sony.dtv.demosystemsupport"
+category = "vendor"
+tier = "recommended"
+note = "retail demo mode"
+
+[[package]]
+id = "com.sony.dtv.multiscreendemo"
+category = "vendor"
+tier = "recommended"
+note = "retail demo"
+
+[[package]]
+id = "com.google.android.play.games"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.sony.dtv.da.service"
+category = "vendor"
+tier = "advanced"
+note = "remote-support session service"
+
+[[package]]
+id = "com.google.android.katniss"
+category = "assistant"
+tier = "advanced"
+note = "Google Assistant and voice search, the remote's mic button stops working"
+
+[[package]]
+id = "com.sony.dtv.voicesearch"
+category = "assistant"
+tier = "advanced"
+note = "Sony voice search"
+
+[[package]]
+id = "com.sony.dtv.assistantadapter"
+category = "assistant"
+tier = "advanced"
+note = "Sony bridge to the voice assistant"
+
+[[package]]
+id = "com.google.android.videos"
+category = "preloaded"
+tier = "advanced"
+note = "Google TV movies, purchases made there are no longer reachable"
+
+[[package]]
+id = "com.vewd.core.service"
+category = "preloaded"
+tier = "advanced"
+note = "Vewd web app platform"
+
+[[package]]
+id = "com.amazon.amazonvideo.livingroom"
+category = "streaming"
+tier = "advanced"
+note = "Prime Video"
+
+[[package]]
+id = "com.sony.dtv.hbbtvplayer"
+category = "preloaded"
+tier = "advanced"
+note = "HbbTV, the red button on broadcast channels"
+
+[[package]]
+id = "com.sonyericsson.dlna"
+category = "cast"
+tier = "advanced"
+note = "DLNA media server and renderer"
+
+[[package]]
+id = "com.sony.huey.dlna.module"
+category = "cast"
+tier = "advanced"
+note = "DLNA"
+
+[[package]]
+id = "com.sony.huey.dlna.renderersettings"
+category = "cast"
+tier = "advanced"
+note = "DLNA renderer settings"
+
+[[package]]
+id = "com.uei.quicksetsdk.sony"
+category = "vendor"
+tier = "advanced"
+note = "UEI QuickSet: IR control of cable boxes and soundbars, HDMI-CEC is not affected"
+
+[[package]]
+id = "com.sony.dtv.gestureapp"
+category = "preloaded"
+tier = "advanced"
+note = "BRAVIA CAM gesture control"
+
+[[package]]
+id = "com.google.android.tts"
+category = "preloaded"
+tier = "advanced"
+note = "Google text-to-speech, TalkBack and read-aloud stop working"
+
+[[keep]]
+id = "com.sony.dtv.tvx"
+reason = "Live TV and tuner app"
+
+[[keep]]
+id = "com.sony.dtv.webapi.core"
+reason = "Sony IP control: Home Assistant's Sony Bravia integration and other IP remotes report the TV as off without it"
+
+[[keep]]
+id = "com.sony.dtv.interactivetvutil"
+reason = "holds a TokenProvider other Sony apps may read"

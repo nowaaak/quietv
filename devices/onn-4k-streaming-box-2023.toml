@@ -1,0 +1,96 @@
+schema = 1
+
+[device]
+name = "onn 4K Streaming Box (2023)"
+brand = "onn"
+model = "YOC"
+platform = "googletv"
+os = "Google TV, Android 14"
+firmware = "URO4.260304.011.B1.15051976"
+stock_launcher = "com.google.android.apps.tv.launcherx"
+notes = """
+Imported from cleanyourtv (examples/onn-4k-streaming-box-2023, MIT, Gathin and contributors). Not yet verified with quietv on this device.
+Walmart box, Amlogic, 2 GB RAM. No HDMI inputs and no Live TV. Port 5555 opens as soon as USB
+debugging is on, no pairing needed. With a VPN app connected, Settings > Network shows the tunnel
+address instead of the LAN one.
+setupwraith (the setup wizard) owns every Wi-Fi network saved during setup and re-enables launcherx.
+quietv protects it, so keep launcherx enabled and use the Home redirect (the default of quietv install
+on Google TV). Casting with setupwraith disabled was not tested here. On the Chromecast with Google TV
+it breaks casting.
+Remotes differ between units. On one unit the app buttons and mic kept working without launcherx
+(com.gretzky.GlobalKey handles them). On another unit's remote the YouTube, profile and Settings
+buttons, and voice search for titles, only work while launcherx is enabled.
+Privacy Sandbox modules use com.android.* names on this build and were checked on one unit only:
+Play Store, voice search and YouTube kept working.
+dreamx also runs the Google Photos slideshow. Before disabling it, run quietv screensaver on.
+com.google.android.videos is not preinstalled on every unit.
+"""
+
+[[package]]
+id = "com.google.android.feedback"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.android.tv.feedbackconsent"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.android.adservices.api"
+category = "ads"
+tier = "recommended"
+note = "Privacy Sandbox ad services"
+
+[[package]]
+id = "com.android.ondevicepersonalization.services"
+category = "telemetry"
+tier = "recommended"
+note = "Privacy Sandbox personalization module"
+
+[[package]]
+id = "com.android.federatedcompute.services"
+category = "telemetry"
+tier = "recommended"
+note = "federated learning module"
+
+[[package]]
+id = "com.google.android.play.games"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.android.printspooler"
+category = "preloaded"
+tier = "recommended"
+note = "printing service"
+
+[[package]]
+id = "com.google.android.videos"
+category = "preloaded"
+tier = "advanced"
+note = "Google TV / Play Movies, needed to watch purchased titles"
+
+[[package]]
+id = "com.google.android.marvin.talkback"
+category = "preloaded"
+tier = "advanced"
+note = "TalkBack screen reader"
+
+[[package]]
+id = "com.google.android.apps.tv.dreamx"
+category = "content"
+tier = "advanced"
+note = "Ambient mode and Google Photos screensaver. Run quietv screensaver on first"
+
+[[keep]]
+id = "com.google.android.tungsten.setupwraith"
+reason = "setup wizard, holds Wi-Fi and Cast credentials. Disabling it deletes the Wi-Fi networks saved during setup"
+
+[[keep]]
+id = "com.gretzky.GlobalKey"
+reason = "routes the onn remote's app buttons and mic"
+
+[[keep]]
+id = "com.google.android.tv.dfuservice"
+reason = "firmware updates for the remote"

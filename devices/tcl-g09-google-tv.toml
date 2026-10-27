@@ -1,0 +1,279 @@
+schema = 1
+
+[device]
+name = "TCL Smart TV Pro (G09)"
+brand = "TCL"
+model = "Smart TV Pro (G09)"
+platform = "googletv"
+os = "Google TV (Android 12)"
+firmware = "STT2.230203.001 AS24"
+stock_launcher = "com.google.android.apps.tv.launcherx"
+notes = """
+Imported from cleanyourtv (examples/tcl-g09-google-tv, MIT, Gathin and contributors). Not yet verified with quietv on this device.
+Amlogic T5M, 2 GB RAM, product G09_4K_GB. The source list was used on UK firmware AS24 in Brazil and India,
+on a 55P71B Pro (AS23), on G09_4K_GB_32BIT (AS10) and on a 55V6C (G09_4K_GB_NF, AS24).
+Keep launcherx enabled and let quietv install set up the Home redirect. With launcherx disabled the remote's gear,
+Netflix, Prime Video and YouTube buttons do nothing, and key helpers that bring them back cost the volume key
+auto-repeat. One owner also lost the volume beep for good after disabling launcherx.
+com.tcl.partnercustomizer must stay: without it com.mediatek.tv.service crash-loops (cleanyourtv issue #2138).
+The source list disables it, this list does not.
+The setup wizard (setupwraith) can own the saved Wi-Fi network. Leave it enabled.
+Firmware updates come through Play services, there is no TCL updater package.
+TCL remote keys can be remapped through the global setting CustomKeyList (cleanyourtv issue #812).
+HDMI and Live TV come out black in screenshots. Press Home first.
+"""
+
+[[package]]
+id = "com.tcl.logkit"
+category = "telemetry"
+tier = "recommended"
+note = "TCL log capture and upload"
+
+[[package]]
+id = "com.graymatrix.did"
+category = "telemetry"
+tier = "recommended"
+note = "device analytics, seen on the Indian AS23 unit"
+
+[[package]]
+id = "com.tcl.channelplus"
+category = "ads"
+tier = "recommended"
+note = "TCL Live FAST channels with ads, also removes them from Live TV"
+
+[[package]]
+id = "com.tcl.waterfall.overseas"
+category = "content"
+tier = "recommended"
+note = "TCL Channel recommendations, the remote's TCL Channel button opens it"
+
+[[package]]
+id = "com.tcl.tv.tclhome_passive"
+category = "content"
+tier = "recommended"
+note = "pushes TCL content to the home screen at boot"
+
+[[package]]
+id = "com.tcl.messagebox"
+category = "content"
+tier = "recommended"
+note = "TCL push messages and promos"
+
+[[package]]
+id = "android.autoinstalls.config.google.gtvpai"
+category = "vendor"
+tier = "recommended"
+note = "partner app auto-installs"
+
+[[package]]
+id = "com.tcl.smartlink.core"
+category = "vendor"
+tier = "recommended"
+note = "bundles a silent app installer"
+
+[[package]]
+id = "com.tcl.usercenter"
+category = "vendor"
+tier = "recommended"
+note = "TCL account sign-in"
+
+[[package]]
+id = "com.tcl.exhibit"
+category = "vendor"
+tier = "recommended"
+note = "store demo mode"
+
+[[package]]
+id = "com.tcl.esticker"
+category = "vendor"
+tier = "recommended"
+note = "store demo stickers"
+
+[[package]]
+id = "com.tcl.hotelmenu"
+category = "vendor"
+tier = "recommended"
+note = "hotel mode"
+
+[[package]]
+id = "com.tcl.ocean.instructions"
+category = "vendor"
+tier = "recommended"
+note = "e-manual"
+
+[[package]]
+id = "com.tcl.repairguide"
+category = "vendor"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.feedback"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.play.games"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.tcl.guard"
+category = "vendor"
+tier = "advanced"
+note = "TGuard memory cleaner, the remote's shield button opens it"
+
+[[package]]
+id = "com.mirakulo.astrotv.service"
+category = "preloaded"
+tier = "advanced"
+note = "Ginga, interactive apps in ISDB-Tb broadcasts (Brazil)"
+
+[[package]]
+id = "com.google.android.videos"
+category = "preloaded"
+tier = "advanced"
+note = "Google TV and Play Movies store, needed for bought or rented films"
+
+[[package]]
+id = "com.google.android.apps.tv.dreamx"
+category = "content"
+tier = "advanced"
+note = "Ambient mode screensaver"
+
+[[package]]
+id = "com.google.android.marvin.talkback"
+category = "preloaded"
+tier = "advanced"
+note = "TalkBack screen reader"
+
+[[package]]
+id = "com.tcl.hearaid"
+category = "preloaded"
+tier = "advanced"
+note = "hearing test and volume adaptation"
+
+[[package]]
+id = "com.tcl.gamebar"
+category = "preloaded"
+tier = "advanced"
+note = "game mode overlay for consoles"
+
+[[package]]
+id = "com.tcl.ui_mediaCenter"
+category = "preloaded"
+tier = "advanced"
+note = "USB media player"
+
+[[package]]
+id = "com.google.android.youtube.tvmusic"
+category = "streaming"
+tier = "advanced"
+note = "YouTube Music"
+
+[[package]]
+id = "com.google.android.youtube.tv"
+category = "streaming"
+tier = "advanced"
+note = "YouTube, frees about 500 MB of RAM if you use another client"
+
+[[package]]
+id = "com.tcl.smartalexa"
+category = "assistant"
+tier = "advanced"
+note = "Alexa client"
+
+[[package]]
+id = "com.google.android.tv.remote.service"
+category = "assistant"
+tier = "advanced"
+note = "without it the remote's mic button and phone remote apps stop working"
+
+[[package]]
+id = "com.google.android.apps.mediashell"
+category = "cast"
+tier = "advanced"
+note = "Chromecast built-in"
+
+[[package]]
+id = "com.tcl.miracast"
+category = "cast"
+tier = "advanced"
+note = "Miracast screen mirroring"
+
+[[package]]
+id = "com.tcl.magiconnectfree"
+category = "cast"
+tier = "advanced"
+note = "MagiConnect phone companion and screen sharing"
+
+[[package]]
+id = "com.tcl.airplay2"
+category = "cast"
+tier = "advanced"
+note = "AirPlay, disable together with com.amlogic.airplay"
+
+[[package]]
+id = "com.amlogic.airplay"
+category = "cast"
+tier = "advanced"
+note = "AirPlay"
+
+[[package]]
+id = "com.tcl.UpdatePeripheral"
+category = "updates"
+tier = "advanced"
+note = "firmware updates for a TCL soundbar"
+
+[[package]]
+id = "com.tcl.ttvs"
+category = "telemetry"
+tier = "expert"
+note = "TCL analytics. Without it a TCL polling service keeps TV settings pinned in memory, one owner kept it for firmware updates, and on the G08 it breaks the Source key"
+
+[[package]]
+id = "com.tcl.interactive"
+category = "telemetry"
+tier = "expert"
+note = "TCL TIAS service. Fine on G09 in the source, but on the G08 disabling it broke the Live TV source overlays"
+
+[[package]]
+id = "com.tcl.initsetup"
+category = "vendor"
+tier = "expert"
+note = "TCL first-run setup with Samba TV ACR hooks, also does the channel scan. Re-enable it before scanning channels"
+
+[[keep]]
+id = "com.tcl.partnercustomizer"
+reason = "com.mediatek.tv.service crash-loops without it (cleanyourtv issue #2138)"
+
+[[keep]]
+id = "com.google.android.tungsten.setupwraith"
+reason = "setup wizard, can own the saved Wi-Fi network and claims Home when launcherx is disabled"
+
+[[keep]]
+id = "com.tcl.tv"
+reason = "Live TV and HDMI playback"
+
+[[keep]]
+id = "com.tcl.tvinput"
+reason = "provides the HDMI and tuner inputs"
+
+[[keep]]
+id = "com.tcl.suspension"
+reason = "hosts the input panel the remote's Input key opens"
+
+[[keep]]
+id = "com.tcl.systemserver"
+reason = "handles the mic hotkeys"
+
+[[keep]]
+id = "com.tcl.autopair"
+reason = "Bluetooth remote pairing"
+
+[[keep]]
+id = "com.tcl.dashboard"
+reason = "the source list keeps it on this firmware"
+
+[[keep]]
+id = "com.tcl.providers.config"
+reason = "TCL configuration provider, the source list keeps it"

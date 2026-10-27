@@ -1,0 +1,230 @@
+schema = 1
+
+[device]
+name = "Philips TPM191E (50PUS8505, 55OLED854, 65OLED804, 50PUS7354)"
+brand = "Philips"
+model = "TPM191E (PH9M_EA_5599)"
+platform = "androidtv"
+os = "Android TV 12"
+firmware = "STT2.230526.001"
+stock_launcher = "com.google.android.tvlauncher"
+notes = """
+Imported from cleanyourtv (examples/philips-tpm191e, MIT, Gathin and contributors). Not yet verified with quietv on this device.
+TP Vision board, MediaTek mt5887, about 2 GB RAM. Some 2020 sets still run the Android 9 firmware PTT1.181130.001.
+Vendor packages use the org.droidtv prefix. Leave org.droidtv.eum, nettvbrowser, menudataapp, nettvregistration,
+playtv, channels, philipstvdrawer and tvsystemui alone.
+The Freeview packages (uk.co.freeview.*, org.droidtv.freeviewplayers) are disabled at the factory, even on non-UK sets.
+DTS Play-Fi (com.phorus.playfi.tv) re-enables itself at every boot, so it is not listed.
+The firmware opens Live TV (org.droidtv.playtv) at every boot.
+With the stock launcher disabled: a held Home press does nothing (Android sends it to the system FallbackHome), and on
+some remotes the Settings button stops working (it sends scancode 357). SOURCES opens org.droidtv.channels and the
+Philips Settings button org.droidtv.philipstvdrawer, both keep working.
+The Netflix (scancode 632) and Rakuten TV (779) buttons do nothing once those apps are disabled.
+OLED models draw a moving Philips logo over a still picture after a few minutes. Keys injected over ADB do not
+dismiss it, a real remote key does.
+"""
+
+[[package]]
+id = "org.droidtv.candeebug"
+category = "telemetry"
+tier = "recommended"
+note = "DAC analytics uploader"
+
+[[package]]
+id = "org.droidtv.gel"
+category = "telemetry"
+tier = "recommended"
+note = "metrics collector, runs in candeebug's process"
+
+[[package]]
+id = "org.droidtv.usagelogger"
+category = "telemetry"
+tier = "recommended"
+note = "boot stats, remote key press counts, panel telemetry"
+
+[[package]]
+id = "org.droidtv.tv.frameworklogger"
+category = "telemetry"
+tier = "recommended"
+note = "Philips framework logger"
+
+[[package]]
+id = "com.google.android.feedback"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.partnersetup"
+category = "telemetry"
+tier = "recommended"
+note = "partner referrer and install attribution"
+
+[[package]]
+id = "org.droidtv.demome"
+category = "vendor"
+tier = "recommended"
+note = "Demo me retail demo mode"
+
+[[package]]
+id = "org.droidtv.nettvrecommender"
+category = "content"
+tier = "recommended"
+note = "Top Picks promotion row"
+
+[[package]]
+id = "org.droidtv.recommendation"
+category = "content"
+tier = "recommended"
+note = "backend of the Top Picks row"
+
+[[package]]
+id = "org.droidtv.nettv.market"
+category = "vendor"
+tier = "recommended"
+note = "Smart TV Collection app store, the Play Store stays"
+
+[[package]]
+id = "com.google.android.onetimeinitializer"
+category = "preloaded"
+tier = "recommended"
+note = "runs once at first setup"
+
+[[package]]
+id = "com.google.android.music"
+category = "preloaded"
+tier = "recommended"
+note = "Google Play Music, the service is discontinued"
+
+[[package]]
+id = "com.google.android.play.games"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.syncadapters.calendar"
+category = "preloaded"
+tier = "advanced"
+
+[[package]]
+id = "com.google.android.katniss"
+category = "assistant"
+tier = "advanced"
+note = "Google Assistant and voice search, the mic button stops working. Alexa is separate."
+
+[[package]]
+id = "org.droidtv.amazonalexa"
+category = "assistant"
+tier = "advanced"
+note = "Alexa bridge, including Alexa power on and off"
+
+[[package]]
+id = "com.amazon.amazonvideo.livingroom"
+category = "streaming"
+tier = "advanced"
+note = "Prime Video"
+
+[[package]]
+id = "com.netflix.ninja"
+category = "streaming"
+tier = "advanced"
+note = "Netflix, the remote's Netflix button stops working"
+
+[[package]]
+id = "com.apple.atve.androidtv.appletv"
+category = "streaming"
+tier = "advanced"
+note = "Apple TV"
+
+[[package]]
+id = "com.google.android.youtube.tvmusic"
+category = "streaming"
+tier = "advanced"
+note = "YouTube Music"
+
+[[package]]
+id = "com.google.android.videos"
+category = "preloaded"
+tier = "advanced"
+note = "Google TV movies, purchases made there are no longer reachable"
+
+[[package]]
+id = "com.google.android.marvin.talkback"
+category = "preloaded"
+tier = "advanced"
+note = "TalkBack screen reader"
+
+[[package]]
+id = "org.droidtv.sticker"
+category = "preloaded"
+tier = "advanced"
+note = "Philips Sticker preload"
+
+[[package]]
+id = "org.droidtv.android.fitness"
+category = "preloaded"
+tier = "advanced"
+note = "Fitness Buddy"
+
+[[package]]
+id = "dk.logisoft.snipergame"
+category = "preloaded"
+tier = "advanced"
+note = "preloaded demo game"
+
+[[package]]
+id = "com.phorus.playfi.softap"
+category = "cast"
+tier = "advanced"
+note = "DTS Play-Fi soft access point"
+
+[[package]]
+id = "org.droidtv.dlna"
+category = "cast"
+tier = "expert"
+note = "DLNA server and renderer. On a related board the Media browser (contentexplorer) binds to it, so USB and network media may stop working."
+
+[[package]]
+id = "com.google.android.tvrecommendations"
+category = "content"
+tier = "expert"
+note = "Android TV Core Services. Disable only after quietv install has moved Home: the stock launcher holds a provider in it and dies otherwise. The notification panel goes too. Came back after a reboot on one unit."
+
+[[keep]]
+id = "org.droidtv.eum"
+reason = "without it xtv retries forever and the sources drawer stops working"
+
+[[keep]]
+id = "org.droidtv.nettvbrowser"
+reason = "must-keep on a related Philips board, kept here as a precaution"
+
+[[keep]]
+id = "org.droidtv.menudataapp"
+reason = "must-keep on a related Philips board, kept here as a precaution"
+
+[[keep]]
+id = "org.droidtv.nettvregistration"
+reason = "must-keep on a related Philips board, kept here as a precaution"
+
+[[keep]]
+id = "org.droidtv.philipstvdrawer"
+reason = "the Philips side menu: TV guide, channel list, sources, Media, quick settings"
+
+[[keep]]
+id = "org.droidtv.playtv"
+reason = "Live TV"
+
+[[keep]]
+id = "org.droidtv.channels"
+reason = "the sources drawer behind the SOURCES button"
+
+[[keep]]
+id = "org.droidtv.oad"
+reason = "firmware updates"
+
+[[keep]]
+id = "com.easy.oad"
+reason = "firmware updates"
+
+[[keep]]
+id = "com.mediatek.tvinput"
+reason = "TV input service"
