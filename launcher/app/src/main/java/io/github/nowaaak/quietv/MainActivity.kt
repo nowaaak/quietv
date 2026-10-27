@@ -155,6 +155,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
         setUpTopBar()
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, newFocus ->
             if (newFocus?.id != R.id.card) hideRing()
+            if (newFocus != null && newFocus.id != R.id.card) hideHero()
         }
     }
 
@@ -377,7 +378,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
         }
         menu.onDismiss = { tileMenu = null }
         tileMenu = menu
-        menu.showBelow(card, Gravity.START)
+        menu.show(card, Gravity.START, TILE_MENU_GAP_DP)
     }
 
     private fun stopMoving() {
@@ -467,5 +468,6 @@ class MainActivity : Activity(), TileAdapter.Listener {
         const val MAX_TILE_WIDTH_DP = 148f
         const val MIN_TILE_GAP_DP = 20f
         const val DOCK_MARGIN_DP = 64f
+        const val TILE_MENU_GAP_DP = 18f
     }
 }

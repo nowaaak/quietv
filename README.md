@@ -12,7 +12,17 @@ and replaces the stock home screen with a small, fast launcher: your apps, your 
   unless you switch on the optional companion feature.
 - **One CLI for Windows, macOS and Linux**, or let an AI coding agent do the setup for you.
 
-> Screenshots follow with the first release.
+![quietv home screen with the favourites row](docs/screenshots/home.png)
+
+| All apps | Hold OK on a tile | Inputs |
+|---|---|---|
+| ![App grid](docs/screenshots/apps.png) | ![Tile menu](docs/screenshots/tile-menu.png) | ![Inputs menu](docs/screenshots/inputs.png) |
+
+| Settings | Paper theme |
+|---|---|
+| ![Settings](docs/screenshots/settings.png) | ![Paper theme](docs/screenshots/paper.png) |
+
+Screenshots from a CHiQ AI PONT (Android TV 11), taken with `quietv screenshot`.
 
 ## Quick start
 

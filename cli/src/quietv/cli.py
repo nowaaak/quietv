@@ -41,7 +41,10 @@ def format_note(note: str) -> str:
 
 
 def progress(done: int, total: int) -> None:
-    print(f"\r  upload {done}/{total}", end="" if done < total else "\n", flush=True)
+    if sys.stdout.isatty():
+        print(f"\r  upload {done}/{total}", end="" if done < total else "\n", flush=True)
+    elif done == total:
+        print(f"  uploaded {total} chunks")
 
 
 def connect(args) -> Tv:

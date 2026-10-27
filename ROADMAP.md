@@ -14,8 +14,8 @@ anything here.
 - [x] Structured device lists with categories and tiers
 - [x] CI with lint and tests
 - [ ] First signed release with checksums
-- [ ] Verified on Android TV and Fire TV hardware
-- [ ] Screenshots from real TVs in the README
+- [x] Verified on Android TV (CHiQ AI PONT) and Fire TV (Fire TV Stick 4K Max) hardware
+- [x] Screenshots from real TVs in the README
 - [ ] Tested on a Google TV device
 
 ## 0.2: Themes

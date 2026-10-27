@@ -48,7 +48,8 @@ quietv firetv status
   issue with your Fire OS version.
 - Fire OS may stop the service under memory pressure. It comes back the next time the system binds
   accessibility services.
-- Tested on Fire TV Stick 4K Max (2nd gen, Fire OS 8) and Toshiba Fire TV (AFTHA004, Fire OS 7).
+- quietv is tested on a Fire TV Stick 4K Max (2nd gen, Fire OS 8). The same redirect approach worked on a
+  Toshiba Fire TV (AFTHA004, Fire OS 7) in the project this one grew out of.
 
 ## Undo
 

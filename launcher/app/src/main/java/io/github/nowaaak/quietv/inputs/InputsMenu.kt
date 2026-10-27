@@ -64,7 +64,7 @@ class InputsMenu(private val activity: Activity, private val liveTvPackage: Stri
             Toast.makeText(activity, R.string.no_inputs, Toast.LENGTH_SHORT).show()
             return
         }
-        menu.showBelow(anchor, Gravity.END)
+        menu.show(anchor, Gravity.END)
     }
 
     private fun statusText(state: Int): String? = when (state) {
