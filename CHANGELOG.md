@@ -5,6 +5,18 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+
+- 12 device lists imported from cleanyourtv: Chromecast with Google TV, Google TV Streamer, onn 4K,
+  TCL G08, G09 and G10, Sony BRAVIA VH21 and VU31, Philips TPM191E, Hisense FFM, Xiaomi Mi Box S and
+  NVIDIA SHIELD TV Pro. They are marked as not yet checked with quietv.
+- `quietv update` updates the launcher in place and keeps its settings.
+- `quietv privacy` lists apps that can use the microphone, camera or location, active accessibility
+  services and ads or telemetry that are still enabled.
+- Release builds are reproducible. `scripts/compare-apks.py` checks a release against your own build.
+- Store descriptions and screenshots for F-Droid and IzzyOnDroid in `fastlane/`.
+- A guide for TVs quietv cannot debloat: Samsung, LG, Roku and Vizio.
+
 ## [0.4.0] - 2026-10-27
 
 ### Added

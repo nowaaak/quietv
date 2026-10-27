@@ -43,8 +43,9 @@ anything here.
 
 ## 0.5: Device lists
 
-- Lists for the TVs people ask about most: TCL, Sony, Chromecast with Google TV, Google TV Streamer,
+- [x] Lists for the TVs people ask about most: TCL, Sony, Chromecast with Google TV, Google TV Streamer,
   onn, Xiaomi, Philips and Hisense
+- [ ] Each imported list checked with quietv on real hardware
 
 ## 0.6: More languages
 
@@ -53,11 +54,15 @@ anything here.
 
 ## 0.7: Distribution
 
-- F-Droid and IzzyOnDroid
-- Reproducible builds
-- `quietv update` to update the launcher in place
+- [x] Store metadata for F-Droid and IzzyOnDroid
+- [ ] Submit to F-Droid and IzzyOnDroid (needs the public repository)
+- [x] Reproducible builds
+- [x] `quietv update` to update the launcher in place
 
 ## Later
 
-- Privacy report: which apps can use the microphone, which talk to known tracking hosts
-- A guide for TVs quietv cannot debloat (Samsung, LG, Roku)
+- [x] Privacy report: which apps can use the microphone, camera and location, which known ad and
+  telemetry packages still run
+- [ ] Privacy report: which apps talk to known tracking hosts (needs network monitoring, not possible
+  over ADB alone)
+- [x] A guide for TVs quietv cannot debloat (Samsung, LG, Roku, Vizio)
