@@ -5,6 +5,8 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-10-27
+
 ### Fixed
 
 - Moving a tile between the favourites row and the app grid: the focus ring follows the tile, the

@@ -13,7 +13,7 @@ anything here.
 - [x] Cross-platform CLI: probe, backup, debloat, restore, install, config, screenshot
 - [x] Structured device lists with categories and tiers
 - [x] CI with lint and tests
-- [ ] First signed release with checksums
+- [x] First signed release with checksums
 - [x] Verified on Android TV (CHiQ AI PONT) and Fire TV (Fire TV Stick 4K Max) hardware
 - [x] Screenshots from real TVs in the README
 - [ ] Tested on a Google TV device
