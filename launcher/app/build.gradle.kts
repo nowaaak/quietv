@@ -12,8 +12,8 @@ android {
         applicationId = "io.github.nowaaak.quietv"
         minSdk = 26
         targetSdk = 34
-        versionCode = 5
-        versionName = "0.3.0"
+        versionCode = 6
+        versionName = "0.4.0"
     }
 
     signingConfigs {
