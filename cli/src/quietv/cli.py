@@ -168,13 +168,28 @@ def cmd_install(args) -> None:
         with connect(args) as tv:
             fire = is_fire_os(tv)
             stock = args.stock_launcher or install.current_home_package(tv)
+            mode = args.mode
+            if mode == "auto":
+                mode = "redirect" if fire or stock in install.REDIRECT_HOMES else "replace"
+            if mode == "redirect" and not fire and not stock:
+                raise Abort("the redirect needs the stock home package, pass --stock-launcher")
             print(f"Installing {apk.name}")
             install.install_apk(tv, apk, progress)
-            if fire:
-                print("Fire OS: switching on the Home redirect (accessibility service)")
+            install.start_launcher(tv)
+            if mode == "redirect":
+                if fire:
+                    print("Fire OS: switching on the Home redirect (accessibility service)")
+                else:
+                    print(f"Redirecting {stock} to quietv (accessibility service). {stock} stays enabled.")
+                    config.push(tv, install.with_redirect(config.pull(tv), stock))
                 install.redirect_on(tv)
             else:
                 install.make_default_home(tv)
+                if not install.home_is_quietv(tv):
+                    raise Abort(
+                        "Android did not accept quietv as Home, so nothing was disabled. "
+                        "Try: quietv install --mode redirect"
+                    )
                 if stock and not args.keep_stock_launcher:
                     confirm(
                         f"Disable the stock launcher {stock}? Android TV keeps it as Home otherwise. "
@@ -242,7 +257,7 @@ def cmd_theme(args) -> None:
     print("Wallpaper removed." if image is None else "Wallpaper set.")
 
 
-def cmd_firetv(args) -> None:
+def cmd_redirect(args) -> None:
     with connect(args) as tv:
         if args.action == "on":
             install.redirect_on(tv)
@@ -305,6 +320,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--apk", help="local APK instead of the latest GitHub release")
     p.add_argument("--stock-launcher", help="package of the stock launcher (default: the current home)")
     p.add_argument("--keep-stock-launcher", action="store_true", help="do not disable the stock launcher")
+    p.add_argument(
+        "--mode",
+        choices=("auto", "replace", "redirect"),
+        default="auto",
+        help="replace the stock home, or keep it and redirect Home to quietv (default: auto, redirect on "
+        "Fire TV and Google TV)",
+    )
     p.add_argument("--yes", "-y", action="store_true", help="do not ask for confirmation")
     p.set_defaults(func=cmd_install)
 
@@ -320,9 +342,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--off", action="store_true", help="remove the wallpaper")
     p.set_defaults(func=cmd_theme)
 
-    p = sub.add_parser("firetv", help="switch the Fire TV Home redirect on or off")
-    p.add_argument("action", choices=("on", "off", "status"))
-    p.set_defaults(func=cmd_firetv)
+    for name, text in (
+        ("redirect", "switch the Home redirect on or off (Fire TV, Google TV)"),
+        ("firetv", "same as redirect"),
+    ):
+        p = sub.add_parser(name, help=text)
+        p.add_argument("action", choices=("on", "off", "status"))
+        p.set_defaults(func=cmd_redirect)
     return parser
 
 

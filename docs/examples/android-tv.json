@@ -7,9 +7,11 @@
     "com.disney.disneyplus",
     "com.spotify.tv.android"
   ],
-  "hidden": ["com.mediatek.wwtv.tvcenter"],
+  "hidden": [
+    "com.mediatek.wwtv.tvcenter"
+  ],
   "columns": 5,
   "accent": "#6EE7B7",
-  "theme": "dark",
+  "theme": "graphite",
   "liveTvPackage": "com.mediatek.wwtv.tvcenter"
 }

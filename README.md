@@ -6,7 +6,8 @@ quietv strips the ads, telemetry and preloaded clutter from Android TV, Google T
 and replaces the stock home screen with a small, fast launcher: your apps, your order, nothing else.
 
 - **One APK for every TV.** Download it from Releases, no Android SDK needed. Settings live on the TV.
-- **Fire TV too.** Amazon's home cannot be replaced, so quietv catches it and opens itself instead.
+- **Fire TV and Google TV too.** Where the stock home cannot be replaced safely, quietv keeps it and opens
+  itself instead.
 - **Reversible.** Packages are disabled, never uninstalled. Every debloat starts with a backup.
 - **Light.** Built for sets with 1 GB of RAM. No tracking, no background work, no network traffic
   unless you switch on the optional companion feature.
@@ -112,6 +113,7 @@ others) and Amazon Fire TV. Not Samsung Tizen or LG webOS. Android 8.0 or newer.
 - [Configuration](docs/configuration.md)
 - [Themes](docs/themes.md)
 - [Fire TV](docs/fire-tv.md)
+- [Google TV](docs/google-tv.md)
 - [Troubleshooting](docs/troubleshooting.md)
 - [Install from a phone](docs/phone-install.md)
 - [Roadmap](ROADMAP.md)

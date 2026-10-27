@@ -6,14 +6,20 @@
     "com.amazon.firebat",
     "com.spotify.tv.android"
   ],
-  "extraApps": ["com.amazon.cloud9"],
-  "hidden": ["com.amazon.tv.launcher", "com.amazon.whasettings", "com.amazon.firetv.troubleshooting"],
+  "extraApps": [
+    "com.amazon.cloud9"
+  ],
+  "hidden": [
+    "com.amazon.tv.launcher",
+    "com.amazon.whasettings",
+    "com.amazon.firetv.troubleshooting"
+  ],
   "columns": 4,
   "accent": "#93C5FD",
-  "theme": "dark",
-  "fireTv": {
-    "redirectHome": true,
+  "theme": "graphite",
+  "homeRedirect": {
+    "enabled": true,
     "stockHomePackage": "com.amazon.tv.launcher",
-    "stockHomeClassHint": "HomeActivity"
+    "classHint": "HomeActivity"
   }
 }

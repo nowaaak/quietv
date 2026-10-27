@@ -44,10 +44,14 @@ More in [examples/](examples/).
 | `wallpaper.enabled` | `false` | Show the wallpaper image. Set one with `quietv theme wallpaper`. Without an image this does nothing. |
 | `wallpaper.dim` | `30` | How much the wallpaper is darkened (or lightened on a light theme), 0 to 80 percent. quietv dims more if text would be hard to read. |
 | `liveTvPackage` | `""` | The TV's tuner app, offered at the end of the Inputs menu. Empty hides the entry. |
-| `fireTv.redirectHome` | `true` | Open quietv when the stock home appears. Only acts if the accessibility service is on, see [fire-tv.md](fire-tv.md). |
-| `fireTv.stockHomePackage` | `""` | The home app to redirect. Empty means `com.amazon.tv.launcher` on Fire OS and nothing elsewhere. |
-| `fireTv.stockHomeClassHint` | `"HomeActivity"` | Part of the stock home activity's class name. Other activities of the same app, such as its settings, are left alone. |
-| `fireTv.showStockHomeTile` | `false` | Add a tile that opens the stock home once. |
+| `homeRedirect.enabled` | `true` | Open quietv when the stock home appears. Only acts if the accessibility service is on, see [fire-tv.md](fire-tv.md) and [google-tv.md](google-tv.md). |
+| `homeRedirect.stockHomePackage` | `""` | The home app to redirect. Empty means `com.amazon.tv.launcher` on Fire OS and nothing elsewhere. `quietv install` fills it in on Google TV. |
+| `homeRedirect.classHint` | `"HomeActivity"` | Part of the stock home activity's class name. Other activities of the same app, such as its settings, are left alone. |
+| `homeRedirect.showStockHomeTile` | `false` | Add a tile that opens the stock home once. |
+
+Configs from quietv 0.2 and older call `homeRedirect` `fireTv`, with the keys `redirectHome`,
+`stockHomePackage`, `stockHomeClassHint` and `showStockHomeTile`. They still work. `quietv config pull`
+writes the new name.
 | `companion.mode` | `"off"` | `"send"`, `"receive"` or `"off"`. See below. |
 | `companion.host` | `""` | Address of the receiving device, for `"send"`. |
 | `companion.port` | `47201` | TCP port, 1024 to 65535. |

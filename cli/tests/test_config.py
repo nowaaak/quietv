@@ -14,7 +14,7 @@ EXAMPLE = {
     "accent": "#6EE7B7",
     "theme": "dark",
     "liveTvPackage": "com.mediatek.wwtv.tvcenter",
-    "fireTv": {"redirectHome": True, "stockHomePackage": "com.amazon.tv.launcher"},
+    "homeRedirect": {"enabled": True, "stockHomePackage": "com.amazon.tv.launcher"},
     "companion": {"mode": "off"},
 }
 
@@ -49,7 +49,9 @@ def test_valid_config_has_no_problems():
         ({"dock": []}, "unknown key 'dock'"),
         ({"companion": {"mode": "receive", "token": "short"}}, "token"),
         ({"companion": {"mode": "send", "token": "x" * 16}}, "companion.host"),
-        ({"fireTv": {"redirectHome": "yes"}}, "redirectHome"),
+        ({"homeRedirect": {"enabled": "yes"}}, "homeRedirect.enabled"),
+        ({"homeRedirect": {"redirectHome": True}}, "homeRedirect: unknown key 'redirectHome'"),
+        ({"fireTv": {}, "homeRedirect": {}}, "not the old fireTv key"),
         ({"colors": {"text": "white"}}, "colors.text"),
         ({"colors": {"glow": "#FFFFFF"}}, "colors: unknown key 'glow'"),
         ({"colors": []}, "colors must be an object"),
@@ -63,6 +65,13 @@ def test_valid_config_has_no_problems():
 def test_invalid_values_are_reported(patch, message):
     problems = config.validate({**EXAMPLE, **patch})
     assert any(message in p for p in problems), problems
+
+
+def test_legacy_fire_tv_key_is_still_valid():
+    legacy = {"fireTv": {"redirectHome": False, "stockHomeClassHint": "Home", "showStockHomeTile": True}}
+    assert config.validate(legacy) == []
+    assert config.home_redirect(legacy) == {"enabled": False, "classHint": "Home", "showStockHomeTile": True}
+    assert any("homeRedirect.enabled" in p for p in config.validate({"fireTv": {"redirectHome": "yes"}}))
 
 
 def test_push_sends_base64_json_to_the_receiver(fake_tv):

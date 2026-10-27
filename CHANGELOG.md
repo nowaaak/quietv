@@ -5,6 +5,19 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+
+- Google TV: `quietv install` keeps `launcherx` and redirects Home to quietv instead of disabling it.
+- `quietv install --mode auto|replace|redirect`. Replace mode disables the stock home only after Android
+  has accepted quietv as Home.
+- After a reboot quietv checks that its Home redirect is running and binds it again if not.
+- `quietv redirect on|off|status`. `quietv firetv` still works.
+
+### Changed
+
+- The config key `fireTv` is now `homeRedirect` (`enabled`, `stockHomePackage`, `classHint`,
+  `showStockHomeTile`). Old configs keep working.
+
 ## [0.2.0] - 2026-10-27
 
 ### Added

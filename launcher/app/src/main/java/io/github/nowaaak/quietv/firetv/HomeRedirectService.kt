@@ -41,8 +41,8 @@ class HomeRedirectService : AccessibilityService(), SharedPreferences.OnSharedPr
     private fun refresh() {
         val config = store?.load() ?: return
         stockHome = Platform.stockHomePackage(this, config)
-        classHint = config.fireTv.stockHomeClassHint
-        redirect = config.fireTv.redirectHome
+        classHint = config.homeRedirect.classHint
+        redirect = config.homeRedirect.enabled
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
