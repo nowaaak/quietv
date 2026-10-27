@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import io.github.nowaaak.quietv.R
+import io.github.nowaaak.quietv.config.ConfigStore
 import io.github.nowaaak.quietv.home.AppLauncher
 import io.github.nowaaak.quietv.ui.DropdownMenu
 import io.github.nowaaak.quietv.ui.Palette
@@ -20,6 +21,7 @@ class InputsMenu(
     private val liveTvPackage: String,
     private val palette: Palette,
     private val accent: Int,
+    private val store: ConfigStore,
 ) {
 
     fun show(anchor: View, root: ViewGroup) {
@@ -27,6 +29,9 @@ class InputsMenu(
         val tim = activity.getSystemService(Activity.TV_INPUT_SERVICE) as TvInputManager?
         var sawNonHdmi = false
         var tunerId: String? = null
+        var rowCount = 0
+        var lastIndex = 0
+        val last = store.lastInput
 
         val inputs = tim?.tvInputList.orEmpty().sortedWith(
             compareBy<TvInputInfo> { it.type != TvInputInfo.TYPE_HDMI }
@@ -46,19 +51,24 @@ class InputsMenu(
             if (!hdmi) sawNonHdmi = true
             val id = info.id
             val state = tim.getInputState(id)
+            if (id == last) lastIndex = rowCount
+            rowCount++
             menu.addRow(
                 icon = if (hdmi) R.drawable.ic_input else R.drawable.ic_av,
                 title = label,
                 status = statusText(state),
                 active = state == TvInputManager.INPUT_STATE_CONNECTED,
-            ) { open(channelIntent(id)) }
+            ) {
+                store.lastInput = id
+                open(inputIntent(id))
+            }
         }
 
         val tuner = tunerId
         val liveTv = when {
             liveTvPackage.isEmpty() -> null
             activity.packageManager.getLeanbackLaunchIntentForPackage(liveTvPackage) == null -> null
-            tuner != null -> channelIntent(tuner).setPackage(liveTvPackage)
+            tuner != null -> inputIntent(tuner).setPackage(liveTvPackage)
             else -> activity.packageManager.getLeanbackLaunchIntentForPackage(liveTvPackage)
         }
         if (liveTv != null) {
@@ -70,7 +80,7 @@ class InputsMenu(
             Toast.makeText(activity, R.string.no_inputs, Toast.LENGTH_SHORT).show()
             return
         }
-        menu.show(anchor, Gravity.END)
+        menu.show(anchor, Gravity.END, focusIndex = lastIndex)
     }
 
     private fun statusText(state: Int): String? = when (state) {
@@ -79,11 +89,13 @@ class InputsMenu(
         else -> null
     }
 
-    private fun channelIntent(inputId: String): Intent =
-        Intent(Intent.ACTION_VIEW).setDataAndType(
-            TvContract.buildChannelUriForPassthroughInput(inputId),
-            "vnd.android.cursor.item/channel",
-        )
-
     private fun open(intent: Intent) = AppLauncher.start(activity, intent)
+
+    companion object {
+        fun inputIntent(inputId: String): Intent =
+            Intent(Intent.ACTION_VIEW).setDataAndType(
+                TvContract.buildChannelUriForPassthroughInput(inputId),
+                "vnd.android.cursor.item/channel",
+            )
+    }
 }

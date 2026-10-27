@@ -66,4 +66,25 @@
     <string name="settings_tv_settings">TV settings</string>
     <string name="settings_about">About</string>
     <string name="settings_version">quietv %1$s</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Search apps</string>
+    <string name="no_results">No apps found</string>
+    <string name="tile_shortcut">Assign to key</string>
+    <string name="shortcut_prompt">Press 0 to 9 or a colour key for %1$s</string>
+    <string name="shortcut_set">%1$s now opens %2$s</string>
+    <string name="shortcut_cancelled">No key assigned</string>
+    <string name="key_red">Red</string>
+    <string name="key_green">Green</string>
+    <string name="key_yellow">Yellow</string>
+    <string name="key_blue">Blue</string>
+    <string name="key_number">Key %1$s</string>
+    <string name="settings_remote">Remote</string>
+    <string name="settings_shortcut_hint">Hold OK on a tile and choose Assign to key</string>
+    <string name="settings_shortcut">%1$s: %2$s</string>
+    <string name="settings_remove">Remove</string>
+    <string name="settings_startup">After a restart</string>
+    <string name="startup_home">Home screen</string>
+    <string name="startup_last_input">Last input</string>
+    <string name="startup_input">TV input</string>
+    <string name="screensaver_name">quietv clock</string>
 </resources>

@@ -63,4 +63,25 @@
     <string name="settings_tv_settings">TV-Einstellungen</string>
     <string name="settings_about">Info</string>
     <string name="settings_version">quietv %1$s</string>
+    <string name="search">Suchen</string>
+    <string name="search_hint">Apps durchsuchen</string>
+    <string name="no_results">Keine Apps gefunden</string>
+    <string name="tile_shortcut">Taste zuweisen</string>
+    <string name="shortcut_prompt">Drücke 0 bis 9 oder eine Farbtaste für %1$s</string>
+    <string name="shortcut_set">%1$s öffnet jetzt %2$s</string>
+    <string name="shortcut_cancelled">Keine Taste zugewiesen</string>
+    <string name="key_red">Rot</string>
+    <string name="key_green">Grün</string>
+    <string name="key_yellow">Gelb</string>
+    <string name="key_blue">Blau</string>
+    <string name="key_number">Taste %1$s</string>
+    <string name="settings_remote">Fernbedienung</string>
+    <string name="settings_shortcut_hint">Halte OK auf einer Kachel und wähle Taste zuweisen</string>
+    <string name="settings_shortcut">%1$s: %2$s</string>
+    <string name="settings_remove">Entfernen</string>
+    <string name="settings_startup">Nach einem Neustart</string>
+    <string name="startup_home">Startbildschirm</string>
+    <string name="startup_last_input">Letzter Eingang</string>
+    <string name="startup_input">TV-Eingang</string>
+    <string name="screensaver_name">quietv Uhr</string>
 </resources>

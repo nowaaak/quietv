@@ -52,6 +52,9 @@ More in [examples/](examples/).
 Configs from quietv 0.2 and older call `homeRedirect` `fireTv`, with the keys `redirectHome`,
 `stockHomePackage`, `stockHomeClassHint` and `showStockHomeTile`. They still work. `quietv config pull`
 writes the new name.
+| `shortcuts` | `{}` | Keys that open an app on the home screen: `"0"` to `"9"`, `"red"`, `"green"`, `"yellow"`, `"blue"`, each mapped to a package name. Set them on the TV too: hold OK on a tile, Assign to key. |
+| `startup.app` | `""` | App to open once after the TV restarts. |
+| `startup.input` | `""` | TV input to open once after a restart instead: `"last"` for the input you used last, or an input id from `quietv report`. Use `app` or `input`, not both. |
 | `companion.mode` | `"off"` | `"send"`, `"receive"` or `"off"`. See below. |
 | `companion.host` | `""` | Address of the receiving device, for `"send"`. |
 | `companion.port` | `47201` | TCP port, 1024 to 65535. |
@@ -59,6 +62,12 @@ writes the new name.
 
 Package names: `quietv shell pm list packages` lists all of them. In the launcher, hold OK on a tile
 and choose App info.
+
+## After a restart
+
+`startup` runs once per restart of the TV, and only within five minutes of it. Many TVs do not restart
+when you switch them off with the remote, they only go to standby. On those, `startup` runs after a
+power cut or a restart from the settings.
 
 ## Companion switch
 

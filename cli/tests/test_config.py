@@ -36,6 +36,12 @@ def test_valid_config_has_no_problems():
         "wallpaper": {"enabled": True, "dim": 80},
     }
     assert config.validate({**EXAMPLE, **appearance}) == []
+    comfort = {
+        "shortcuts": {"1": "com.netflix.ninja", "red": "com.google.android.youtube.tv"},
+        "startup": {"input": "com.mediatek.tvinput/.hdmi.HDMIInputService/HW5"},
+    }
+    assert config.validate({**EXAMPLE, **comfort}) == []
+    assert config.validate({"startup": {"input": "last"}}) == []
 
 
 @pytest.mark.parametrize(
@@ -60,6 +66,11 @@ def test_valid_config_has_no_problems():
         ({"wallpaper": {"enabled": "yes"}}, "wallpaper.enabled"),
         ({"wallpaper": {"dim": 90}}, "wallpaper.dim"),
         ({"wallpaper": {"blur": 3}}, "wallpaper: unknown key 'blur'"),
+        ({"shortcuts": {"f1": "com.a.b"}}, "'f1' is not a number or colour key"),
+        ({"shortcuts": {"1": "nope"}}, "shortcuts.1"),
+        ({"startup": {"app": "com.a.b", "input": "last"}}, "either app or input"),
+        ({"startup": {"input": "bad id!"}}, "startup.input"),
+        ({"startup": {"boot": 1}}, "startup: unknown key 'boot'"),
     ],
 )
 def test_invalid_values_are_reported(patch, message):

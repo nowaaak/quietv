@@ -36,10 +36,10 @@ anything here.
 
 ## 0.4: Everyday comfort
 
-- Screensaver with clock and date (DreamService)
-- App search with the remote
-- Remote key shortcuts: long press a colour or number key to open an app
-- Inputs menu that remembers the last used HDMI port, optional input or app on start
+- [x] Screensaver with clock and date (DreamService)
+- [x] App search with the remote
+- [x] Remote key shortcuts: a colour or number key opens an app
+- [x] Inputs menu that remembers the last used HDMI port, optional input or app on start
 
 ## 0.5: Device lists
 

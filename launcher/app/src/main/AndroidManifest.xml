@@ -80,6 +80,22 @@
             android:name=".settings.SettingsActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".search.SearchActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize" />
+
+        <service
+            android:name=".dream.ClockDream"
+            android:exported="true"
+            android:label="@string/screensaver_name"
+            android:permission="android.permission.BIND_DREAM_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.dreams.DreamService" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
         <service
             android:name=".firetv.HomeRedirectService"
             android:exported="true"

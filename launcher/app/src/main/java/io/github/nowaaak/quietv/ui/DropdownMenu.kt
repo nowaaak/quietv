@@ -91,7 +91,7 @@ class DropdownMenu(
         rows.addView(row)
     }
 
-    fun show(anchor: View, gravity: Int, gapDp: Float = DEFAULT_GAP_DP) {
+    fun show(anchor: View, gravity: Int, gapDp: Float = DEFAULT_GAP_DP, focusIndex: Int = 0) {
         popup.setOnDismissListener { onDismiss?.invoke() }
         val width = popup.width
         panel.measure(
@@ -113,7 +113,8 @@ class DropdownMenu(
         popup.showAtLocation(anchor, Gravity.NO_GRAVITY, x, y)
         panel.animate().alpha(1f).scaleY(1f).translationY(0f).setDuration(220)
             .setInterpolator(DecelerateInterpolator(1.6f)).start()
-        (0 until rows.childCount).map { rows.getChildAt(it) }.firstOrNull { it.isFocusable }?.requestFocus()
+        val focusable = (0 until rows.childCount).map { rows.getChildAt(it) }.filter { it.isFocusable }
+        (focusable.getOrNull(focusIndex) ?: focusable.firstOrNull())?.requestFocus()
     }
 
     val isShowing: Boolean get() = popup.isShowing

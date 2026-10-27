@@ -341,6 +341,24 @@ def cmd_theme(args) -> None:
     print("Wallpaper removed." if image is None else "Wallpaper set.")
 
 
+def cmd_screensaver(args) -> None:
+    with connect(args) as tv:
+        current = tv.shell("settings get secure screensaver_components").strip()
+        enabled = tv.shell("settings get secure screensaver_enabled").strip() == "1"
+        if args.action == "status":
+            ours = current == install.SCREENSAVER
+            print(f"Screensaver {'on' if enabled else 'off'}: {'quietv clock' if ours else current or 'none'}")
+        elif args.action == "on":
+            install.screensaver_on(tv)
+            print("Screensaver set to the quietv clock. Change the delay in the TV's screensaver settings.")
+        else:
+            if current != install.SCREENSAVER:
+                print("The quietv clock is not the screensaver. Nothing changed.")
+                return
+            install.screensaver_off(tv)
+            print("quietv clock removed. The TV uses its own screensaver again.")
+
+
 def cmd_redirect(args) -> None:
     with connect(args) as tv:
         if args.action == "on":
@@ -441,6 +459,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--dim", type=int, help="wallpaper dimming in percent, 0 to 80 (default 30)")
     p.add_argument("--off", action="store_true", help="remove the wallpaper")
     p.set_defaults(func=cmd_theme)
+
+    p = sub.add_parser("screensaver", help="use the quietv clock as screensaver")
+    p.add_argument("action", choices=("on", "off", "status"))
+    p.set_defaults(func=cmd_screensaver)
 
     for name, text in (
         ("redirect", "switch the Home redirect on or off (Fire TV, Google TV)"),

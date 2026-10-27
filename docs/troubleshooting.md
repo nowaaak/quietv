@@ -55,6 +55,12 @@ third-party home. `quietv install` disables it. If you kept it, disable it with
 network name with location access. `quietv install` grants it. On some TVs, Location must also be on in
 the TV settings.
 
+**The quietv clock does not appear as screensaver on Fire TV.** Fire OS runs Amazon's own screensaver and
+ignores other ones. `quietv screensaver on` works on Android TV and Google TV.
+
+**A number key does nothing.** Shortcuts work on quietv's home screen. Inside other apps the keys belong to
+the app. Check the assignments in quietv's Settings under Remote.
+
 **HDMI and Live TV screenshots are black.** The video layer is protected. That is expected.
 
 **An app is missing from the grid.** Apps without a TV launcher entry do not show up by default. Add

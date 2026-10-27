@@ -5,6 +5,15 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+
+- Search your apps from the home screen (the magnifier at the top, or the remote's search key).
+- Number and colour keys open apps on the home screen. Assign them on the TV (hold OK on a tile) or with
+  `shortcuts` in the config.
+- The Inputs menu remembers the last input and starts on it.
+- `startup` opens an app or the last input once after a restart.
+- A clock screensaver that drifts to avoid burn-in. `quietv screensaver on|off|status` sets it.
+
 ## [0.3.0] - 2026-10-27
 
 ### Added

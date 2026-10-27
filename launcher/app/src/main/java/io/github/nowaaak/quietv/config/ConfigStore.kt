@@ -33,6 +33,18 @@ class ConfigStore(context: Context) {
             prefs.edit().putString(KEY_ORDER, value.joinToString(",")).apply()
         }
 
+    var lastInput: String
+        get() = prefs.getString(KEY_LAST_INPUT, "").orEmpty()
+        set(value) {
+            prefs.edit().putString(KEY_LAST_INPUT, value).apply()
+        }
+
+    var startupBoot: Int
+        get() = prefs.getInt(KEY_STARTUP_BOOT, -1)
+        set(value) {
+            prefs.edit().putInt(KEY_STARTUP_BOOT, value).apply()
+        }
+
     fun register(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
         prefs.registerOnSharedPreferenceChangeListener(listener)
     }
@@ -46,5 +58,7 @@ class ConfigStore(context: Context) {
         const val PREFS = "quietv"
         const val KEY_CONFIG = "config"
         const val KEY_ORDER = "order"
+        const val KEY_LAST_INPUT = "lastInput"
+        const val KEY_STARTUP_BOOT = "startupBoot"
     }
 }
