@@ -102,7 +102,8 @@ class DropdownMenu(
         val gap = (gapDp * density).toInt()
         val location = IntArray(2)
         anchor.getLocationOnScreen(location)
-        val x = if (gravity == Gravity.END) location[0] + anchor.width - width else location[0]
+        val alignEnd = (gravity == Gravity.END) != (anchor.layoutDirection == View.LAYOUT_DIRECTION_RTL)
+        val x = if (alignEnd) location[0] + anchor.width - width else location[0]
         val fitsBelow = location[1] + anchor.height + gap + height <= anchor.rootView.height
         val y = if (fitsBelow) location[1] + anchor.height + gap else location[1] - gap - height
 

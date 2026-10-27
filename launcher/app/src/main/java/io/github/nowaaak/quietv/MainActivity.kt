@@ -208,10 +208,11 @@ class MainActivity : Activity(), TileAdapter.Listener {
 
         val edgeKeys = View.OnKeyListener { v, keyCode, event ->
             if (event.action != KeyEvent.ACTION_DOWN) return@OnKeyListener false
+            val rtl = v.layoutDirection == View.LAYOUT_DIRECTION_RTL
             when (keyCode) {
                 KeyEvent.KEYCODE_DPAD_UP -> true
-                KeyEvent.KEYCODE_DPAD_LEFT -> v.id == R.id.btnSearch
-                KeyEvent.KEYCODE_DPAD_RIGHT -> v.id == R.id.btnSettings
+                KeyEvent.KEYCODE_DPAD_LEFT -> v.id == if (rtl) R.id.btnSettings else R.id.btnSearch
+                KeyEvent.KEYCODE_DPAD_RIGHT -> v.id == if (rtl) R.id.btnSearch else R.id.btnSettings
                 else -> false
             }
         }
@@ -431,8 +432,8 @@ class MainActivity : Activity(), TileAdapter.Listener {
         if (event.action != KeyEvent.ACTION_DOWN) return true
         if (select && event.repeatCount > 0) return true
         val direction = when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_LEFT -> Direction.LEFT
-            KeyEvent.KEYCODE_DPAD_RIGHT -> Direction.RIGHT
+            KeyEvent.KEYCODE_DPAD_LEFT -> if (rtl(card)) Direction.RIGHT else Direction.LEFT
+            KeyEvent.KEYCODE_DPAD_RIGHT -> if (rtl(card)) Direction.LEFT else Direction.RIGHT
             KeyEvent.KEYCODE_DPAD_UP -> Direction.UP
             KeyEvent.KEYCODE_DPAD_DOWN -> Direction.DOWN
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_BACK -> {
@@ -455,6 +456,8 @@ class MainActivity : Activity(), TileAdapter.Listener {
         movingPos = target
         return true
     }
+
+    private fun rtl(view: View): Boolean = view.layoutDirection == View.LAYOUT_DIRECTION_RTL
 
     override fun onTileMenu(position: Int, card: View) {
         if (movingPos >= 0 || tileMenu?.isShowing == true) return
