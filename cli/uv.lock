@@ -261,7 +261,7 @@ wheels = [
 
 [[package]]
 name = "quietv"
-version = "0.5.0"
+version = "0.5.1"
 source = { editable = "." }
 dependencies = [
     { name = "adb-shell" },
