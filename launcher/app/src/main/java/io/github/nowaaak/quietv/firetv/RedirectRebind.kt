@@ -6,12 +6,29 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import io.github.nowaaak.quietv.config.ConfigStore
 
 object RedirectRebind {
 
     private const val TAG = "RedirectRebind"
     private const val CHECK_DELAY_MS = 5000L
     private const val REBIND_DELAY_MS = 1000L
+
+    fun restore(context: Context) {
+        val app = context.applicationContext
+        if (!ConfigStore(app).redirectWanted || Platform.redirectServiceEnabled(app)) return
+        val resolver = app.contentResolver
+        val ours = ComponentName(app, HomeRedirectService::class.java).flattenToString()
+        val current = Settings.Secure.getString(resolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
+        val services = current.orEmpty().split(':').filter { it.isNotEmpty() && it != "null" } + ours
+        try {
+            Settings.Secure.putString(resolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, services.joinToString(":"))
+            Settings.Secure.putInt(resolver, Settings.Secure.ACCESSIBILITY_ENABLED, 1)
+            Log.i(TAG, "redirect service was removed, probably by a force stop, added it back")
+        } catch (e: SecurityException) {
+            Log.w(TAG, "cannot add the redirect service back: ${e.message}")
+        }
+    }
 
     fun schedule(context: Context, always: Boolean, done: () -> Unit) {
         val app = context.applicationContext

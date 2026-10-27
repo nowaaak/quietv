@@ -32,6 +32,7 @@ import io.github.nowaaak.quietv.config.ConfigStore
 import io.github.nowaaak.quietv.config.LauncherConfig
 import io.github.nowaaak.quietv.config.StartupConfig
 import io.github.nowaaak.quietv.firetv.Platform
+import io.github.nowaaak.quietv.firetv.RedirectRebind
 import io.github.nowaaak.quietv.home.AppCatalog
 import io.github.nowaaak.quietv.home.AppLauncher
 import io.github.nowaaak.quietv.home.Direction
@@ -234,6 +235,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
         applyAccent()
         applyWallpaper()
         CompanionReceiverService.sync(this, config)
+        RedirectRebind.restore(this)
 
         ringShown = false
         ring.alpha = 0f

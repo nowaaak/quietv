@@ -5,6 +5,7 @@
     <string name="settings">الإعدادات</string>
     <string name="connected">متصل</string>
     <string name="not_connected">لا يوجد جهاز</string>
+    <string name="standby">وضع الاستعداد</string>
     <string name="live_tv">البث المباشر</string>
     <string name="no_inputs">لم يتم العثور على مصادر إدخال</string>
     <string name="good_morning">صباح الخير</string>

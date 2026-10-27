@@ -5,6 +5,7 @@
     <string name="settings">Instellingen</string>
     <string name="connected">Verbonden</string>
     <string name="not_connected">Geen apparaat</string>
+    <string name="standby">Stand-by</string>
     <string name="live_tv">Live-tv</string>
     <string name="no_inputs">Geen ingangen gevonden</string>
     <string name="good_morning">Goedemorgen</string>

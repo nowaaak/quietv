@@ -33,30 +33,38 @@ class InputsMenu(
         var lastIndex = 0
         val last = store.lastInput
 
-        val inputs = tim?.tvInputList.orEmpty().sortedWith(
-            compareBy<TvInputInfo> { it.type != TvInputInfo.TYPE_HDMI }
-                .thenBy(String.CASE_INSENSITIVE_ORDER) { it.loadLabel(activity).toString() },
-        )
-        for (info in inputs) {
+        val all = tim?.tvInputList.orEmpty()
+        for (info in all) {
             val system = info.serviceInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0
             val currentTuner = tunerId
             if (info.type == TvInputInfo.TYPE_TUNER && system && (currentTuner == null || info.id < currentTuner)) {
                 tunerId = info.id
             }
-            if (tim == null || !info.isPassthroughInput) continue
-            val hdmi = info.type == TvInputInfo.TYPE_HDMI
-            var label = info.loadLabel(activity)?.toString() ?: info.id
+        }
+        val passthrough = all.filter { it.isPassthroughInput }
+        val ids = passthrough.map { it.id }.toSet()
+        val devices = passthrough.filter { it.parentId != null && it.parentId in ids }.groupBy { it.parentId }
+        val ports = passthrough.filter { it.parentId == null || it.parentId !in ids }.sortedWith(
+            compareBy<TvInputInfo> { it.type != TvInputInfo.TYPE_HDMI }
+                .thenBy(String.CASE_INSENSITIVE_ORDER) { it.loadLabel(activity).toString() },
+        )
+        for (port in ports) {
+            if (tim == null) break
+            val hdmi = port.type == TvInputInfo.TYPE_HDMI
+            var label = port.loadLabel(activity)?.toString() ?: port.id
             if (hdmi && !label.uppercase().contains("HDMI")) label = "HDMI $label"
+            val device = devices[port.id]?.firstOrNull()
+            device?.loadLabel(activity)?.toString()?.takeIf { it.isNotBlank() }?.let { label = "$label · $it" }
             if (!hdmi && !menu.isEmpty && !sawNonHdmi) menu.addSeparator()
             if (!hdmi) sawNonHdmi = true
-            val id = info.id
+            val id = device?.id ?: port.id
             val state = tim.getInputState(id)
-            if (id == last) lastIndex = rowCount
+            if (id == last || port.id == last) lastIndex = rowCount
             rowCount++
             menu.addRow(
                 icon = if (hdmi) R.drawable.ic_input else R.drawable.ic_av,
                 title = label,
-                status = statusText(state),
+                status = statusText(state, device != null),
                 active = state == TvInputManager.INPUT_STATE_CONNECTED,
             ) {
                 store.lastInput = id
@@ -83,9 +91,10 @@ class InputsMenu(
         menu.show(anchor, Gravity.END, focusIndex = lastIndex)
     }
 
-    private fun statusText(state: Int): String? = when (state) {
-        TvInputManager.INPUT_STATE_CONNECTED -> activity.getString(R.string.connected)
-        TvInputManager.INPUT_STATE_DISCONNECTED -> activity.getString(R.string.not_connected)
+    private fun statusText(state: Int, device: Boolean): String? = when {
+        state == TvInputManager.INPUT_STATE_CONNECTED -> activity.getString(R.string.connected)
+        state == TvInputManager.INPUT_STATE_DISCONNECTED -> activity.getString(R.string.not_connected)
+        state == TvInputManager.INPUT_STATE_CONNECTED_STANDBY && device -> activity.getString(R.string.standby)
         else -> null
     }
 
