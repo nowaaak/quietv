@@ -1,0 +1,29 @@
+name: Device report
+description: Share what you disabled on a TV that has no device list yet, or report a problem with one
+labels: [devices]
+body:
+  - type: textarea
+    id: probe
+    attributes:
+      label: Output of `quietv probe`
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: packages
+    attributes:
+      label: Packages
+      description: What you disabled, what each one does if you know, and how long you have used the TV like this.
+    validations:
+      required: true
+  - type: textarea
+    id: problems
+    attributes:
+      label: Anything that broke
+      description: And which package brought it back.
+  - type: checkboxes
+    id: pr
+    attributes:
+      label: Pull request
+      options:
+        - label: I can open a pull request with a `devices/*.toml` file myself

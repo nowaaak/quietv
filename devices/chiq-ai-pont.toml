@@ -1,0 +1,133 @@
+schema = 1
+
+[device]
+name = "CHiQ AI PONT"
+brand = "CHiQ"
+model = "DVB93CQ (samseong)"
+platform = "androidtv"
+os = "Android TV 11"
+firmware = "RTO2.250508.001"
+stock_launcher = "com.google.android.tvlauncher"
+notes = """
+1.3 GB RAM, MediaTek. Vendor layer by Homwee (com.homwee.*), ad and content recognition by Anoki.
+HDMI and Live TV screenshots come out black because the video layer is protected.
+The Wi-Fi button shows the network name only when Location is on in the TV settings (Android 11).
+One remote for TV and a stick on HDMI: quietv shell settings put global hdmi_control_enabled 1
+Checked against the UAD-ng list (2026-10-20): Google packages rated Expert there (tvlauncher,
+tvrecommendations, mediashell) were disabled here without side effects across several reboots.
+"""
+
+[[package]]
+id = "tv.anoki.acr.controller"
+category = "ads"
+tier = "recommended"
+note = "automatic content recognition (ACR)"
+
+[[package]]
+id = "com.cltv.fast"
+category = "ads"
+tier = "recommended"
+note = "FAST channels with ads"
+
+[[package]]
+id = "com.homwee.aipont"
+category = "content"
+tier = "recommended"
+
+[[package]]
+id = "android.autoinstalls.config.homwee"
+category = "vendor"
+tier = "recommended"
+
+[[package]]
+id = "com.homwee.store"
+category = "vendor"
+tier = "recommended"
+
+[[package]]
+id = "com.homwee.help"
+category = "vendor"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.feedback"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.play.games"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.videos"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.youtube.tvmusic"
+category = "streaming"
+tier = "advanced"
+note = "YouTube Music"
+
+[[package]]
+id = "com.google.android.tvrecommendations"
+category = "content"
+tier = "advanced"
+
+[[package]]
+id = "com.google.android.backdrop"
+category = "content"
+tier = "advanced"
+note = "Ambient mode screensaver"
+
+[[package]]
+id = "com.google.android.syncadapters.calendar"
+category = "preloaded"
+tier = "advanced"
+
+[[package]]
+id = "com.google.android.katniss"
+category = "assistant"
+tier = "advanced"
+note = "Google Assistant and voice search"
+
+[[package]]
+id = "com.homwee.alexacontrol"
+category = "assistant"
+tier = "advanced"
+
+[[package]]
+id = "com.google.android.apps.mediashell"
+category = "cast"
+tier = "advanced"
+note = "Chromecast built-in"
+
+[[package]]
+id = "com.homwee.multiscreenshare"
+category = "cast"
+tier = "advanced"
+
+[[package]]
+id = "com.homwee.mmp.screenshare"
+category = "cast"
+tier = "advanced"
+note = "Miracast and AirPlay"
+
+[[package]]
+id = "com.homwee.upgrade"
+category = "updates"
+tier = "advanced"
+note = "vendor app updater, firmware updates are com.homwee.dmt.upgrade"
+
+[[keep]]
+id = "com.google.android.leanbacklauncher.partnercustomizer"
+reason = "provides the tvlauncher.widget provider; without it com.mediatek.tv.service crash-loops after a reboot and the Input key stops working"
+
+[[keep]]
+id = "com.homwee.dmt.upgrade"
+reason = "firmware updates"
+
+[[keep]]
+id = "com.homwee.synckey"
+reason = "remote key service"

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inputs">Quellen</string>
+    <string name="wifi">WLAN</string>
+    <string name="settings">Einstellungen</string>
+    <string name="connected">Verbunden</string>
+    <string name="not_connected">Kein Gerät</string>
+    <string name="live_tv">Live TV</string>
+    <string name="no_inputs">Keine Quellen gefunden</string>
+    <string name="good_morning">Guten Morgen</string>
+    <string name="good_afternoon">Guten Tag</string>
+    <string name="good_evening">Guten Abend</string>
+    <string name="good_night">Gute Nacht</string>
+    <string name="ethernet">LAN</string>
+    <string name="offline">Offline</string>
+    <string name="not_available">Auf diesem TV nicht verfügbar</string>
+    <string name="cant_open">%1$s lässt sich nicht öffnen</string>
+    <string name="date_format">EEEE, d. MMMM</string>
+    <string name="selected">Ausgewählt</string>
+    <string name="open">Öffnen</string>
+    <string name="hold_hint">Halten für Optionen</string>
+    <string name="favorites">Favoriten</string>
+    <string name="all_apps">Alle Apps</string>
+
+    <string name="tile_move">Verschieben</string>
+    <string name="tile_hide">Ausblenden</string>
+    <string name="tile_info">App-Info</string>
+    <string name="tile_hidden">%1$s ausgeblendet. In den Einstellungen wieder einblenden.</string>
+
+    <string name="redirect_description">Öffnet quietv, sobald der Standard-Startbildschirm erscheint. Für Fire TV, wo sich der Startbildschirm nicht ersetzen lässt.</string>
+    <string name="companion_switch">Zum TV wechseln</string>
+    <string name="companion_failed">TV nicht erreichbar</string>
+    <string name="companion_channel">Geräte-Umschaltung</string>
+
+    <string name="settings_appearance">Darstellung</string>
+    <string name="settings_theme">Design</string>
+    <string name="theme_dark">Graphit</string>
+    <string name="theme_light">Papier</string>
+    <string name="settings_accent">Akzentfarbe</string>
+    <string name="settings_columns">Kacheln pro Reihe</string>
+    <string name="settings_apps">Apps</string>
+    <string name="settings_reset_order">Kachel-Reihenfolge zurücksetzen</string>
+    <string name="settings_order_reset">Reihenfolge zurückgesetzt</string>
+    <string name="settings_show_app">%1$s einblenden</string>
+    <string name="settings_hidden">Ausgeblendet</string>
+    <string name="settings_fire_tv">Fire TV</string>
+    <string name="settings_home_redirect">Home-Taste öffnet quietv</string>
+    <string name="on">An</string>
+    <string name="off">Aus</string>
+    <string name="settings_system">System</string>
+    <string name="settings_tv_settings">TV-Einstellungen</string>
+    <string name="settings_about">Info</string>
+    <string name="settings_version">quietv %1$s</string>
+</resources>

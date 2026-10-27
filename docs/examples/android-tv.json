@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "favorites": [
+    "com.netflix.ninja",
+    "com.google.android.youtube.tv",
+    "com.amazon.amazonvideo.livingroom",
+    "com.disney.disneyplus",
+    "com.spotify.tv.android"
+  ],
+  "hidden": ["com.mediatek.wwtv.tvcenter"],
+  "columns": 5,
+  "accent": "#6EE7B7",
+  "theme": "dark",
+  "liveTvPackage": "com.mediatek.wwtv.tvcenter"
+}

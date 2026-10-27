@@ -1,0 +1,202 @@
+schema = 1
+
+[device]
+name = "Fire TV Stick 4K Max (2nd gen)"
+brand = "Amazon"
+model = "AFTKRT (karat)"
+platform = "fireos"
+os = "Fire OS 8.1.8.5 (Android 11)"
+firmware = "RS8185/3891"
+stock_launcher = "com.amazon.tv.launcher"
+notes = """
+The stock launcher is protected and cannot be disabled. quietv install switches on the Home redirect
+instead, see docs/fire-tv.md.
+Protected, disable-user is refused: com.amazon.ftvads.deeplinking, com.amazon.device.metrics.
+"""
+
+[[package]]
+id = "com.amazon.tv.acr"
+category = "ads"
+tier = "recommended"
+note = "automatic content recognition (ACR)"
+
+[[package]]
+id = "com.amazon.hybridadidservice"
+category = "ads"
+tier = "recommended"
+note = "advertising ID"
+
+[[package]]
+id = "com.amazon.kso.blackbird"
+category = "ads"
+tier = "recommended"
+note = "ad bidding"
+
+[[package]]
+id = "com.amazon.shoptv.client"
+category = "ads"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.shoptv.firetv.client"
+category = "ads"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.media.recommendations"
+category = "content"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.sneakpeek"
+category = "content"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.tv.earlyaccess"
+category = "content"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.neo.minerva"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.neo.minerva.logcat"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.wirelessmetrics.service"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.perfcollection"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.perfc"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.dp.logger"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.device.telemetry.emitter"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.storm.lightning.tutorial"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.tmm.tutorial"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.gamehub"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.tv.releasenotes"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.bueller.music"
+category = "preloaded"
+tier = "advanced"
+
+[[package]]
+id = "com.amazon.bueller.photos"
+category = "preloaded"
+tier = "advanced"
+
+[[package]]
+id = "com.amazon.minitv.android.app"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.amazon.tahoe"
+category = "preloaded"
+tier = "advanced"
+note = "Amazon Kids"
+
+[[package]]
+id = "com.amazon.spiderpork"
+category = "streaming"
+tier = "advanced"
+note = "Luna cloud gaming"
+
+[[package]]
+id = "com.amazon.hedwig"
+category = "preloaded"
+tier = "advanced"
+note = "News"
+
+[[package]]
+id = "com.amazon.audiohome"
+category = "preloaded"
+tier = "advanced"
+note = "Music & More"
+
+[[package]]
+id = "com.amazon.smarthomemapviewapp"
+category = "assistant"
+tier = "advanced"
+note = "Alexa smart home view"
+
+[[package]]
+id = "com.amazon.vizzini"
+category = "assistant"
+tier = "advanced"
+
+[[package]]
+id = "com.amazon.tv.alexaalerts"
+category = "assistant"
+tier = "advanced"
+
+[[package]]
+id = "com.amazon.tv.alexanotifications"
+category = "assistant"
+tier = "advanced"
+
+[[package]]
+id = "com.amazon.whad"
+category = "assistant"
+tier = "advanced"
+
+[[package]]
+id = "com.amazon.cast.sink"
+category = "cast"
+tier = "advanced"
+note = "Miracast receiver"
+
+[[package]]
+id = "com.amazon.ftv.screensaver"
+category = "content"
+tier = "advanced"
+
+[[package]]
+id = "com.amazon.tv.ftvambient"
+category = "content"
+tier = "advanced"
+
+[[keep]]
+id = "com.amazon.venezia"
+reason = "Appstore, needed to install and update apps"
+
+[[keep]]
+id = "com.amazon.logan"
+reason = "accessibility framework used by the Home redirect"

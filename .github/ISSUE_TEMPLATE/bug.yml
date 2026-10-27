@@ -1,0 +1,30 @@
+name: Bug report
+description: Something in the launcher or the CLI does not work
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did you do, what did you expect, what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: probe
+    attributes:
+      label: Output of `quietv probe`
+      render: text
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: quietv version
+      description: Settings → About on the TV, or `quietv --version`
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: "`quietv screenshot bug.png` takes a screenshot. `quietv shell logcat -d -t 300` shows recent logs."

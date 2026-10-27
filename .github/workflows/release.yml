@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v4
+      - run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Check that the tag matches the versions
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          grep -q "versionName = \"$VERSION\"" launcher/app/build.gradle.kts \
+            || { echo "launcher versionName does not match $GITHUB_REF_NAME"; exit 1; }
+          grep -q "^version = \"$VERSION\"" cli/pyproject.toml \
+            || { echo "cli version does not match $GITHUB_REF_NAME"; exit 1; }
+
+      - name: Build signed APK
+        working-directory: launcher
+        env:
+          KEYSTORE_BASE64: ${{ secrets.QUIETV_KEYSTORE_BASE64 }}
+          QUIETV_KEYSTORE_PASSWORD: ${{ secrets.QUIETV_KEYSTORE_PASSWORD }}
+          QUIETV_KEY_ALIAS: ${{ secrets.QUIETV_KEY_ALIAS }}
+          QUIETV_KEY_PASSWORD: ${{ secrets.QUIETV_KEY_PASSWORD }}
+        run: |
+          test -n "$KEYSTORE_BASE64" || { echo "secret QUIETV_KEYSTORE_BASE64 is missing"; exit 1; }
+          export QUIETV_KEYSTORE="$RUNNER_TEMP/release.jks"
+          echo "$KEYSTORE_BASE64" | base64 -d > "$QUIETV_KEYSTORE"
+          ./gradlew testDebugUnitTest assembleRelease --console=plain
+          rm -f "$QUIETV_KEYSTORE"
+
+      - name: Verify signature and write checksums
+        run: |
+          APKSIGNER="$ANDROID_HOME/build-tools/36.0.0/apksigner"
+          cp launcher/app/build/outputs/apk/release/app-release.apk quietv.apk
+          "$APKSIGNER" verify --verbose quietv.apk
+          sha256sum quietv.apk > SHA256SUMS
+          "$APKSIGNER" verify --print-certs quietv.apk | grep "SHA-256" > certificate.txt
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "Install with \`quietv install\` or see the README."
+            echo
+            echo "Signing certificate:"
+            echo
+            echo '```'
+            cat certificate.txt
+            echo '```'
+          } > notes.md
+          gh release create "$GITHUB_REF_NAME" quietv.apk SHA256SUMS \
+            --title "quietv ${GITHUB_REF_NAME#v}" --notes-file notes.md --verify-tag

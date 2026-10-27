@@ -1,0 +1,191 @@
+schema = 1
+
+[device]
+name = "Toshiba Fire TV"
+brand = "Toshiba"
+model = "AFTHA004 (hazel)"
+platform = "fireos"
+os = "Fire OS (Android 9)"
+firmware = "PS7717.5741N.0036408028416"
+stock_launcher = "com.amazon.tv.launcher"
+notes = """
+Conservative list. Kept on purpose: Alexa, OTA updates, AirPlay, DIAL and whisperplay casting.
+The streaming apps are preinstalled regional apps; skip them with --exclude streaming if you use any.
+"""
+
+[[package]]
+id = "com.amazon.shoptv.client"
+category = "ads"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.shoptv.firetv.client"
+category = "ads"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.tv.acr"
+category = "ads"
+tier = "recommended"
+note = "automatic content recognition (ACR)"
+
+[[package]]
+id = "com.amazon.tv.democontent.provider"
+category = "content"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.tv.fw.metrics"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.neo.minerva"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.neo.minerva.logcat"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.wirelessmetrics.service"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.perfcollection"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.perfc"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.dp.logger"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.storm.lightning.tutorial"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.tmm.tutorial"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.gamehub"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.amazon.bueller.music"
+category = "preloaded"
+tier = "advanced"
+
+[[package]]
+id = "com.amazon.bueller.photos"
+category = "preloaded"
+tier = "advanced"
+
+[[package]]
+id = "com.amazon.minitv.android.app"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.amazon.naatyam"
+category = "preloaded"
+tier = "advanced"
+
+[[package]]
+id = "com.amazon.cast.sink"
+category = "cast"
+tier = "advanced"
+note = "Miracast receiver"
+
+[[package]]
+id = "com.disney.disneyplus"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "in.startv.hotstar"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.hbo.hbonow"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.hulu.plus"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.peacock.peacockfiretv"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.tubitv.ott"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "tv.pluto.android"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.onemainstream.sonyliv.android"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.zee5.amazon"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.suntv.sunnxt"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.yupptv.firetv"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.jio.media.stb.ondemand"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.hungama.movies"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.aajtak.firetv"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.july.ndtv"
+category = "streaming"
+tier = "advanced"
+
+[[package]]
+id = "com.nexgtv.tv"
+category = "streaming"
+tier = "advanced"

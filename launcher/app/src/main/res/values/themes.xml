@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Quietv" parent="android:Theme.Material.NoActionBar.Fullscreen">
+        <item name="android:windowBackground">@color/graphite_background</item>
+        <item name="android:colorBackground">@color/graphite_background</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="qvBackground">@color/graphite_background</item>
+        <item name="qvSurface">@color/graphite_surface</item>
+        <item name="qvText">@color/graphite_text</item>
+        <item name="qvTextMuted">@color/graphite_text_muted</item>
+        <item name="qvTextDim">@color/graphite_text_dim</item>
+        <item name="qvLine">@color/graphite_line</item>
+        <item name="qvStroke">@color/graphite_stroke</item>
+        <item name="qvOnText">@color/graphite_background</item>
+        <item name="qvOnTextDim">@color/graphite_on_text_dim</item>
+    </style>
+
+    <style name="Theme.Quietv.Light">
+        <item name="android:windowBackground">@color/paper_background</item>
+        <item name="android:colorBackground">@color/paper_background</item>
+        <item name="qvBackground">@color/paper_background</item>
+        <item name="qvSurface">@color/paper_surface</item>
+        <item name="qvText">@color/paper_text</item>
+        <item name="qvTextMuted">@color/paper_text_muted</item>
+        <item name="qvTextDim">@color/paper_text_dim</item>
+        <item name="qvLine">@color/paper_line</item>
+        <item name="qvStroke">@color/paper_stroke</item>
+        <item name="qvOnText">@color/paper_background</item>
+        <item name="qvOnTextDim">@color/paper_on_text_dim</item>
+    </style>
+
+    <style name="TopIconButton">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:padding">11dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:background">@drawable/pill_bg</item>
+        <item name="android:tint">@color/pill_content</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="EyebrowBase">
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">@font/geist</item>
+        <item name="android:letterSpacing">0.14</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Eyebrow" parent="EyebrowBase" />
+</resources>

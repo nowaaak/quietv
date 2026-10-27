@@ -1,0 +1,122 @@
+schema = 1
+
+[device]
+name = "Xiaomi Mi TV 4A"
+brand = "Xiaomi"
+model = "MiTV-MOOQ1 (tarzan)"
+platform = "androidtv"
+os = "Android TV 10"
+firmware = "QTG3.200305.006.2591"
+stock_launcher = "com.google.android.tvlauncher"
+notes = """
+Also a good starting point for other Xiaomi and Redmi Android TVs with PatchWall.
+Known quirk: default_input_method points at com.baidu.input, which is not installed, so no keyboard
+appears in search fields. Fix: quietv shell ime set com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME
+"""
+
+[[package]]
+id = "com.miui.tv.analytics"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.xiaomi.statistic"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.mitv.tvhome.atv"
+category = "content"
+tier = "recommended"
+note = "PatchWall content rows"
+
+[[package]]
+id = "com.mitv.tvhome.michannel"
+category = "content"
+tier = "recommended"
+
+[[package]]
+id = "com.mitv.tvhome.mitvplus"
+category = "content"
+tier = "recommended"
+
+[[package]]
+id = "com.xm.webcontent"
+category = "content"
+tier = "recommended"
+
+[[package]]
+id = "com.xiaomi.floatingframe"
+category = "content"
+tier = "recommended"
+
+[[package]]
+id = "com.xiaomi.mitv.tvmanager"
+category = "vendor"
+tier = "recommended"
+note = "TV Manager cleaner app"
+
+[[package]]
+id = "android.autoinstalls.config.xiaomi.amelie"
+category = "vendor"
+tier = "recommended"
+
+[[package]]
+id = "com.xiaomi.mitv.smartshare"
+category = "cast"
+tier = "advanced"
+
+[[package]]
+id = "com.mitv.milinkservice"
+category = "cast"
+tier = "advanced"
+note = "Mi cast, Chromecast keeps working"
+
+[[package]]
+id = "com.xiaomi.mitv.updateservice"
+category = "updates"
+tier = "advanced"
+note = "re-enable to check for firmware updates"
+
+[[package]]
+id = "com.xiaomi.amazon.alexa"
+category = "assistant"
+tier = "advanced"
+note = "Alexa bridge"
+
+[[package]]
+id = "com.xiaomi.mimusic2"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.play.games"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.feedback"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.apps.tachyon"
+category = "preloaded"
+tier = "recommended"
+note = "Google Duo"
+
+[[package]]
+id = "fusion.android.tv.demo"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.tvrecommendations"
+category = "content"
+tier = "advanced"
+note = "recommendation rows of the stock launcher"
+
+[[package]]
+id = "com.google.android.leanbacklauncher.recommendations"
+category = "content"
+tier = "advanced"

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="VectorRaster"
+    android:width="320dp" android:height="180dp"
+    android:viewportWidth="320" android:viewportHeight="180">
+    <path android:fillColor="@color/graphite_background" android:pathData="M0,0H320V180H0Z" />
+    <group android:pivotX="160" android:pivotY="90" android:scaleX="0.75" android:scaleY="0.75">
+        <group android:translateX="-28" android:translateY="-3.5">
+            <path
+                android:strokeColor="@color/graphite_text"
+                android:strokeWidth="8"
+                android:strokeLineCap="round"
+                android:strokeLineJoin="round"
+                android:pathData="M98,92A20,20 0,1 1,58 92A20,20 0,1 1,98 92M98,72V132M116,72V92A20,20 0,0 0,156 92M156,72V112M174,72V112M192,92H232A20,20 0,1 0,226.14 106.14M256,62V102A10,10 0,0 0,266 112H272M246,76H270M282,72L300,112L318,72" />
+            <path android:fillColor="@color/accent" android:pathData="M169,56A5,5 0,1 0,179 56A5,5 0,1 0,169 56Z" />
+        </group>
+    </group>
+</vector>

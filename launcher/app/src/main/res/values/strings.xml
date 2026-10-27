@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">quietv</string>
+    <string name="inputs">Inputs</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="settings">Settings</string>
+    <string name="connected">Connected</string>
+    <string name="not_connected">No device</string>
+    <string name="live_tv">Live TV</string>
+    <string name="no_inputs">No inputs found</string>
+    <string name="good_morning">Good morning</string>
+    <string name="good_afternoon">Good afternoon</string>
+    <string name="good_evening">Good evening</string>
+    <string name="good_night">Good night</string>
+    <string name="ethernet">Ethernet</string>
+    <string name="offline">Offline</string>
+    <string name="not_available">Not available on this TV</string>
+    <string name="cant_open">Can\'t open %1$s</string>
+    <string name="date_format">EEEE  d MMMM</string>
+    <string name="selected">Selected</string>
+    <string name="open">Open</string>
+    <string name="ok_key" translatable="false">OK</string>
+    <string name="hold_hint">Hold for options</string>
+    <string name="favorites">Favorites</string>
+    <string name="all_apps">All apps</string>
+
+    <string name="tile_move">Move</string>
+    <string name="tile_hide">Hide</string>
+    <string name="tile_info">App info</string>
+    <string name="tile_hidden">%1$s hidden. Show it again in Settings.</string>
+
+    <string name="redirect_description">Opens quietv when the stock home screen appears. Used on Fire TV, where the stock home cannot be replaced.</string>
+    <string name="companion_switch">Switch to TV</string>
+    <string name="companion_failed">TV not reachable</string>
+    <string name="companion_channel">Companion switch</string>
+
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme">Theme</string>
+    <string name="theme_dark">Graphite</string>
+    <string name="theme_light">Paper</string>
+    <string name="settings_accent">Accent colour</string>
+    <string name="settings_columns">Tiles per row</string>
+    <string name="settings_apps">Apps</string>
+    <string name="settings_reset_order">Reset tile order</string>
+    <string name="settings_order_reset">Tile order reset</string>
+    <string name="settings_show_app">Show %1$s</string>
+    <string name="settings_hidden">Hidden</string>
+    <string name="settings_fire_tv">Fire TV</string>
+    <string name="settings_home_redirect">Home button opens quietv</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="settings_system">System</string>
+    <string name="settings_tv_settings">TV settings</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">quietv %1$s</string>
+</resources>
