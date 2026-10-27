@@ -29,7 +29,7 @@
     <string name="tile_info">App info</string>
     <string name="tile_hidden">%1$s hidden. Show it again in Settings.</string>
 
-    <string name="redirect_description">Opens quietv when the stock home screen appears. Used on Fire TV, where the stock home cannot be replaced.</string>
+    <string name="redirect_description">Opens quietv when the stock home screen appears. Used on Fire TV and Google TV, where the stock home cannot be replaced.</string>
     <string name="companion_switch">Switch to TV</string>
     <string name="companion_failed">TV not reachable</string>
     <string name="companion_channel">Companion switch</string>
@@ -58,8 +58,8 @@
     <string name="settings_order_reset">Tile order reset</string>
     <string name="settings_show_app">Show %1$s</string>
     <string name="settings_hidden">Hidden</string>
-    <string name="settings_fire_tv">Fire TV</string>
-    <string name="settings_home_redirect">Home button opens quietv</string>
+    <string name="settings_home_button">Home button</string>
+    <string name="settings_home_redirect">Opens quietv instead of the stock home</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="settings_system">System</string>

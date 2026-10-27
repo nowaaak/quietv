@@ -12,10 +12,10 @@ enum class CompanionMode(val key: String) {
     RECEIVE("receive"),
 }
 
-data class FireTvConfig(
-    val redirectHome: Boolean = true,
+data class HomeRedirectConfig(
+    val enabled: Boolean = true,
     val stockHomePackage: String = "",
-    val stockHomeClassHint: String = DEFAULT_CLASS_HINT,
+    val classHint: String = DEFAULT_CLASS_HINT,
     val showStockHomeTile: Boolean = false,
 ) {
     companion object {
@@ -56,7 +56,7 @@ data class LauncherConfig(
     val tileRadius: Int = DEFAULT_TILE_RADIUS,
     val wallpaper: WallpaperConfig = WallpaperConfig(),
     val liveTvPackage: String = "",
-    val fireTv: FireTvConfig = FireTvConfig(),
+    val homeRedirect: HomeRedirectConfig = HomeRedirectConfig(),
     val companion: CompanionConfig = CompanionConfig(),
 ) {
 
@@ -73,12 +73,12 @@ data class LauncherConfig(
         .put("wallpaper", JSONObject().put("enabled", wallpaper.enabled).put("dim", wallpaper.dim))
         .put("liveTvPackage", liveTvPackage)
         .put(
-            "fireTv",
+            "homeRedirect",
             JSONObject()
-                .put("redirectHome", fireTv.redirectHome)
-                .put("stockHomePackage", fireTv.stockHomePackage)
-                .put("stockHomeClassHint", fireTv.stockHomeClassHint)
-                .put("showStockHomeTile", fireTv.showStockHomeTile),
+                .put("enabled", homeRedirect.enabled)
+                .put("stockHomePackage", homeRedirect.stockHomePackage)
+                .put("classHint", homeRedirect.classHint)
+                .put("showStockHomeTile", homeRedirect.showStockHomeTile),
         )
         .put(
             "companion",
@@ -111,10 +111,16 @@ data class LauncherConfig(
         private val TOKEN = Regex("^[A-Za-z0-9_-]{${CompanionConfig.MIN_TOKEN_LENGTH},}$")
         private val TOP_KEYS = setOf(
             "version", "favorites", "hidden", "extraApps", "columns", "accent", "theme", "colors", "tileRadius",
-            "wallpaper", "liveTvPackage", "fireTv", "companion",
+            "wallpaper", "liveTvPackage", "homeRedirect", "fireTv", "companion",
         )
         private val WALLPAPER_KEYS = setOf("enabled", "dim")
-        private val FIRE_TV_KEYS = setOf("redirectHome", "stockHomePackage", "stockHomeClassHint", "showStockHomeTile")
+        private val REDIRECT_KEYS = setOf("enabled", "stockHomePackage", "classHint", "showStockHomeTile")
+        private val LEGACY_REDIRECT_KEYS = mapOf(
+            "redirectHome" to "enabled",
+            "stockHomePackage" to "stockHomePackage",
+            "stockHomeClassHint" to "classHint",
+            "showStockHomeTile" to "showStockHomeTile",
+        )
         private val COMPANION_KEYS = setOf("mode", "host", "port", "token")
 
         fun isPackageName(value: String): Boolean = PACKAGE.matches(value)
@@ -157,17 +163,22 @@ data class LauncherConfig(
             }
             val liveTv = optionalPackage(root, "liveTvPackage", "liveTvPackage", problems)
 
-            val fireJson = objectOrEmpty(root, "fireTv", problems)
-            unknownKeys(fireJson, FIRE_TV_KEYS, "fireTv.", problems)
-            val redirect = fireJson.opt("redirectHome") ?: true
-            if (redirect !is Boolean) problems += "fireTv.redirectHome must be true or false"
-            val stockTile = fireJson.opt("showStockHomeTile") ?: false
-            if (stockTile !is Boolean) problems += "fireTv.showStockHomeTile must be true or false"
-            val fireTv = FireTvConfig(
-                redirectHome = redirect as? Boolean ?: true,
-                stockHomePackage = optionalPackage(fireJson, "stockHomePackage", "fireTv.stockHomePackage", problems),
-                stockHomeClassHint = fireJson.optString("stockHomeClassHint", FireTvConfig.DEFAULT_CLASS_HINT)
-                    .ifBlank { FireTvConfig.DEFAULT_CLASS_HINT },
+            val redirectJson = homeRedirectJson(root, problems)
+            unknownKeys(redirectJson, REDIRECT_KEYS, "homeRedirect.", problems)
+            val redirect = redirectJson.opt("enabled") ?: true
+            if (redirect !is Boolean) problems += "homeRedirect.enabled must be true or false"
+            val stockTile = redirectJson.opt("showStockHomeTile") ?: false
+            if (stockTile !is Boolean) problems += "homeRedirect.showStockHomeTile must be true or false"
+            val homeRedirect = HomeRedirectConfig(
+                enabled = redirect as? Boolean ?: true,
+                stockHomePackage = optionalPackage(
+                    redirectJson,
+                    "stockHomePackage",
+                    "homeRedirect.stockHomePackage",
+                    problems,
+                ),
+                classHint = redirectJson.optString("classHint", HomeRedirectConfig.DEFAULT_CLASS_HINT)
+                    .ifBlank { HomeRedirectConfig.DEFAULT_CLASS_HINT },
                 showStockHomeTile = stockTile as? Boolean ?: false,
             )
 
@@ -202,7 +213,7 @@ data class LauncherConfig(
                 tileRadius = tileRadius as Int,
                 wallpaper = WallpaperConfig(wallpaperOn as Boolean, dim as Int),
                 liveTvPackage = liveTv,
-                fireTv = fireTv,
+                homeRedirect = homeRedirect,
                 companion = CompanionConfig(mode!!, host, port as Int, token),
             )
         }
@@ -222,6 +233,21 @@ data class LauncherConfig(
             val value = obj.optString(key, "")
             if (value.isNotEmpty() && !isPackageName(value)) problems += "$name must be a package name or empty"
             return value
+        }
+
+        private fun homeRedirectJson(root: JSONObject, problems: MutableList<String>): JSONObject {
+            if (!root.has("fireTv")) return objectOrEmpty(root, "homeRedirect", problems)
+            if (root.has("homeRedirect")) {
+                problems += "use homeRedirect, not the old fireTv key"
+                return JSONObject()
+            }
+            val legacy = objectOrEmpty(root, "fireTv", problems)
+            val result = JSONObject()
+            for (key in legacy.keys()) {
+                val name = LEGACY_REDIRECT_KEYS[key]
+                if (name == null) problems += "unknown key 'fireTv.$key'" else result.put(name, legacy.get(key))
+            }
+            return result
         }
 
         private fun colors(root: JSONObject, problems: MutableList<String>): Map<String, Int> {

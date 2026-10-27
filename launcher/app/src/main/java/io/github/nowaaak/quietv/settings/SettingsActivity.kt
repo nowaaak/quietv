@@ -94,8 +94,8 @@ class SettingsActivity : Activity() {
             }
         }
 
-        if (Platform.isFireOs(this) || config.fireTv.stockHomePackage.isNotEmpty()) {
-            section(R.string.settings_fire_tv)
+        if (Platform.isFireOs(this) || config.homeRedirect.stockHomePackage.isNotEmpty()) {
+            section(R.string.settings_home_button)
             val on = Platform.redirectServiceEnabled(this)
             row(getString(R.string.settings_home_redirect), getString(if (on) R.string.on else R.string.off)) {
                 AppLauncher.start(this, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))

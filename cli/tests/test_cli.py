@@ -1,6 +1,9 @@
+import base64
+import json
+
 import pytest
 
-from quietv import cli, release
+from quietv import cli, config, release
 
 
 @pytest.fixture
@@ -106,19 +109,78 @@ def test_install_on_fire_os_turns_on_the_redirect(connected, tmp_path):
     assert not any("set-home-activity" in c for c in tv.commands)
 
 
-def test_install_on_android_tv_disables_the_stock_launcher(connected, tmp_path):
+@pytest.fixture
+def home_tv(monkeypatch, fake_tv, tmp_path):
     apk = tmp_path / "quietv.apk"
     apk.write_bytes(b"apk")
-    tv = connected(
-        {
-            "getprop ro.product.manufacturer": "CHiQ\n",
-            "cmd package resolve-activity": "com.google.android.tvlauncher/.MainActivity\n",
-            "pm install": "Success\n",
-        }
-    )
-    assert cli.main(["install", "--apk", str(apk), "--yes"]) == 0
+
+    def make(home, accepts=True, stored=None):
+        class HomeTv(fake_tv):
+            pushed = []
+
+            def shell(self, command, timeout=120.0):
+                if command.startswith("cmd package set-home-activity") and accepts:
+                    self.responses["cmd package resolve-activity"] = "io.github.nowaaak.quietv/.HomeEntry\n"
+                if "SET_CONFIG" in command:
+                    payload = command.split("--es config ")[1].strip("'")
+                    self.pushed.append(json.loads(base64.b64decode(payload)))
+                return super().shell(command, timeout)
+
+        data = base64.b64encode(json.dumps(stored or {}).encode()).decode()
+        tv = HomeTv(
+            {
+                "getprop ro.product.manufacturer": "TCL\n",
+                "cmd package resolve-activity": home + "\n",
+                "pm install": "Success\n",
+                "settings get secure enabled_accessibility_services": "null\n",
+                f"am broadcast -n {config.RECEIVER} -a {config.ACTION_GET}": (
+                    f'Broadcast completed: result=-1, data="{data}"\n'
+                ),
+                "am broadcast": "Broadcast completed: result=-1\n",
+            }
+        )
+        monkeypatch.setattr(cli, "connect", lambda args: tv)
+        return tv, str(apk)
+
+    return make
+
+
+def test_install_on_android_tv_disables_the_stock_launcher(home_tv):
+    tv, apk = home_tv("com.google.android.tvlauncher/.MainActivity")
+    assert cli.main(["install", "--apk", apk, "--yes"]) == 0
     assert "cmd package set-home-activity --user 0 io.github.nowaaak.quietv/.HomeEntry" in tv.commands
     assert "pm disable-user --user 0 com.google.android.tvlauncher" in tv.commands
+
+
+def test_install_keeps_the_stock_launcher_when_android_refuses(home_tv, capsys):
+    tv, apk = home_tv("com.google.android.tvlauncher/.MainActivity", accepts=False)
+    assert cli.main(["install", "--apk", apk, "--yes"]) == 1
+    assert not any(c.startswith("pm disable-user") for c in tv.commands)
+    assert "--mode redirect" in capsys.readouterr().err
+
+
+def test_install_on_google_tv_redirects_and_keeps_launcherx(home_tv):
+    tv, apk = home_tv(
+        "com.google.android.apps.tv.launcherx/.home.HomeActivity",
+        stored={"theme": "graphite", "fireTv": {"redirectHome": False}},
+    )
+    assert cli.main(["install", "--apk", apk, "--yes"]) == 0
+    assert not any(c.startswith("pm disable-user") for c in tv.commands)
+    assert not any("set-home-activity" in c for c in tv.commands)
+    assert any("enabled_accessibility_services io.github.nowaaak.quietv/" in c for c in tv.commands)
+    assert tv.pushed[-1]["homeRedirect"] == {
+        "enabled": True,
+        "stockHomePackage": "com.google.android.apps.tv.launcherx",
+        "classHint": "HomeActivity",
+    }
+    assert "fireTv" not in tv.pushed[-1]
+
+
+def test_redirect_mode_needs_a_stock_home(home_tv, capsys):
+    tv, apk = home_tv("android/com.android.internal.app.ResolverActivity")
+    assert cli.main(["install", "--apk", apk, "--mode", "redirect", "--yes"]) == 1
+    assert "--stock-launcher" in capsys.readouterr().err
+    assert not any(c.startswith("pm install") for c in tv.commands)
 
 
 def test_parse_sums():

@@ -35,7 +35,12 @@ class LauncherConfigTest {
             tileRadius = 6,
             wallpaper = WallpaperConfig(enabled = true, dim = 45),
             liveTvPackage = "com.mediatek.wwtv.tvcenter",
-            fireTv = FireTvConfig(redirectHome = false, stockHomePackage = "com.amazon.tv.launcher", showStockHomeTile = true),
+            homeRedirect = HomeRedirectConfig(
+                enabled = false,
+                stockHomePackage = "com.google.android.apps.tv.launcherx",
+                classHint = "home.HomeActivity",
+                showStockHomeTile = true,
+            ),
             companion = CompanionConfig(CompanionMode.SEND, "192.168.1.20", 47202, "abcdefghijklmnop"),
         )
         assertEquals(config, LauncherConfig.parse(config.toJson()))
@@ -79,6 +84,22 @@ class LauncherConfigTest {
         listOf("colors.text", "unknown key 'colors.glow'", "tileRadius", "wallpaper.enabled", "wallpaper.dim",
             "unknown key 'wallpaper.blur'").forEach {
             assertTrue("missing '$it' in: $message", message.contains(it))
+        }
+    }
+
+    @Test
+    fun legacyFireTvKeyIsRead() {
+        val config = LauncherConfig.parse(
+            """{"fireTv": {"redirectHome": false, "stockHomePackage": "com.amazon.tv.launcher",
+               "stockHomeClassHint": "Home", "showStockHomeTile": true}}""",
+        )
+        assertEquals(HomeRedirectConfig(false, "com.amazon.tv.launcher", "Home", true), config.homeRedirect)
+        assertFalse(config.toJson().contains("fireTv"))
+        assertThrows(InvalidConfigException::class.java) {
+            LauncherConfig.parse("""{"fireTv": {}, "homeRedirect": {}}""")
+        }
+        assertThrows(InvalidConfigException::class.java) {
+            LauncherConfig.parse("""{"fireTv": {"redirect": true}}""")
         }
     }
 

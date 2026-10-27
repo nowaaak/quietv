@@ -26,10 +26,12 @@ accessibility services you use stay on.
 Turn it off and on again with:
 
 ```bash
-quietv firetv off
-quietv firetv on
-quietv firetv status
+quietv redirect off
+quietv redirect on
+quietv redirect status
 ```
+
+`quietv firetv` is the old name of the same command and still works.
 
 `off` removes only quietv's service. On the TV, Settings in quietv shows whether the redirect is on.
 
@@ -38,22 +40,23 @@ quietv firetv status
 - **Long press on Home** opens Fire OS's quick menu. quietv never touches the key itself.
 - **TV settings.** The Settings screen in quietv has a TV settings entry. Fire OS routes the settings
   intent through Amazon's home, so quietv lets that one pass.
-- **Amazon's home**, if you want it. Set `fireTv.showStockHomeTile` to `true` (see
+- **Amazon's home**, if you want it. Set `homeRedirect.showStockHomeTile` to `true` (see
   [configuration.md](configuration.md)) and a tile opens it once. The next Home press comes back to quietv.
 
 ## Caveats
 
 - Amazon can change this behaviour with any Fire OS update. Other launchers that used the same approach
-  have been broken by updates before. If Home stops opening quietv, run `quietv firetv status` and open an
+  have been broken by updates before. If Home stops opening quietv, run `quietv redirect status` and open an
   issue with your Fire OS version.
 - Fire OS may stop the service under memory pressure. It comes back the next time the system binds
-  accessibility services.
+  accessibility services. After a reboot quietv checks that the service is running and binds it again
+  if it is not.
 - quietv is tested on a Fire TV Stick 4K Max (2nd gen, Fire OS 8). The same redirect approach worked on a
   Toshiba Fire TV (AFTHA004, Fire OS 7) in the project this one grew out of.
 
 ## Undo
 
 ```bash
-quietv firetv off
+quietv redirect off
 quietv restore
 ```

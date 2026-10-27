@@ -27,10 +27,17 @@ TOP_KEYS = {
     "tileRadius",
     "wallpaper",
     "liveTvPackage",
+    "homeRedirect",
     "fireTv",
     "companion",
 }
-FIRE_TV_KEYS = {"redirectHome", "stockHomePackage", "stockHomeClassHint", "showStockHomeTile"}
+REDIRECT_KEYS = {"enabled", "stockHomePackage", "classHint", "showStockHomeTile"}
+LEGACY_REDIRECT_KEYS = {
+    "redirectHome": "enabled",
+    "stockHomePackage": "stockHomePackage",
+    "stockHomeClassHint": "classHint",
+    "showStockHomeTile": "showStockHomeTile",
+}
 COMPANION_KEYS = {"mode", "host", "port", "token"}
 THEMES = ("graphite", "paper", "midnight", "slate", "forest", "sand")
 LEGACY_THEMES = ("dark", "light")
@@ -84,17 +91,7 @@ def validate(config: Any) -> list[str]:
     if live and not is_package(str(live)):
         problems.append("liveTvPackage must be a package name or empty")
 
-    fire = config.get("fireTv", {})
-    if not isinstance(fire, dict):
-        problems.append("fireTv must be an object")
-    else:
-        problems += [f"fireTv: unknown key {k!r}" for k in sorted(set(fire) - FIRE_TV_KEYS)]
-        for flag in ("redirectHome", "showStockHomeTile"):
-            if not isinstance(fire.get(flag, False), bool):
-                problems.append(f"fireTv.{flag} must be true or false")
-        stock = fire.get("stockHomePackage", "")
-        if stock and not is_package(str(stock)):
-            problems.append("fireTv.stockHomePackage must be a package name or empty")
+    problems += _redirect_problems(config)
 
     companion = config.get("companion", {})
     if not isinstance(companion, dict):
@@ -112,6 +109,34 @@ def validate(config: Any) -> list[str]:
             problems.append("companion.token needs at least 16 letters, digits, - or _ when the companion switch is on")
         if mode == "send" and not (isinstance(companion.get("host"), str) and HOST_RE.match(companion["host"])):
             problems.append("companion.host is required when companion.mode is 'send'")
+    return problems
+
+
+def home_redirect(config: dict) -> dict:
+    if "fireTv" in config and isinstance(config["fireTv"], dict):
+        return {LEGACY_REDIRECT_KEYS.get(k, k): v for k, v in config["fireTv"].items()}
+    value = config.get("homeRedirect", {})
+    return value if isinstance(value, dict) else {}
+
+
+def _redirect_problems(config: dict) -> list[str]:
+    if "fireTv" in config and "homeRedirect" in config:
+        return ["use homeRedirect, not the old fireTv key"]
+    key = "fireTv" if "fireTv" in config else "homeRedirect"
+    raw = config.get(key, {})
+    if not isinstance(raw, dict):
+        return [f"{key} must be an object"]
+    allowed = set(LEGACY_REDIRECT_KEYS) if key == "fireTv" else REDIRECT_KEYS
+    problems = [f"{key}: unknown key {k!r}" for k in sorted(set(raw) - allowed)]
+    redirect = home_redirect(config)
+    for flag in ("enabled", "showStockHomeTile"):
+        if not isinstance(redirect.get(flag, False), bool):
+            problems.append(f"homeRedirect.{flag} must be true or false")
+    stock = redirect.get("stockHomePackage", "")
+    if stock and not is_package(str(stock)):
+        problems.append("homeRedirect.stockHomePackage must be a package name or empty")
+    if not isinstance(redirect.get("classHint", ""), str):
+        problems.append("homeRedirect.classHint must be text")
     return problems
 
 

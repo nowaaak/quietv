@@ -64,7 +64,7 @@ class AppCatalog(private val context: Context) {
     }
 
     private fun stockHomeEntry(pm: PackageManager, config: LauncherConfig): AppEntry? {
-        if (!config.fireTv.showStockHomeTile) return null
+        if (!config.homeRedirect.showStockHomeTile) return null
         val stock = Platform.stockHomePackage(context, config)
         if (stock.isEmpty()) return null
         return try {

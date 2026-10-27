@@ -13,6 +13,13 @@ MAIN_ACTIVITY = f"{PACKAGE}/.MainActivity"
 HOME_ENTRY = f"{PACKAGE}/.HomeEntry"
 REDIRECT_SERVICE = f"{PACKAGE}/{PACKAGE}.firetv.HomeRedirectService"
 SERVICES_RE = re.compile(r"^[A-Za-z0-9_.$/:]+$")
+GOOGLE_TV_HOME = "com.google.android.apps.tv.launcherx"
+REDIRECT_HOMES = {GOOGLE_TV_HOME}
+CLASS_HINTS = {
+    "com.amazon.tv.launcher": "HomeActivity",
+    GOOGLE_TV_HOME: "HomeActivity",
+    "com.google.android.tvlauncher": "MainActivity",
+}
 
 
 def current_home_package(tv: Shell) -> str | None:
@@ -21,6 +28,22 @@ def current_home_package(tv: Shell) -> str | None:
         return None
     package = home.split("/", 1)[0]
     return None if package in ("android", PACKAGE) else package
+
+
+def home_is_quietv(tv: Shell) -> bool:
+    home = parse_home_activity(tv.shell(HOME_QUERY))
+    return bool(home) and home.split("/", 1)[0] == PACKAGE
+
+
+def with_redirect(config: dict, stock: str) -> dict:
+    result = {k: v for k, v in config.items() if k != "fireTv"}
+    result["homeRedirect"] = {
+        **config.get("homeRedirect", {}),
+        "enabled": True,
+        "stockHomePackage": stock,
+        "classHint": CLASS_HINTS.get(stock, "HomeActivity"),
+    }
+    return result
 
 
 def install_apk(tv: Shell, apk: Path, progress: Callable[[int, int], None] | None = None) -> None:
