@@ -5,6 +5,8 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-27
+
 ### Added
 
 - 12 device lists imported from cleanyourtv: Chromecast with Google TV, Google TV Streamer, onn 4K,
