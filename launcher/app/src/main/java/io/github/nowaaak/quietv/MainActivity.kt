@@ -3,6 +3,7 @@ package io.github.nowaaak.quietv
 import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
@@ -39,8 +40,11 @@ import io.github.nowaaak.quietv.home.TileAdapter
 import io.github.nowaaak.quietv.inputs.InputsMenu
 import io.github.nowaaak.quietv.net.NetworkLabel
 import io.github.nowaaak.quietv.settings.SettingsActivity
+import io.github.nowaaak.quietv.ui.Contrast
 import io.github.nowaaak.quietv.ui.DropdownMenu
+import io.github.nowaaak.quietv.ui.Palette
 import io.github.nowaaak.quietv.ui.ThemeColors
+import io.github.nowaaak.quietv.wallpaper.WallpaperStore
 import java.util.Calendar
 import kotlin.math.abs
 import kotlin.math.max
@@ -51,6 +55,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
 
     private lateinit var store: ConfigStore
     private lateinit var config: LauncherConfig
+    private lateinit var palette: Palette
     private lateinit var catalog: AppCatalog
     private lateinit var navigator: GridNavigator
     private lateinit var adapter: TileAdapter
@@ -64,6 +69,8 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private lateinit var greeting: TextView
     private lateinit var wifiLabel: TextView
     private lateinit var wifiDot: View
+    private lateinit var wallpaper: ImageView
+    private lateinit var scrim: View
     private lateinit var springX: SpringAnimation
     private lateinit var springY: SpringAnimation
 
@@ -77,6 +84,9 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private var movingPos = -1
     private var tileMenu: DropdownMenu? = null
     private var afterLayout: (() -> Unit)? = null
+    private var tileRadius = 0f
+    private var wallpaperVersion = NO_WALLPAPER
+    private var wallpaperSamples = IntArray(0)
 
     private val handler = Handler(Looper.getMainLooper())
     private val minuteTick = object : Runnable {
@@ -90,13 +100,15 @@ class MainActivity : Activity(), TileAdapter.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         store = ConfigStore(this)
         config = store.load()
-        ThemeColors.apply(this, config.theme)
+        palette = Palette.of(config)
+        ThemeColors.apply(this, palette)
         super.onCreate(savedInstanceState)
         Platform.syncHomeEntry(this)
         setContentView(R.layout.activity_main)
 
         density = resources.displayMetrics.density
         columns = config.columns
+        tileRadius = config.tileRadius * density
         navigator = GridNavigator(columns)
         catalog = AppCatalog(this)
 
@@ -110,6 +122,8 @@ class MainActivity : Activity(), TileAdapter.Listener {
         wifiLabel = findViewById(R.id.wifiLabel)
         wifiDot = findViewById(R.id.wifiDot)
         grid = findViewById(R.id.grid)
+        wallpaper = findViewById(R.id.wallpaper)
+        scrim = findViewById(R.id.scrim)
 
         val frame = grid.parent as View
         val column = frame.parent as View
@@ -128,9 +142,9 @@ class MainActivity : Activity(), TileAdapter.Listener {
         }
         grid.setHasFixedSize(true)
         grid.itemAnimator = null
-        grid.addItemDecoration(SectionDecoration(this, columns))
+        grid.addItemDecoration(SectionDecoration(this, columns, palette.textMuted))
         grid.layoutAnimation = LayoutAnimationController(AnimationUtils.loadAnimation(this, R.anim.tile_enter), 0.06f)
-        adapter = TileAdapter(this, columns, tileWidth, tileHeight)
+        adapter = TileAdapter(this, columns, tileWidth, tileHeight, palette, tileRadius)
         grid.adapter = adapter
 
         val bleed = if (columns < 2) 0 else ((cell - tileWidth) / 2 * columns / (columns - 1)).roundToInt()
@@ -159,7 +173,9 @@ class MainActivity : Activity(), TileAdapter.Listener {
         springY = SpringAnimation(ring, DynamicAnimation.TRANSLATION_Y)
         listOf(springX, springY).forEach { it.spring = SpringForce().setStiffness(260f).setDampingRatio(0.58f) }
 
+        ring.setPalette(palette)
         setUpTopBar()
+        applyPalette()
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, newFocus ->
             if (newFocus?.id != R.id.card) hideRing()
             if (newFocus != null && newFocus.id != R.id.card) hideHero()
@@ -179,7 +195,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
                     Toast.makeText(this, R.string.companion_failed, Toast.LENGTH_SHORT).show()
                 }
             } else {
-                InputsMenu(this, config.liveTvPackage, config.accent).show(btnInputs, root)
+                InputsMenu(this, config.liveTvPackage, palette, config.accent).show(btnInputs, root)
             }
         }
 
@@ -198,7 +214,9 @@ class MainActivity : Activity(), TileAdapter.Listener {
     override fun onResume() {
         super.onResume()
         val fresh = store.load()
-        if (fresh.theme != config.theme || fresh.columns != config.columns) {
+        if (fresh.theme != config.theme || fresh.colors != config.colors ||
+            fresh.tileRadius != config.tileRadius || fresh.columns != config.columns
+        ) {
             config = fresh
             recreate()
             return
@@ -206,6 +224,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
         config = fresh
         applyCompanionButton()
         applyAccent()
+        applyWallpaper()
         CompanionReceiverService.sync(this, config)
 
         ringShown = false
@@ -248,6 +267,71 @@ class MainActivity : Activity(), TileAdapter.Listener {
         heroEyebrow.setTextColor(config.accent)
     }
 
+    private fun applyPalette() {
+        heroName.setTextColor(palette.text)
+        findViewById<TextView>(R.id.clock).setTextColor(palette.text)
+        findViewById<TextView>(R.id.okKey).apply {
+            setTextColor(palette.text)
+            background = ThemeColors.rounded(
+                Color.TRANSPARENT,
+                KEY_CAP_RADIUS_DP * density,
+                palette.line,
+                density.toInt().coerceAtLeast(1),
+            )
+        }
+        findViewById<View>(R.id.hintDot).backgroundTintList = ColorStateList.valueOf(palette.line)
+        listOf(R.id.greeting, R.id.openHint, R.id.holdHint, R.id.clockAmPm, R.id.date).forEach {
+            findViewById<TextView>(it).setTextColor(palette.textMuted)
+        }
+        val content = ThemeColors.pillContent(palette)
+        val pill = ThemeColors.pillBackground(palette)
+        listOf(R.id.btnWifi, R.id.btnInputs, R.id.btnSettings).forEach { findViewById<View>(it).backgroundTintList = pill }
+        listOf(R.id.btnInputs, R.id.btnSettings, R.id.wifiIcon).forEach { findViewById<ImageView>(it).imageTintList = content }
+        wifiLabel.setTextColor(content)
+    }
+
+    private fun applyWallpaper() {
+        val wallpapers = WallpaperStore(this)
+        if (!config.wallpaper.enabled || !wallpapers.exists()) {
+            wallpaperVersion = NO_WALLPAPER
+            wallpaper.setImageDrawable(null)
+            wallpaper.visibility = View.GONE
+            scrim.visibility = View.GONE
+            return
+        }
+        val version = wallpapers.version()
+        if (version == wallpaperVersion) {
+            applyScrim()
+            return
+        }
+        wallpaperVersion = version
+        val width = resources.displayMetrics.widthPixels
+        val height = resources.displayMetrics.heightPixels
+        Thread {
+            val bitmap = WallpaperStore.decode(wallpapers.file, width, height)
+            val samples = bitmap?.let { WallpaperStore.samples(it) } ?: IntArray(0)
+            runOnUiThread {
+                if (isDestroyed || wallpaperVersion != version) return@runOnUiThread
+                if (bitmap == null) {
+                    wallpaper.visibility = View.GONE
+                    scrim.visibility = View.GONE
+                    return@runOnUiThread
+                }
+                wallpaperSamples = samples
+                wallpaper.setImageBitmap(bitmap)
+                wallpaper.visibility = View.VISIBLE
+                applyScrim()
+            }
+        }.start()
+    }
+
+    private fun applyScrim() {
+        val texts = intArrayOf(palette.text, palette.textMuted, palette.textDim)
+        val amount = Contrast.scrimFor(wallpaperSamples, texts, palette.background, config.wallpaper.dim / 100f)
+        scrim.setBackgroundColor(Contrast.withAlpha(palette.background, (amount * 255).roundToInt()))
+        scrim.visibility = View.VISIBLE
+    }
+
     private fun applyCompanionButton() {
         val button = findViewById<ImageView>(R.id.btnInputs)
         if (config.companion.mode == CompanionMode.SEND) {
@@ -279,7 +363,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
             lp.width = w.toInt()
             lp.height = h.toInt()
             ring.layoutParams = lp
-            ring.setRadius(TileAdapter.CORNER_DP * density * TileAdapter.FOCUS_SCALE)
+            ring.setRadius(tileRadius * TileAdapter.FOCUS_SCALE)
         }
         ringTargetY = y
         if (!ringShown) {
@@ -363,7 +447,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
     override fun onTileMenu(position: Int, card: View) {
         if (movingPos >= 0 || tileMenu?.isShowing == true) return
         val entry = adapter.entryAt(position) ?: return
-        val menu = DropdownMenu(this, root, config.accent)
+        val menu = DropdownMenu(this, root, palette, config.accent)
         menu.addRow(R.drawable.ic_move, getString(R.string.tile_move)) {
             movingPos = position
             ring.setMoving(true)
@@ -468,6 +552,8 @@ class MainActivity : Activity(), TileAdapter.Listener {
 
     private companion object {
         const val MINUTE_MS = 60_000L
+        const val NO_WALLPAPER = -1L
+        const val KEY_CAP_RADIUS_DP = 5f
         const val MAX_TILE_WIDTH_DP = 148f
         const val MIN_TILE_GAP_DP = 20f
         const val DOCK_MARGIN_DP = 64f

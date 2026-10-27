@@ -1,6 +1,7 @@
 package io.github.nowaaak.quietv.home
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.graphics.Outline
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -13,13 +14,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import io.github.nowaaak.quietv.R
-import io.github.nowaaak.quietv.ui.themeColor
+import io.github.nowaaak.quietv.ui.Palette
+import io.github.nowaaak.quietv.ui.ThemeColors
 
 class TileAdapter(
     private val listener: Listener,
     private val dockSize: Int,
     private val tileWidth: Int,
     private val tileHeight: Int,
+    private val palette: Palette,
+    private val cornerRadius: Float,
 ) : RecyclerView.Adapter<TileAdapter.Holder>() {
 
     interface Listener {
@@ -94,10 +98,19 @@ class TileAdapter(
         val label: TextView = view.findViewById(R.id.label)
         val name: TextView = view.findViewById(R.id.name)
         val density = view.resources.displayMetrics.density
-        val text = view.context.themeColor(R.attr.qvText)
-        val dimText = view.context.themeColor(R.attr.qvTextDim)
+        val text = palette.text
+        val dimText = palette.textDim
 
         init {
+            card.background = ThemeColors.rounded(palette.surface, cornerRadius)
+            card.foreground = ThemeColors.rounded(
+                Color.TRANSPARENT,
+                cornerRadius,
+                palette.stroke,
+                density.toInt().coerceAtLeast(1),
+            )
+            label.setTextColor(palette.text)
+            name.setTextColor(palette.text)
             card.layoutParams = (card.layoutParams as FrameLayout.LayoutParams).apply {
                 width = tileWidth
                 height = tileHeight
@@ -106,10 +119,9 @@ class TileAdapter(
                 width = tileWidth
                 topMargin = tileHeight + (NAME_GAP_DP * density).toInt()
             }
-            val radius = density * CORNER_DP
             card.outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(view: View, outline: Outline) {
-                    outline.setRoundRect(0, 0, view.width, view.height, radius)
+                    outline.setRoundRect(0, 0, view.width, view.height, cornerRadius)
                 }
             }
             card.clipToOutline = true
@@ -166,7 +178,6 @@ class TileAdapter(
     companion object {
         private val SECTION_CHANGED = Any()
         const val FOCUS_SCALE = 1.06f
-        const val CORNER_DP = 14f
         const val NAME_GAP_DP = 9f
         const val NAME_HEIGHT_DP = 22f
         const val VERTICAL_PADDING_DP = 8f

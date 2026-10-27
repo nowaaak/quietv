@@ -1,12 +1,12 @@
 package io.github.nowaaak.quietv.ui
 
 import android.app.Activity
-import android.content.Context
-import android.util.TypedValue
-import androidx.annotation.AttrRes
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import io.github.nowaaak.quietv.R
 import io.github.nowaaak.quietv.config.LauncherConfig
-import io.github.nowaaak.quietv.config.ThemeMode
 
 object ThemeColors {
 
@@ -20,34 +20,50 @@ object ThemeColors {
     )
 
     val LIGHT_ACCENTS = intArrayOf(
-        0xFF059669.toInt(),
-        0xFF2563EB.toInt(),
-        0xFFD97706.toInt(),
-        0xFFDC2626.toInt(),
-        0xFF7C3AED.toInt(),
+        0xFF047857.toInt(),
+        0xFF1D4ED8.toInt(),
+        0xFF92400E.toInt(),
+        0xFFB91C1C.toInt(),
+        0xFF6D28D9.toInt(),
         0xFF15171C.toInt(),
     )
 
-    fun accents(theme: ThemeMode): IntArray = if (theme == ThemeMode.LIGHT) LIGHT_ACCENTS else DARK_ACCENTS
+    private val FOCUSED = intArrayOf(android.R.attr.state_focused)
+    private val DEFAULT = intArrayOf()
 
-    fun nextAccent(theme: ThemeMode, current: Int): Int {
-        val list = accents(theme)
+    fun accents(light: Boolean): IntArray = if (light) LIGHT_ACCENTS else DARK_ACCENTS
+
+    fun nextAccent(light: Boolean, current: Int): Int {
+        val list = accents(light)
         val index = list.indexOf(current)
         return list[(index + 1) % list.size]
     }
 
-    fun accentForTheme(current: Int, from: ThemeMode, to: ThemeMode): Int {
-        val index = accents(from).indexOf(current)
-        return if (index >= 0) accents(to)[index] else current
+    fun accentForTheme(current: Int, fromLight: Boolean, toLight: Boolean): Int {
+        val index = accents(fromLight).indexOf(current)
+        return if (index >= 0) accents(toLight)[index] else current
     }
 
-    fun apply(activity: Activity, theme: ThemeMode) {
-        activity.setTheme(if (theme == ThemeMode.LIGHT) R.style.Theme_Quietv_Light else R.style.Theme_Quietv)
+    fun apply(activity: Activity, palette: Palette) {
+        activity.setTheme(if (palette.light) R.style.Theme_Quietv_Light else R.style.Theme_Quietv)
+        activity.window.setBackgroundDrawable(ColorDrawable(palette.background))
     }
-}
 
-fun Context.themeColor(@AttrRes attr: Int): Int {
-    val value = TypedValue()
-    theme.resolveAttribute(attr, value, true)
-    return if (value.resourceId != 0) getColor(value.resourceId) else value.data
+    fun pillContent(palette: Palette): ColorStateList = focusable(palette.onText, palette.text)
+
+    fun pillContentDim(palette: Palette): ColorStateList = focusable(palette.onTextDim, palette.textMuted)
+
+    fun pillBackground(palette: Palette): ColorStateList = focusable(palette.text, palette.surface)
+
+    fun rowBackground(palette: Palette): ColorStateList = focusable(palette.text, Color.TRANSPARENT)
+
+    fun rounded(fill: Int, radius: Float, stroke: Int = Color.TRANSPARENT, strokeWidth: Int = 0): GradientDrawable =
+        GradientDrawable().apply {
+            setColor(fill)
+            cornerRadius = radius
+            if (strokeWidth > 0) setStroke(strokeWidth, stroke)
+        }
+
+    private fun focusable(focused: Int, normal: Int): ColorStateList =
+        ColorStateList(arrayOf(FOCUSED, DEFAULT), intArrayOf(focused, normal))
 }

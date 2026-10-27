@@ -5,6 +5,18 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+
+- Four more themes: Midnight, Slate, Forest and Sand. Pick them on the TV or with `quietv theme apply`.
+- Your own colours (`colors`), tile corners (`tileRadius`) and theme files for `quietv theme apply`.
+- Wallpaper with `quietv theme wallpaper`. quietv dims it until all text is readable.
+- Settings on the TV for tile corners and the wallpaper.
+
+### Fixed
+
+- Paper theme: the names under the favourites now meet the 4.5:1 contrast ratio.
+- Light themes: the accent colours are a shade darker, so the focus ring and "Selected" stay readable.
+
 ## [0.1.2] - 2026-10-27
 
 ### Fixed

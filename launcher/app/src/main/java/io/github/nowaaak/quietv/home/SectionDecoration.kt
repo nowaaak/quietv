@@ -8,16 +8,19 @@ import android.util.TypedValue
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import io.github.nowaaak.quietv.R
-import io.github.nowaaak.quietv.ui.themeColor
 
-class SectionDecoration(context: Context, private val dockSize: Int) : RecyclerView.ItemDecoration() {
+class SectionDecoration(
+    context: Context,
+    private val dockSize: Int,
+    color: Int,
+) : RecyclerView.ItemDecoration() {
 
     private val density = context.resources.displayMetrics.density
     private val locale = context.resources.configuration.locales[0]
     private val favorites = context.getString(R.string.favorites).uppercase(locale)
     private val allApps = context.getString(R.string.all_apps).uppercase(locale)
     private val text = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = context.themeColor(R.attr.qvTextMuted)
+        this.color = color
         textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 11f, context.resources.displayMetrics)
         letterSpacing = 0.14f
         typeface = context.resources.getFont(R.font.geist)

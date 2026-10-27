@@ -13,11 +13,17 @@ import android.widget.Toast
 import io.github.nowaaak.quietv.R
 import io.github.nowaaak.quietv.home.AppLauncher
 import io.github.nowaaak.quietv.ui.DropdownMenu
+import io.github.nowaaak.quietv.ui.Palette
 
-class InputsMenu(private val activity: Activity, private val liveTvPackage: String, private val accent: Int) {
+class InputsMenu(
+    private val activity: Activity,
+    private val liveTvPackage: String,
+    private val palette: Palette,
+    private val accent: Int,
+) {
 
     fun show(anchor: View, root: ViewGroup) {
-        val menu = DropdownMenu(activity, root, accent)
+        val menu = DropdownMenu(activity, root, palette, accent)
         val tim = activity.getSystemService(Activity.TV_INPUT_SERVICE) as TvInputManager?
         var sawNonHdmi = false
         var tunerId: String? = null

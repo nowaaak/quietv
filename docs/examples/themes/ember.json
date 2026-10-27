@@ -1,0 +1,13 @@
+{
+  "name": "Ember",
+  "theme": "graphite",
+  "accent": "#FDBA74",
+  "colors": {
+    "background": "#1A1210",
+    "surface": "#261A16",
+    "text": "#F7EDE8",
+    "textMuted": "#C4A99E",
+    "line": "#4A3530"
+  },
+  "tileRadius": 6
+}

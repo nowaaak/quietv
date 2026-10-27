@@ -21,7 +21,7 @@ separately and survives a push. Reset it in Settings.
   "hidden": ["com.mediatek.wwtv.tvcenter"],
   "columns": 5,
   "accent": "#6EE7B7",
-  "theme": "dark",
+  "theme": "graphite",
   "liveTvPackage": "com.mediatek.wwtv.tvcenter"
 }
 ```
@@ -38,7 +38,11 @@ More in [examples/](examples/).
 | `extraApps` | `[]` | Apps without a TV launcher entry to show anyway, such as Silk on Fire TV. Favourites are added automatically. |
 | `columns` | `5` | Tiles per row, 3 to 8. The tiles shrink to fit. |
 | `accent` | `"#6EE7B7"` | Focus ring, status dots and the "Selected" label, as `#RRGGBB`. |
-| `theme` | `"dark"` | `"dark"` (Graphite) or `"light"` (Paper). |
+| `theme` | `"graphite"` | A bundled theme: `"graphite"`, `"paper"`, `"midnight"`, `"slate"`, `"forest"` or `"sand"`. `"dark"` and `"light"` still work and mean Graphite and Paper. |
+| `colors` | `{}` | Your own colours on top of the theme, each as `#RRGGBB`: `background`, `surface` (tiles, menus), `text`, `textMuted` (clock date, hints, labels) and `line`. Leave a key out to keep the theme's colour. See [themes.md](themes.md). |
+| `tileRadius` | `14` | Tile corner radius in dp, 0 (square) to 24. |
+| `wallpaper.enabled` | `false` | Show the wallpaper image. Set one with `quietv theme wallpaper`. Without an image this does nothing. |
+| `wallpaper.dim` | `30` | How much the wallpaper is darkened (or lightened on a light theme), 0 to 80 percent. quietv dims more if text would be hard to read. |
 | `liveTvPackage` | `""` | The TV's tuner app, offered at the end of the Inputs menu. Empty hides the entry. |
 | `fireTv.redirectHome` | `true` | Open quietv when the stock home appears. Only acts if the accessibility service is on, see [fire-tv.md](fire-tv.md). |
 | `fireTv.stockHomePackage` | `""` | The home app to redirect. Empty means `com.amazon.tv.launcher` on Fire OS and nothing elsewhere. |

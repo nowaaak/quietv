@@ -5,7 +5,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from quietv import PACKAGE, __version__, backup, config, devicelist, install, release
+from quietv import PACKAGE, __version__, backup, config, devicelist, install, release, themes, wallpaper
 from quietv.devicelist import CATEGORIES, TIERS, DeviceListError
 from quietv.packages import parse_package_list
 from quietv.paths import backups_dir
@@ -207,6 +207,41 @@ def cmd_config(args) -> None:
                 sys.stdout.write(text)
 
 
+def cmd_theme(args) -> None:
+    if args.action == "list":
+        for name, preset in themes.PRESETS.items():
+            print(f"{name:10} {'light' if preset.light else 'dark'}")
+        return
+    if args.action == "apply":
+        theme = themes.load(args.source)
+        image = wallpaper.read_image(theme.image) if theme.image else None
+        with connect(args) as tv:
+            updated = themes.merge(config.pull(tv), theme)
+            for warning in themes.contrast_warnings(updated):
+                print(f"  warning: {warning}")
+            if image is not None:
+                print("Uploading the wallpaper")
+                wallpaper.upload(tv, image, progress)
+            config.push(tv, updated)
+            install.start_launcher(tv)
+        print("Theme applied.")
+        return
+    image = None if args.off else wallpaper.read_image(Path(args.source))
+    with connect(args) as tv:
+        current = config.pull(tv)
+        settings = current.get("wallpaper", {})
+        if image is None:
+            wallpaper.clear(tv)
+            current["wallpaper"] = {**settings, "enabled": False}
+        else:
+            print("Uploading the wallpaper")
+            wallpaper.upload(tv, image, progress)
+            current["wallpaper"] = {"enabled": True, "dim": settings.get("dim", 30) if args.dim is None else args.dim}
+        config.push(tv, current)
+        install.start_launcher(tv)
+    print("Wallpaper removed." if image is None else "Wallpaper set.")
+
+
 def cmd_firetv(args) -> None:
     with connect(args) as tv:
         if args.action == "on":
@@ -278,6 +313,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("file", nargs="?", help="JSON file (required for push and check)")
     p.set_defaults(func=cmd_config)
 
+    p = sub.add_parser("theme", help="list or apply themes and set a wallpaper")
+    p.add_argument("action", choices=("list", "apply", "wallpaper"))
+    p.add_argument("source", nargs="?", help="theme name or theme file for apply, image file for wallpaper")
+    p.add_argument("--dim", type=int, help="wallpaper dimming in percent, 0 to 80 (default 30)")
+    p.add_argument("--off", action="store_true", help="remove the wallpaper")
+    p.set_defaults(func=cmd_theme)
+
     p = sub.add_parser("firetv", help="switch the Fire TV Home redirect on or off")
     p.add_argument("action", choices=("on", "off", "status"))
     p.set_defaults(func=cmd_firetv)
@@ -291,6 +333,13 @@ def main(argv: list[str] | None = None) -> int:
         parser.error(f"config {args.action} needs a file")
     if args.command == "shell" and not args.command_line:
         parser.error("shell needs a command")
+    if args.command == "theme":
+        if args.action == "apply" and not args.source:
+            parser.error("theme apply needs a theme name or file")
+        if args.action == "wallpaper" and bool(args.source) == args.off:
+            parser.error("theme wallpaper needs an image file or --off")
+        if args.dim is not None and not 0 <= args.dim <= config.MAX_DIM:
+            parser.error(f"--dim must be from 0 to {config.MAX_DIM}")
     try:
         args.func(args)
     except (Abort, TvError, DeviceListError, ReleaseError, config.ConfigError, ValueError, OSError) as e:

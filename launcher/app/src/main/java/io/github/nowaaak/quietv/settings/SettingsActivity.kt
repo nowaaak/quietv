@@ -12,26 +12,29 @@ import android.widget.Toast
 import io.github.nowaaak.quietv.R
 import io.github.nowaaak.quietv.config.ConfigStore
 import io.github.nowaaak.quietv.config.LauncherConfig
-import io.github.nowaaak.quietv.config.ThemeMode
+import io.github.nowaaak.quietv.config.ThemePreset
 import io.github.nowaaak.quietv.firetv.HomeRedirectService
 import io.github.nowaaak.quietv.firetv.Platform
 import io.github.nowaaak.quietv.home.AppCatalog
 import io.github.nowaaak.quietv.home.AppLauncher
+import io.github.nowaaak.quietv.ui.Palette
 import io.github.nowaaak.quietv.ui.ThemeColors
+import io.github.nowaaak.quietv.wallpaper.WallpaperStore
 
 class SettingsActivity : Activity() {
 
     private lateinit var store: ConfigStore
     private lateinit var rows: LinearLayout
-    private var theme = ThemeMode.DARK
+    private lateinit var palette: Palette
 
     override fun onCreate(savedInstanceState: Bundle?) {
         store = ConfigStore(this)
-        theme = store.load().theme
-        ThemeColors.apply(this, theme)
+        palette = Palette.of(store.load())
+        ThemeColors.apply(this, palette)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         rows = findViewById(R.id.rows)
+        findViewById<TextView>(R.id.title).setTextColor(palette.text)
     }
 
     override fun onResume() {
@@ -45,13 +48,35 @@ class SettingsActivity : Activity() {
         val catalog = AppCatalog(this)
 
         section(R.string.settings_appearance)
-        row(getString(R.string.settings_theme), themeName(config.theme)) {
-            val next = if (config.theme == ThemeMode.DARK) ThemeMode.LIGHT else ThemeMode.DARK
-            store.update { it.copy(theme = next, accent = ThemeColors.accentForTheme(it.accent, it.theme, next)) }
+        row(getString(R.string.settings_theme), themeName(config)) {
+            val next = ThemePreset.entries[(config.theme.ordinal + 1) % ThemePreset.entries.size]
+            store.update {
+                it.copy(
+                    theme = next,
+                    colors = emptyMap(),
+                    accent = ThemeColors.accentForTheme(it.accent, palette.light, next.light),
+                )
+            }
             recreate()
         }
         row(getString(R.string.settings_accent), LauncherConfig.formatColor(config.accent), swatch = config.accent) {
-            store.update { it.copy(accent = ThemeColors.nextAccent(it.theme, it.accent)) }
+            store.update { it.copy(accent = ThemeColors.nextAccent(palette.light, it.accent)) }
+        }
+        row(getString(R.string.settings_tile_shape), tileShapeName(config.tileRadius)) {
+            val next = TILE_RADII.firstOrNull { it > config.tileRadius } ?: TILE_RADII.first()
+            store.update { it.copy(tileRadius = next) }
+        }
+        if (WallpaperStore(this).exists()) {
+            val wallpaper = config.wallpaper
+            row(getString(R.string.settings_wallpaper), getString(if (wallpaper.enabled) R.string.on else R.string.off)) {
+                store.update { it.copy(wallpaper = it.wallpaper.copy(enabled = !it.wallpaper.enabled)) }
+            }
+            if (wallpaper.enabled) {
+                row(getString(R.string.settings_wallpaper_dim), getString(R.string.percent, wallpaper.dim)) {
+                    val next = WALLPAPER_DIMS.firstOrNull { it > wallpaper.dim } ?: WALLPAPER_DIMS.first()
+                    store.update { it.copy(wallpaper = it.wallpaper.copy(dim = next)) }
+                }
+            }
         }
         row(getString(R.string.settings_columns), config.columns.toString()) {
             val next = if (config.columns >= MAX_COLUMNS_ON_TV) MIN_COLUMNS_ON_TV else config.columns + 1
@@ -91,6 +116,7 @@ class SettingsActivity : Activity() {
     private fun section(title: Int) {
         val view = layoutInflater.inflate(R.layout.item_settings_section, rows, false) as TextView
         view.setText(title)
+        view.setTextColor(palette.textMuted)
         rows.addView(view)
     }
 
@@ -102,8 +128,13 @@ class SettingsActivity : Activity() {
         action: () -> Unit,
     ) {
         val view = layoutInflater.inflate(R.layout.item_setting, rows, false)
-        view.findViewById<TextView>(R.id.title).text = title
+        view.backgroundTintList = ThemeColors.rowBackground(palette)
+        view.findViewById<TextView>(R.id.title).apply {
+            text = title
+            setTextColor(ThemeColors.pillContent(palette))
+        }
         val valueView = view.findViewById<TextView>(R.id.value)
+        valueView.setTextColor(ThemeColors.pillContentDim(palette))
         if (value == null) valueView.visibility = View.GONE else valueView.text = value
         val swatchView = view.findViewById<View>(R.id.swatch)
         if (swatch == null) {
@@ -126,13 +157,33 @@ class SettingsActivity : Activity() {
     private fun focusableIndex(view: View): Int =
         (0 until rows.childCount).map { rows.getChildAt(it) }.filter { it.isFocusable }.indexOf(view)
 
-    private fun themeName(mode: ThemeMode): String =
-        getString(if (mode == ThemeMode.LIGHT) R.string.theme_light else R.string.theme_dark)
+    private fun themeName(config: LauncherConfig): String {
+        val name = getString(
+            when (config.theme) {
+                ThemePreset.GRAPHITE -> R.string.theme_graphite
+                ThemePreset.PAPER -> R.string.theme_paper
+                ThemePreset.MIDNIGHT -> R.string.theme_midnight
+                ThemePreset.SLATE -> R.string.theme_slate
+                ThemePreset.FOREST -> R.string.theme_forest
+                ThemePreset.SAND -> R.string.theme_sand
+            },
+        )
+        return if (config.colors.isEmpty()) name else getString(R.string.theme_custom, name)
+    }
+
+    private fun tileShapeName(radius: Int): String = when (radius) {
+        0 -> getString(R.string.tile_square)
+        in 1..8 -> getString(R.string.tile_soft)
+        in 9..16 -> getString(R.string.tile_rounded)
+        else -> getString(R.string.tile_round)
+    }
 
     private fun versionName(): String = packageManager.getPackageInfo(packageName, 0).versionName.orEmpty()
 
     private companion object {
         const val MIN_COLUMNS_ON_TV = 4
         const val MAX_COLUMNS_ON_TV = 6
+        val TILE_RADII = intArrayOf(0, 6, 14, 22)
+        val WALLPAPER_DIMS = intArrayOf(0, 15, 30, 45, 60)
     }
 }

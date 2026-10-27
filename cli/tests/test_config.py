@@ -29,6 +29,13 @@ def test_examples_in_the_repo_are_valid(repo_root):
 def test_valid_config_has_no_problems():
     assert config.validate(EXAMPLE) == []
     assert config.validate({}) == []
+    appearance = {
+        "theme": "midnight",
+        "colors": {"background": "#000000", "textMuted": "#A1A1A8"},
+        "tileRadius": 0,
+        "wallpaper": {"enabled": True, "dim": 80},
+    }
+    assert config.validate({**EXAMPLE, **appearance}) == []
 
 
 @pytest.mark.parametrize(
@@ -43,6 +50,14 @@ def test_valid_config_has_no_problems():
         ({"companion": {"mode": "receive", "token": "short"}}, "token"),
         ({"companion": {"mode": "send", "token": "x" * 16}}, "companion.host"),
         ({"fireTv": {"redirectHome": "yes"}}, "redirectHome"),
+        ({"colors": {"text": "white"}}, "colors.text"),
+        ({"colors": {"glow": "#FFFFFF"}}, "colors: unknown key 'glow'"),
+        ({"colors": []}, "colors must be an object"),
+        ({"tileRadius": 30}, "tileRadius"),
+        ({"tileRadius": False}, "tileRadius"),
+        ({"wallpaper": {"enabled": "yes"}}, "wallpaper.enabled"),
+        ({"wallpaper": {"dim": 90}}, "wallpaper.dim"),
+        ({"wallpaper": {"blur": 3}}, "wallpaper: unknown key 'blur'"),
     ],
 )
 def test_invalid_values_are_reported(patch, message):
