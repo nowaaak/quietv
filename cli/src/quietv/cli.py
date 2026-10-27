@@ -5,7 +5,21 @@ import sys
 import tempfile
 from pathlib import Path
 
-from quietv import PACKAGE, __version__, backup, config, devicelist, install, release, themes, wallpaper
+from quietv import (
+    PACKAGE,
+    __version__,
+    backup,
+    config,
+    devicelist,
+    guard,
+    install,
+    pair,
+    release,
+    report,
+    state,
+    themes,
+    wallpaper,
+)
 from quietv.devicelist import CATEGORIES, TIERS, DeviceListError
 from quietv.packages import parse_package_list
 from quietv.paths import backups_dir
@@ -101,8 +115,16 @@ def cmd_debloat(args) -> None:
 
     with connect(args) as tv:
         enabled = parse_package_list(tv.shell("pm list packages -e"))
-        todo = [p for p in selected if p.id in enabled]
-        skipped = len(selected) - len(todo)
+        installed = [p for p in selected if p.id in enabled]
+        skipped = len(selected) - len(installed)
+        protected = guard.dynamic(tv)
+        todo = []
+        for p in installed:
+            why = guard.reason(p.id, protected)
+            if why:
+                print(f"  keep {p.id}: protected, {why}")
+            else:
+                todo.append(p)
         for p in todo:
             print(f"  disable {p.id} [{p.category}, {p.tier}]{format_note(p.note)}")
         if skipped:
@@ -121,6 +143,8 @@ def cmd_debloat(args) -> None:
             out = install.disable_package(tv, p.id)
             if "disabled" not in out:
                 failed.append((p.id, out))
+        failed_ids = {package for package, _ in failed}
+        state.record(tv, added=[p.id for p in todo if p.id not in failed_ids])
         print(f"Disabled {len(todo) - len(failed)} of {len(todo)} packages.")
         for package, out in failed:
             print(f"  failed {package}: {out}")
@@ -151,7 +175,67 @@ def cmd_restore(args) -> None:
         confirm(f"Run {len(commands)} commands?", args.yes)
         for command in commands:
             tv.shell(command)
+        state.record(tv, removed=parse_package_list(tv.shell("pm list packages -e")))
         print("Restored. Press Home on the remote.")
+
+
+def cmd_check(args) -> None:
+    with connect(args) as tv:
+        recorded = state.disabled(tv)
+        if not recorded:
+            print("No record of packages quietv disabled on this TV. Run quietv debloat first.")
+            return
+        enabled = parse_package_list(tv.shell("pm list packages -e"))
+        back = sorted(recorded & enabled)
+        gone = recorded - parse_package_list(tv.shell("pm list packages -u"))
+        if gone:
+            state.record(tv, removed=gone)
+        if not back:
+            print(f"All {len(recorded - gone)} packages quietv disabled are still disabled.")
+            return
+        print(f"{len(back)} packages quietv disabled are enabled again, probably by a firmware update:")
+        for package in back:
+            print(f"  {package}")
+        if not args.fix:
+            print("Run quietv check --fix to disable them again.")
+            return
+        confirm(f"Disable {len(back)} packages again?", args.yes)
+        if not args.no_backup:
+            print(f"Backup written to {backup.create(tv, backups_dir())}")
+        protected = guard.dynamic(tv)
+        for package in back:
+            why = guard.reason(package, protected)
+            if why:
+                print(f"  keep {package}: protected, {why}")
+                state.record(tv, removed=[package])
+                continue
+            print(f"  {package}: {install.disable_package(tv, package)}")
+
+
+def cmd_report(args) -> None:
+    with connect(args) as tv:
+        model = getprop(tv, "ro.product.model") or "tv"
+        text = report.build(tv)
+    out = Path(args.out or f"quietv-report-{backup.SAFE_NAME.sub('-', model).strip('-')}.md")
+    out.write_text(text, encoding="utf-8")
+    print(f"Report written to {out}")
+    print("It lists the installed packages. Attach it to a device report on GitHub if you are happy to share that.")
+
+
+def cmd_pair(args) -> None:
+    host = args.host or os.environ.get("QUIETV_HOST")
+    if not host:
+        raise Abort("set the TV's IP address with --host or the QUIETV_HOST environment variable")
+    adb = pair.find_adb()
+    if not adb:
+        raise Abort(
+            "pairing needs Android's adb tool. Install the platform tools from "
+            "https://developer.android.com/tools/releases/platform-tools and try again."
+        )
+    print(f"Pairing with {host}:{args.pair_port} using {adb}")
+    pair.pair(adb, host, args.pair_port, args.code, args.connect_port)
+    print(f"Done. The TV now accepts ADB on port {pair.LEGACY_PORT} until it restarts.")
+    print("Run quietv probe and accept the prompt on the TV.")
 
 
 def cmd_install(args) -> None:
@@ -316,6 +400,22 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--yes", "-y", action="store_true", help="do not ask for confirmation")
     p.set_defaults(func=cmd_restore)
 
+    p = sub.add_parser("check", help="find packages a firmware update enabled again")
+    p.add_argument("--fix", action="store_true", help="disable them again")
+    p.add_argument("--no-backup", action="store_true", help="skip the automatic backup before --fix")
+    p.add_argument("--yes", "-y", action="store_true", help="do not ask for confirmation")
+    p.set_defaults(func=cmd_check)
+
+    p = sub.add_parser("report", help="write a device report for a GitHub issue")
+    p.add_argument("--out", help="file name (default: quietv-report-<model>.md)")
+    p.set_defaults(func=cmd_report)
+
+    p = sub.add_parser("pair", help="pair with wireless debugging (Android 11+) and open port 5555")
+    p.add_argument("pair_port", type=int, help="port shown under 'Pair device with pairing code'")
+    p.add_argument("code", help="six-digit pairing code")
+    p.add_argument("connect_port", type=int, help="port shown under 'IP address and port'")
+    p.set_defaults(func=cmd_pair)
+
     p = sub.add_parser("install", help="install the launcher and make it the home screen")
     p.add_argument("--apk", help="local APK instead of the latest GitHub release")
     p.add_argument("--stock-launcher", help="package of the stock launcher (default: the current home)")
@@ -359,6 +459,8 @@ def main(argv: list[str] | None = None) -> int:
         parser.error(f"config {args.action} needs a file")
     if args.command == "shell" and not args.command_line:
         parser.error("shell needs a command")
+    if args.command == "pair" and not (args.code.isdigit() and len(args.code) == 6):
+        parser.error("the pairing code has six digits")
     if args.command == "theme":
         if args.action == "apply" and not args.source:
             parser.error("theme apply needs a theme name or file")
@@ -368,7 +470,16 @@ def main(argv: list[str] | None = None) -> int:
             parser.error(f"--dim must be from 0 to {config.MAX_DIM}")
     try:
         args.func(args)
-    except (Abort, TvError, DeviceListError, ReleaseError, config.ConfigError, ValueError, OSError) as e:
+    except (
+        Abort,
+        TvError,
+        DeviceListError,
+        ReleaseError,
+        config.ConfigError,
+        pair.PairError,
+        ValueError,
+        OSError,
+    ) as e:
         print(f"quietv: {e}", file=sys.stderr)
         return 1
     except KeyboardInterrupt:

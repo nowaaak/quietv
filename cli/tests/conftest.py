@@ -44,6 +44,11 @@ class FakeTv:
         pass
 
 
+@pytest.fixture(autouse=True)
+def isolated_home(monkeypatch, tmp_path):
+    monkeypatch.setenv("QUIETV_HOME", str(tmp_path / "quietv-home"))
+
+
 @pytest.fixture
 def fake_tv():
     return FakeTv
