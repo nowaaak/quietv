@@ -5,6 +5,7 @@
     <string name="settings">Paramètres</string>
     <string name="connected">Connecté</string>
     <string name="not_connected">Aucun appareil</string>
+    <string name="standby">En veille</string>
     <string name="live_tv">TV en direct</string>
     <string name="no_inputs">Aucune entrée trouvée</string>
     <string name="good_morning">Bonjour</string>

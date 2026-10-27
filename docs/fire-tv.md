@@ -51,6 +51,9 @@ quietv redirect status
 - Fire OS may stop the service under memory pressure. It comes back the next time the system binds
   accessibility services. After a reboot and after an update quietv checks that the service is really
   connected and binds it again if it is not.
+- "Force stop" on quietv in the app settings removes the service from the accessibility list. quietv
+  adds it back the next time it starts or the TV restarts. If you switch the service off yourself in
+  the accessibility settings, quietv leaves it off.
 - After an update of the launcher, Fire OS keeps the service listed but stops sending it anything.
   quietv switches it off and on again a few seconds after each update.
 - quietv is tested on a Fire TV Stick 4K Max (2nd gen, Fire OS 8). The same redirect approach worked on a

@@ -43,6 +43,12 @@ quietv redirect on
 
 On the TV, quietv's Settings shows the redirect under Home button.
 
+## The Assistant
+
+Google TV shows some Assistant answers inside the stock home. For eight seconds after the Assistant
+was on screen, quietv does not redirect, so those answers stay visible. Press Home again to come back
+to quietv.
+
 ## After a reboot
 
 Some TVs come up with the accessibility service listed but not running. quietv checks this a few

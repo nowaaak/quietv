@@ -22,12 +22,20 @@ class HomeRedirectService : AccessibilityService(), SharedPreferences.OnSharedPr
     @Volatile
     private var redirect = false
 
+    private val grace = AssistantGrace()
+
     override fun onServiceConnected() {
         connected = true
         val configStore = ConfigStore(this)
+        configStore.redirectWanted = true
         store = configStore
         configStore.register(this)
         refresh()
+    }
+
+    override fun onUnbind(intent: Intent?): Boolean {
+        store?.redirectWanted = false
+        return super.onUnbind(intent)
     }
 
     override fun onDestroy() {
@@ -52,10 +60,11 @@ class HomeRedirectService : AccessibilityService(), SharedPreferences.OnSharedPr
         val pkg = event.packageName?.toString() ?: return
         val stock = stockHome
         if (!redirect || stock.isEmpty()) return
+        grace.windowShown(pkg, SystemClock.uptimeMillis())
 
         if (pkg == stock) {
             val cls = event.className?.toString() ?: return
-            if (!cls.contains(classHint) || allowStock) return
+            if (!cls.contains(classHint) || allowStock || grace.active(SystemClock.uptimeMillis())) return
             if (SystemClock.uptimeMillis() < passStockUntil) {
                 passStockUntil = 0
                 return

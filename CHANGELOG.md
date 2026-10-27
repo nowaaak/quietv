@@ -5,6 +5,19 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+
+- Inputs menu: a device connected over HDMI-CEC shows under its port with its name ("HDMI 1 · Fire TV")
+  and its standby state, instead of as a second row.
+- Google TV: after the Assistant shows an answer, the Home redirect waits eight seconds, so answers
+  that open in the stock home stay on screen.
+
+### Fixed
+
+- "Force stop" on quietv removed the Home redirect for good on Fire TV and Google TV. quietv now adds it
+  back the next time it starts or the TV restarts, unless you switched it off yourself in the
+  accessibility settings.
+
 ## [0.6.0] - 2026-10-27
 
 ### Added

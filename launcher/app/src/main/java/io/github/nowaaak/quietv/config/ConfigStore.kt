@@ -45,6 +45,12 @@ class ConfigStore(context: Context) {
             prefs.edit().putInt(KEY_STARTUP_BOOT, value).apply()
         }
 
+    var redirectWanted: Boolean
+        get() = prefs.getBoolean(KEY_REDIRECT_WANTED, false)
+        set(value) {
+            prefs.edit().putBoolean(KEY_REDIRECT_WANTED, value).apply()
+        }
+
     fun register(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
         prefs.registerOnSharedPreferenceChangeListener(listener)
     }
@@ -60,5 +66,6 @@ class ConfigStore(context: Context) {
         const val KEY_ORDER = "order"
         const val KEY_LAST_INPUT = "lastInput"
         const val KEY_STARTUP_BOOT = "startupBoot"
+        const val KEY_REDIRECT_WANTED = "redirectWanted"
     }
 }
