@@ -5,6 +5,8 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-10-27
+
 ### Fixed
 
 - Fire TV: after an update of the launcher, Home kept showing Amazon's home. Fire OS lists the redirect
