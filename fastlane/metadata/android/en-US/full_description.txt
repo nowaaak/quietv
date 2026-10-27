@@ -1,0 +1,17 @@
+quietv replaces the home screen of your TV with a small, fast launcher: your apps, your order, nothing else. No ads, no recommendation rows, no tracking.
+
+<ul>
+<li>Your favourites in a row, all other apps in a grid below.</li>
+<li>Hold OK on a tile to move it, hide it, open its app info or put it on a number or colour key.</li>
+<li>Inputs menu for HDMI, AV and Live TV that remembers the last input.</li>
+<li>Six themes, your own colours, tile corners and an optional wallpaper that stays readable.</li>
+<li>App search with the remote and a clock screensaver.</li>
+<li>Works on Fire TV and Google TV too: where the stock home cannot be replaced, quietv opens itself when it appears.</li>
+<li>English and German.</li>
+</ul>
+
+quietv has no network access of its own unless you switch on the optional companion feature, which only talks to your other TV device in your home network.
+
+The companion command-line tool (Windows, macOS, Linux) backs up your TV, disables preinstalled ads, telemetry and clutter from tested device lists, installs quietv and pushes its settings. Packages are disabled, never uninstalled, so everything can be undone.
+
+The Fire TV and Google TV Home redirect uses an accessibility service. It only watches which app comes to the front and never reads screen content.

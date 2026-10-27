@@ -31,6 +31,19 @@ def current_home_package(tv: Shell) -> str | None:
     return None if package in ("android", PACKAGE) else package
 
 
+VERSION_RE = re.compile(r"versionName=([0-9][0-9A-Za-z.+-]*)")
+
+
+def installed_version(tv: Shell) -> str | None:
+    match = VERSION_RE.search(tv.shell(f"dumpsys package {PACKAGE} | grep versionName"))
+    return match.group(1) if match else None
+
+
+def version_key(version: str) -> tuple[int, ...]:
+    numbers = re.findall(r"\d+", version.lstrip("v").split("-", 1)[0])
+    return tuple(int(n) for n in numbers)
+
+
 def home_is_quietv(tv: Shell) -> bool:
     home = parse_home_activity(tv.shell(HOME_QUERY))
     return bool(home) and home.split("/", 1)[0] == PACKAGE

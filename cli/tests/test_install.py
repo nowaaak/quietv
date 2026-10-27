@@ -76,3 +76,11 @@ def test_install_apk_reports_pm_failure(tmp_path, fake_tv):
     tv = fake_tv({"pm install": "Failure [INSTALL_FAILED_UPDATE_INCOMPATIBLE]\n"})
     with pytest.raises(TvError, match="INSTALL_FAILED_UPDATE_INCOMPATIBLE"):
         install.install_apk(tv, apk)
+
+
+def test_installed_version_and_ordering(fake_tv):
+    tv = fake_tv({"dumpsys package io.github.nowaaak.quietv": "    versionName=0.4.0\n"})
+    assert install.installed_version(tv) == "0.4.0"
+    assert install.installed_version(fake_tv()) is None
+    assert install.version_key("v0.10.0") > install.version_key("0.9.3")
+    assert install.version_key("0.4.0") == install.version_key("v0.4.0")

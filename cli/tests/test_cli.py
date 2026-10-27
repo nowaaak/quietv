@@ -189,3 +189,31 @@ def test_parse_sums():
         "quietv-0.1.0.apk": digest,
         "other.apk": digest,
     }
+
+
+def test_update_skips_when_up_to_date(connected, monkeypatch, tmp_path, capsys):
+    apk = tmp_path / "quietv.apk"
+    apk.write_bytes(b"apk")
+    monkeypatch.setattr(release, "download_latest", lambda dest: (apk, "v0.4.0"))
+    tv = connected({"dumpsys package io.github.nowaaak.quietv": "    versionName=0.4.0\n"})
+    assert cli.main(["update"]) == 0
+    assert "up to date" in capsys.readouterr().out
+    assert not any(c.startswith("pm install") for c in tv.commands)
+
+
+def test_update_installs_a_newer_release(connected, monkeypatch, tmp_path):
+    apk = tmp_path / "quietv.apk"
+    apk.write_bytes(b"apk")
+    monkeypatch.setattr(release, "download_latest", lambda dest: (apk, "v0.5.0"))
+    tv = connected({"dumpsys package io.github.nowaaak.quietv": "    versionName=0.4.0\n", "pm install": "Success\n"})
+    assert cli.main(["update"]) == 0
+    assert any(c.startswith("pm install -r") for c in tv.commands)
+    assert not any("set-home-activity" in c or "disable-user" in c for c in tv.commands)
+
+
+def test_update_needs_an_installed_launcher(connected, tmp_path, capsys):
+    apk = tmp_path / "quietv.apk"
+    apk.write_bytes(b"apk")
+    connected({})
+    assert cli.main(["update", "--apk", str(apk)]) == 1
+    assert "quietv install first" in capsys.readouterr().err

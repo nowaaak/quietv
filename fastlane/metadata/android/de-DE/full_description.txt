@@ -1,0 +1,17 @@
+quietv ersetzt den Startbildschirm deines Fernsehers durch einen kleinen, schnellen Launcher: deine Apps, deine Reihenfolge, sonst nichts. Keine Werbung, keine Empfehlungsreihen, kein Tracking.
+
+<ul>
+<li>Deine Favoriten in einer Reihe, alle anderen Apps im Raster darunter.</li>
+<li>Halte OK auf einer Kachel, um sie zu verschieben, auszublenden, ihre App-Info zu öffnen oder sie auf eine Zahlen- oder Farbtaste zu legen.</li>
+<li>Eingänge-Menü für HDMI, AV und Live-TV, das sich den letzten Eingang merkt.</li>
+<li>Sechs Designs, eigene Farben, Kachelecken und ein optionales Hintergrundbild, das lesbar bleibt.</li>
+<li>App-Suche mit der Fernbedienung und eine Uhr als Bildschirmschoner.</li>
+<li>Läuft auch auf Fire TV und Google TV: Wo sich der Startbildschirm nicht ersetzen lässt, öffnet sich quietv, sobald er erscheint.</li>
+<li>Deutsch und Englisch.</li>
+</ul>
+
+quietv greift selbst nicht aufs Netz zu, außer du schaltest die optionale Companion-Funktion ein. Sie spricht nur mit deinem anderen TV-Gerät im Heimnetz.
+
+Das Kommandozeilen-Werkzeug (Windows, macOS, Linux) sichert deinen Fernseher, deaktiviert vorinstallierte Werbung, Telemetrie und Ballast nach getesteten Gerätelisten, installiert quietv und überträgt seine Einstellungen. Pakete werden deaktiviert, nie deinstalliert, alles lässt sich rückgängig machen.
+
+Die Home-Umleitung auf Fire TV und Google TV nutzt einen Bedienungshilfen-Dienst. Er sieht nur, welche App in den Vordergrund kommt, und liest nie Bildschirminhalte.

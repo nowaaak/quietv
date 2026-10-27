@@ -1,6 +1,6 @@
 import pytest
 
-from quietv import cli, devicelist, guard, pair, report, state
+from quietv import cli, devicelist, guard, pair, privacy, report, state
 from quietv.backup import HOME_QUERY
 
 TV_INPUT = (
@@ -171,3 +171,40 @@ def test_screensaver_on_and_off(connected, capsys):
     tv = connected({"settings get secure screensaver_components": "io.github.nowaaak.quietv/.dream.ClockDream\n"})
     assert cli.main(["screensaver", "off"]) == 0
     assert "settings delete secure screensaver_components" in tv.commands
+
+
+DUMP = """Packages:
+  Package [com.google.android.katniss] (8f5788c):
+    runtime permissions:
+        android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ GRANTED_BY_DEFAULT]
+        android.permission.RECORD_AUDIO: granted=true, flags=[ GRANTED_BY_DEFAULT]
+  Package [com.android.vending] (bb73595):
+        android.permission.RECORD_AUDIO: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED]
+  Package [com.old.disabled] (1):
+        android.permission.CAMERA: granted=true
+  Package [com.vendor.camera] (2):
+        android.permission.CAMERA: granted=false
+"""
+
+
+def test_privacy_report_lists_enabled_holders_and_origins(fake_tv, repo_root):
+    tv = fake_tv(
+        {
+            "pm list packages -e": (
+                "package:com.google.android.katniss\npackage:com.android.vending\npackage:com.vendor.camera\n"
+                "package:com.miui.tv.analytics\npackage:tv.anoki.acr.controller\n"
+            ),
+            "dumpsys package packages": DUMP,
+            "settings get secure enabled_accessibility_services": "io.github.nowaaak.quietv/x.Service\n",
+            "settings get secure enabled_notification_listeners": "null\n",
+        }
+    )
+    text = privacy.build(tv, devicelist.load(str(repo_root / "devices" / "chiq-ai-pont.toml")))
+    microphone = text.split("## Microphone")[1].split("##")[0]
+    assert "`com.google.android.katniss` (granted by the manufacturer)" in microphone
+    assert "`com.android.vending` (granted by you or an app)" in microphone
+    assert "## Camera\n\nNo enabled app has it." in text
+    assert "`io.github.nowaaak.quietv/x.Service`" in text
+    assert "## Notification listeners\n\nNone." in text
+    assert "`tv.anoki.acr.controller` (ads" in text
+    assert "`com.miui.tv.analytics`" in text.split("a guess from the package name only")[1]
