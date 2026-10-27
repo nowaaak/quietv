@@ -45,6 +45,15 @@ data class WallpaperConfig(
     }
 }
 
+data class StartupConfig(
+    val app: String = "",
+    val input: String = "",
+) {
+    companion object {
+        const val LAST_INPUT = "last"
+    }
+}
+
 data class LauncherConfig(
     val favorites: List<String> = emptyList(),
     val hidden: List<String> = emptyList(),
@@ -57,6 +66,8 @@ data class LauncherConfig(
     val wallpaper: WallpaperConfig = WallpaperConfig(),
     val liveTvPackage: String = "",
     val homeRedirect: HomeRedirectConfig = HomeRedirectConfig(),
+    val shortcuts: Map<String, String> = emptyMap(),
+    val startup: StartupConfig = StartupConfig(),
     val companion: CompanionConfig = CompanionConfig(),
 ) {
 
@@ -80,6 +91,8 @@ data class LauncherConfig(
                 .put("classHint", homeRedirect.classHint)
                 .put("showStockHomeTile", homeRedirect.showStockHomeTile),
         )
+        .put("shortcuts", JSONObject().also { json -> shortcuts.toSortedMap().forEach { (k, v) -> json.put(k, v) } })
+        .put("startup", JSONObject().put("app", startup.app).put("input", startup.input))
         .put(
             "companion",
             JSONObject()
@@ -111,9 +124,12 @@ data class LauncherConfig(
         private val TOKEN = Regex("^[A-Za-z0-9_-]{${CompanionConfig.MIN_TOKEN_LENGTH},}$")
         private val TOP_KEYS = setOf(
             "version", "favorites", "hidden", "extraApps", "columns", "accent", "theme", "colors", "tileRadius",
-            "wallpaper", "liveTvPackage", "homeRedirect", "fireTv", "companion",
+            "wallpaper", "liveTvPackage", "homeRedirect", "fireTv", "shortcuts", "startup", "companion",
         )
         private val WALLPAPER_KEYS = setOf("enabled", "dim")
+        val SHORTCUT_KEYS = (0..9).map { it.toString() } + listOf("red", "green", "yellow", "blue")
+        private val STARTUP_KEYS = setOf("app", "input")
+        private val INPUT_ID = Regex("^[A-Za-z0-9_.$/-]+$")
         private val REDIRECT_KEYS = setOf("enabled", "stockHomePackage", "classHint", "showStockHomeTile")
         private val LEGACY_REDIRECT_KEYS = mapOf(
             "redirectHome" to "enabled",
@@ -182,6 +198,18 @@ data class LauncherConfig(
                 showStockHomeTile = stockTile as? Boolean ?: false,
             )
 
+            val shortcuts = shortcuts(root, problems)
+            val startupJson = objectOrEmpty(root, "startup", problems)
+            unknownKeys(startupJson, STARTUP_KEYS, "startup.", problems)
+            val startupApp = optionalPackage(startupJson, "app", "startup.app", problems)
+            val startupInput = startupJson.optString("input", "")
+            if (startupInput.isNotEmpty() && !INPUT_ID.matches(startupInput)) {
+                problems += "startup.input must be 'last' or a TV input id"
+            }
+            if (startupApp.isNotEmpty() && startupInput.isNotEmpty()) {
+                problems += "startup takes either app or input, not both"
+            }
+
             val companionJson = objectOrEmpty(root, "companion", problems)
             unknownKeys(companionJson, COMPANION_KEYS, "companion.", problems)
             val mode = CompanionMode.entries.firstOrNull { it.key == companionJson.optString("mode", "off") }
@@ -214,6 +242,8 @@ data class LauncherConfig(
                 wallpaper = WallpaperConfig(wallpaperOn as Boolean, dim as Int),
                 liveTvPackage = liveTv,
                 homeRedirect = homeRedirect,
+                shortcuts = shortcuts,
+                startup = StartupConfig(startupApp, startupInput),
                 companion = CompanionConfig(mode!!, host, port as Int, token),
             )
         }
@@ -246,6 +276,20 @@ data class LauncherConfig(
             for (key in legacy.keys()) {
                 val name = LEGACY_REDIRECT_KEYS[key]
                 if (name == null) problems += "unknown key 'fireTv.$key'" else result.put(name, legacy.get(key))
+            }
+            return result
+        }
+
+        private fun shortcuts(root: JSONObject, problems: MutableList<String>): Map<String, String> {
+            val json = objectOrEmpty(root, "shortcuts", problems)
+            val result = mutableMapOf<String, String>()
+            for (key in json.keys()) {
+                val pkg = json.opt(key) as? String
+                when {
+                    key !in SHORTCUT_KEYS -> problems += "shortcuts: '$key' is not a number or colour key"
+                    pkg == null || !isPackageName(pkg) -> problems += "shortcuts.$key must be a package name"
+                    else -> result[key] = pkg
+                }
             }
             return result
         }

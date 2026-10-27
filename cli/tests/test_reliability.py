@@ -158,3 +158,16 @@ def test_pair_needs_six_digits(capsys):
     with pytest.raises(SystemExit):
         cli.main(["--host", "10.0.0.5", "pair", "37000", "12ab", "41000"])
     assert "six digits" in capsys.readouterr().err
+
+
+def test_screensaver_on_and_off(connected, capsys):
+    tv = connected({"settings get secure screensaver_components": "com.gathin.tvhome/.ClockDream\n"})
+    assert cli.main(["screensaver", "off"]) == 0
+    assert "Nothing changed" in capsys.readouterr().out
+    assert cli.main(["screensaver", "on"]) == 0
+    assert "settings put secure screensaver_components io.github.nowaaak.quietv/.dream.ClockDream" in tv.commands
+    assert "settings put secure screensaver_enabled 1" in tv.commands
+
+    tv = connected({"settings get secure screensaver_components": "io.github.nowaaak.quietv/.dream.ClockDream\n"})
+    assert cli.main(["screensaver", "off"]) == 0
+    assert "settings delete secure screensaver_components" in tv.commands

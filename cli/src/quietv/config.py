@@ -29,6 +29,8 @@ TOP_KEYS = {
     "liveTvPackage",
     "homeRedirect",
     "fireTv",
+    "shortcuts",
+    "startup",
     "companion",
 }
 REDIRECT_KEYS = {"enabled", "stockHomePackage", "classHint", "showStockHomeTile"}
@@ -44,6 +46,9 @@ LEGACY_THEMES = ("dark", "light")
 COLOR_KEYS = ("background", "surface", "text", "textMuted", "line")
 WALLPAPER_KEYS = {"enabled", "dim"}
 MAX_TILE_RADIUS = 24
+SHORTCUT_KEYS = tuple(str(n) for n in range(10)) + ("red", "green", "yellow", "blue")
+STARTUP_KEYS = {"app", "input"}
+INPUT_ID_RE = re.compile(r"^[A-Za-z0-9_.$/-]+$")
 MAX_DIM = 80
 
 
@@ -92,6 +97,7 @@ def validate(config: Any) -> list[str]:
         problems.append("liveTvPackage must be a package name or empty")
 
     problems += _redirect_problems(config)
+    problems += _shortcut_problems(config)
 
     companion = config.get("companion", {})
     if not isinstance(companion, dict):
@@ -109,6 +115,33 @@ def validate(config: Any) -> list[str]:
             problems.append("companion.token needs at least 16 letters, digits, - or _ when the companion switch is on")
         if mode == "send" and not (isinstance(companion.get("host"), str) and HOST_RE.match(companion["host"])):
             problems.append("companion.host is required when companion.mode is 'send'")
+    return problems
+
+
+def _shortcut_problems(config: dict) -> list[str]:
+    problems = []
+    shortcuts = config.get("shortcuts", {})
+    if not isinstance(shortcuts, dict):
+        problems.append("shortcuts must be an object")
+    else:
+        for key, package in shortcuts.items():
+            if key not in SHORTCUT_KEYS:
+                problems.append(f"shortcuts: {key!r} is not a number or colour key")
+            elif not isinstance(package, str) or not is_package(package):
+                problems.append(f"shortcuts.{key} must be a package name")
+    startup = config.get("startup", {})
+    if not isinstance(startup, dict):
+        problems.append("startup must be an object")
+        return problems
+    problems += [f"startup: unknown key {k!r}" for k in sorted(set(startup) - STARTUP_KEYS)]
+    app = startup.get("app", "")
+    if app and not (isinstance(app, str) and is_package(app)):
+        problems.append("startup.app must be a package name or empty")
+    target = startup.get("input", "")
+    if target and not (isinstance(target, str) and INPUT_ID_RE.match(target)):
+        problems.append("startup.input must be 'last' or a TV input id")
+    if app and target:
+        problems.append("startup takes either app or input, not both")
     return problems
 
 

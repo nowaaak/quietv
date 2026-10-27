@@ -12,6 +12,7 @@ REMOTE_APK = "/data/local/tmp/quietv.apk"
 MAIN_ACTIVITY = f"{PACKAGE}/.MainActivity"
 HOME_ENTRY = f"{PACKAGE}/.HomeEntry"
 REDIRECT_SERVICE = f"{PACKAGE}/{PACKAGE}.firetv.HomeRedirectService"
+SCREENSAVER = f"{PACKAGE}/.dream.ClockDream"
 SERVICES_RE = re.compile(r"^[A-Za-z0-9_.$/:]+$")
 GOOGLE_TV_HOME = "com.google.android.apps.tv.launcherx"
 REDIRECT_HOMES = {GOOGLE_TV_HOME}
@@ -65,6 +66,15 @@ def disable_package(tv: Shell, package: str) -> str:
 
 def start_launcher(tv: Shell) -> None:
     tv.shell(f"am start -n {MAIN_ACTIVITY}")
+
+
+def screensaver_on(tv: Shell) -> None:
+    tv.shell(f"settings put secure screensaver_components {SCREENSAVER}")
+    tv.shell("settings put secure screensaver_enabled 1")
+
+
+def screensaver_off(tv: Shell) -> None:
+    tv.shell("settings delete secure screensaver_components")
 
 
 def accessibility_services(tv: Shell) -> str:

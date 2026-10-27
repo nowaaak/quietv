@@ -73,7 +73,9 @@ No computer? See [docs/phone-install.md](docs/phone-install.md).
 - Your favourites in a row at the bottom, the rest of your apps in a grid below. Press Down to see them.
 - One focus ring that springs from tile to tile. The focused favourite's name stands above the row.
 - Hold OK on a tile to move it, hide it or open its app info.
-- Inputs menu with HDMI ports, AV and Live TV through the TV input framework.
+- Inputs menu with HDMI ports, AV and Live TV through the TV input framework. It remembers the last one.
+- Search your apps with the remote. Number and colour keys open your favourite apps.
+- A clock screensaver that moves a little every minute: `quietv screensaver on`.
 - Six themes, your own colours, tile corners and an optional wallpaper that stays readable.
   [Themes](docs/themes.md).
 - Settings on the TV: theme, accent colour, tile corners, tiles per row, wallpaper, hidden apps.

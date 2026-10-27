@@ -8,6 +8,7 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.provider.Settings
 import android.view.Gravity
 import android.view.KeyEvent
@@ -29,6 +30,7 @@ import io.github.nowaaak.quietv.companion.CompanionSwitch
 import io.github.nowaaak.quietv.config.CompanionMode
 import io.github.nowaaak.quietv.config.ConfigStore
 import io.github.nowaaak.quietv.config.LauncherConfig
+import io.github.nowaaak.quietv.config.StartupConfig
 import io.github.nowaaak.quietv.firetv.Platform
 import io.github.nowaaak.quietv.home.AppCatalog
 import io.github.nowaaak.quietv.home.AppLauncher
@@ -36,9 +38,11 @@ import io.github.nowaaak.quietv.home.Direction
 import io.github.nowaaak.quietv.home.FocusRing
 import io.github.nowaaak.quietv.home.GridNavigator
 import io.github.nowaaak.quietv.home.SectionDecoration
+import io.github.nowaaak.quietv.home.Shortcuts
 import io.github.nowaaak.quietv.home.TileAdapter
 import io.github.nowaaak.quietv.inputs.InputsMenu
 import io.github.nowaaak.quietv.net.NetworkLabel
+import io.github.nowaaak.quietv.search.SearchActivity
 import io.github.nowaaak.quietv.settings.SettingsActivity
 import io.github.nowaaak.quietv.ui.Contrast
 import io.github.nowaaak.quietv.ui.DropdownMenu
@@ -84,6 +88,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private var movingPos = -1
     private var tileMenu: DropdownMenu? = null
     private var afterLayout: (() -> Unit)? = null
+    private var assigningPkg: String? = null
     private var tileRadius = 0f
     private var wallpaperVersion = NO_WALLPAPER
     private var wallpaperSamples = IntArray(0)
@@ -183,10 +188,12 @@ class MainActivity : Activity(), TileAdapter.Listener {
     }
 
     private fun setUpTopBar() {
+        val btnSearch = findViewById<View>(R.id.btnSearch)
         val btnWifi = findViewById<View>(R.id.btnWifi)
         val btnInputs = findViewById<ImageView>(R.id.btnInputs)
         val btnSettings = findViewById<View>(R.id.btnSettings)
 
+        btnSearch.setOnClickListener { openSearch() }
         btnWifi.setOnClickListener { AppLauncher.start(this, Intent(Settings.ACTION_WIFI_SETTINGS)) }
         btnSettings.setOnClickListener { startActivity(Intent(this, SettingsActivity::class.java)) }
         btnInputs.setOnClickListener {
@@ -195,7 +202,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
                     Toast.makeText(this, R.string.companion_failed, Toast.LENGTH_SHORT).show()
                 }
             } else {
-                InputsMenu(this, config.liveTvPackage, palette, config.accent).show(btnInputs, root)
+                InputsMenu(this, config.liveTvPackage, palette, config.accent, store).show(btnInputs, root)
             }
         }
 
@@ -203,12 +210,12 @@ class MainActivity : Activity(), TileAdapter.Listener {
             if (event.action != KeyEvent.ACTION_DOWN) return@OnKeyListener false
             when (keyCode) {
                 KeyEvent.KEYCODE_DPAD_UP -> true
-                KeyEvent.KEYCODE_DPAD_LEFT -> v.id == R.id.btnWifi
+                KeyEvent.KEYCODE_DPAD_LEFT -> v.id == R.id.btnSearch
                 KeyEvent.KEYCODE_DPAD_RIGHT -> v.id == R.id.btnSettings
                 else -> false
             }
         }
-        listOf(btnWifi, btnInputs, btnSettings).forEach { it.setOnKeyListener(edgeKeys) }
+        listOf(btnSearch, btnWifi, btnInputs, btnSettings).forEach { it.setOnKeyListener(edgeKeys) }
     }
 
     override fun onResume() {
@@ -236,6 +243,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
         updateGreeting()
         updateNetwork()
         handler.postDelayed(minuteTick, MINUTE_MS)
+        runStartup()
 
         grid.post {
             val focused = currentFocus
@@ -285,8 +293,12 @@ class MainActivity : Activity(), TileAdapter.Listener {
         }
         val content = ThemeColors.pillContent(palette)
         val pill = ThemeColors.pillBackground(palette)
-        listOf(R.id.btnWifi, R.id.btnInputs, R.id.btnSettings).forEach { findViewById<View>(it).backgroundTintList = pill }
-        listOf(R.id.btnInputs, R.id.btnSettings, R.id.wifiIcon).forEach { findViewById<ImageView>(it).imageTintList = content }
+        listOf(R.id.btnSearch, R.id.btnWifi, R.id.btnInputs, R.id.btnSettings).forEach {
+            findViewById<View>(it).backgroundTintList = pill
+        }
+        listOf(R.id.btnSearch, R.id.btnInputs, R.id.btnSettings, R.id.wifiIcon).forEach {
+            findViewById<ImageView>(it).imageTintList = content
+        }
         wifiLabel.setTextColor(content)
     }
 
@@ -461,11 +473,77 @@ class MainActivity : Activity(), TileAdapter.Listener {
                 grid.post { focusTile(position) }
                 Toast.makeText(this, getString(R.string.tile_hidden, entry.label), Toast.LENGTH_SHORT).show()
             }
+            menu.addRow(R.drawable.ic_keypad, getString(R.string.tile_shortcut)) {
+                assigningPkg = entry.pkg
+                Toast.makeText(this, getString(R.string.shortcut_prompt, entry.label), Toast.LENGTH_LONG).show()
+            }
             menu.addRow(R.drawable.ic_info, getString(R.string.tile_info)) { AppLauncher.openDetails(this, entry.pkg) }
         }
         menu.onDismiss = { tileMenu = null }
         tileMenu = menu
         menu.show(card, Gravity.START, TILE_MENU_GAP_DP)
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action != KeyEvent.ACTION_DOWN || event.repeatCount != 0) return super.dispatchKeyEvent(event)
+        val key = Shortcuts.keyName(event.keyCode)
+        val pending = assigningPkg
+        if (pending != null) {
+            assigningPkg = null
+            if (key == null) {
+                Toast.makeText(this, R.string.shortcut_cancelled, Toast.LENGTH_SHORT).show()
+            } else {
+                store.update { it.copy(shortcuts = it.shortcuts + (key to pending)) }
+                config = store.load()
+                val text = getString(R.string.shortcut_set, Shortcuts.label(this, key), catalog.label(pending))
+                Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+            }
+            return true
+        }
+        if (event.keyCode == KeyEvent.KEYCODE_SEARCH) {
+            openSearch()
+            return true
+        }
+        val pkg = key?.let { config.shortcuts[it] }
+        if (pkg != null && movingPos < 0 && tileMenu?.isShowing != true) {
+            openPackage(pkg)
+            return true
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
+    private fun openSearch() {
+        startActivity(Intent(this, SearchActivity::class.java))
+    }
+
+    private fun openPackage(pkg: String) {
+        val entry = adapter.entries.firstOrNull { it.pkg == pkg }
+        if (entry != null) {
+            AppLauncher.launch(this, entry)
+            return
+        }
+        val intent = packageManager.getLeanbackLaunchIntentForPackage(pkg)
+            ?: packageManager.getLaunchIntentForPackage(pkg)
+        if (intent == null) {
+            Toast.makeText(this, getString(R.string.cant_open, catalog.label(pkg)), Toast.LENGTH_SHORT).show()
+        } else {
+            AppLauncher.start(this, intent)
+        }
+    }
+
+    private fun runStartup() {
+        val boot = Settings.Global.getInt(contentResolver, Settings.Global.BOOT_COUNT, -1)
+        if (boot < 0 || boot == store.startupBoot) return
+        store.startupBoot = boot
+        if (SystemClock.elapsedRealtime() > STARTUP_WINDOW_MS) return
+        val startup = config.startup
+        when {
+            startup.app.isNotEmpty() -> openPackage(startup.app)
+            startup.input.isNotEmpty() -> {
+                val id = if (startup.input == StartupConfig.LAST_INPUT) store.lastInput else startup.input
+                if (id.isNotEmpty()) AppLauncher.start(this, InputsMenu.inputIntent(id))
+            }
+        }
     }
 
     private fun stopMoving() {
@@ -553,6 +631,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private companion object {
         const val MINUTE_MS = 60_000L
         const val NO_WALLPAPER = -1L
+        const val STARTUP_WINDOW_MS = 5 * 60_000L
         const val KEY_CAP_RADIUS_DP = 5f
         const val MAX_TILE_WIDTH_DP = 148f
         const val MIN_TILE_GAP_DP = 20f

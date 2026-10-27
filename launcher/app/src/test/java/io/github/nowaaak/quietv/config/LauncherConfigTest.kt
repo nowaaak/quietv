@@ -42,6 +42,8 @@ class LauncherConfigTest {
                 showStockHomeTile = true,
             ),
             companion = CompanionConfig(CompanionMode.SEND, "192.168.1.20", 47202, "abcdefghijklmnop"),
+            shortcuts = mapOf("1" to "com.netflix.ninja", "red" to "com.google.android.youtube.tv"),
+            startup = StartupConfig(input = StartupConfig.LAST_INPUT),
         )
         assertEquals(config, LauncherConfig.parse(config.toJson()))
     }
@@ -101,6 +103,24 @@ class LauncherConfigTest {
         assertThrows(InvalidConfigException::class.java) {
             LauncherConfig.parse("""{"fireTv": {"redirect": true}}""")
         }
+    }
+
+    @Test
+    fun shortcutsAndStartupAreChecked() {
+        val error = assertThrows(InvalidConfigException::class.java) {
+            LauncherConfig.parse(
+                """{"shortcuts": {"f1": "com.a.b", "2": "nope"},
+                   "startup": {"app": "com.a.b", "input": "last", "boot": 1}}""",
+            )
+        }
+        val message = error.message.orEmpty()
+        listOf("'f1' is not a number or colour key", "shortcuts.2", "either app or input", "startup.boot").forEach {
+            assertTrue("missing '$it' in: $message", message.contains(it))
+        }
+        val ok = LauncherConfig.parse(
+            """{"startup": {"input": "com.mediatek.tvinput/.hdmi.HDMIInputService/HW5"}}""",
+        )
+        assertEquals("com.mediatek.tvinput/.hdmi.HDMIInputService/HW5", ok.startup.input)
     }
 
     @Test

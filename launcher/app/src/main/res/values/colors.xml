@@ -6,4 +6,7 @@
     <color name="graphite_text">#FFF3F4F6</color>
 
     <color name="paper_background">#FFF4F4F1</color>
+
+    <color name="dream_time">#FFD9DCE1</color>
+    <color name="dream_date">#FF8B93A0</color>
 </resources>

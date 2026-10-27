@@ -2,6 +2,7 @@ package io.github.nowaaak.quietv.settings
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.provider.Settings
@@ -12,11 +13,13 @@ import android.widget.Toast
 import io.github.nowaaak.quietv.R
 import io.github.nowaaak.quietv.config.ConfigStore
 import io.github.nowaaak.quietv.config.LauncherConfig
+import io.github.nowaaak.quietv.config.StartupConfig
 import io.github.nowaaak.quietv.config.ThemePreset
 import io.github.nowaaak.quietv.firetv.HomeRedirectService
 import io.github.nowaaak.quietv.firetv.Platform
 import io.github.nowaaak.quietv.home.AppCatalog
 import io.github.nowaaak.quietv.home.AppLauncher
+import io.github.nowaaak.quietv.home.Shortcuts
 import io.github.nowaaak.quietv.ui.Palette
 import io.github.nowaaak.quietv.ui.ThemeColors
 import io.github.nowaaak.quietv.wallpaper.WallpaperStore
@@ -94,6 +97,18 @@ class SettingsActivity : Activity() {
             }
         }
 
+        section(R.string.settings_remote)
+        if (config.shortcuts.isEmpty()) {
+            row(getString(R.string.settings_shortcut_hint), null, focusable = false) {}
+        }
+        for (key in LauncherConfig.SHORTCUT_KEYS.filter { it in config.shortcuts }) {
+            val pkg = config.shortcuts.getValue(key)
+            val title = getString(R.string.settings_shortcut, Shortcuts.label(this, key), catalog.label(pkg))
+            row(title, getString(R.string.settings_remove)) {
+                store.update { it.copy(shortcuts = it.shortcuts - key) }
+            }
+        }
+
         if (Platform.isFireOs(this) || config.homeRedirect.stockHomePackage.isNotEmpty()) {
             section(R.string.settings_home_button)
             val on = Platform.redirectServiceEnabled(this)
@@ -103,6 +118,13 @@ class SettingsActivity : Activity() {
         }
 
         section(R.string.settings_system)
+        val startup = config.startup
+        if (packageManager.hasSystemFeature(PackageManager.FEATURE_LIVE_TV) || startup != StartupConfig()) {
+            row(getString(R.string.settings_startup), startupName(startup, catalog)) {
+                val next = if (startup == StartupConfig()) StartupConfig(input = StartupConfig.LAST_INPUT) else StartupConfig()
+                store.update { it.copy(startup = next) }
+            }
+        }
         row(getString(R.string.settings_tv_settings), null) {
             HomeRedirectService.passStockHomeOnce()
             AppLauncher.start(this, Intent(Settings.ACTION_SETTINGS))
@@ -169,6 +191,13 @@ class SettingsActivity : Activity() {
             },
         )
         return if (config.colors.isEmpty()) name else getString(R.string.theme_custom, name)
+    }
+
+    private fun startupName(startup: StartupConfig, catalog: AppCatalog): String = when {
+        startup.app.isNotEmpty() -> catalog.label(startup.app)
+        startup.input == StartupConfig.LAST_INPUT -> getString(R.string.startup_last_input)
+        startup.input.isNotEmpty() -> getString(R.string.startup_input)
+        else -> getString(R.string.startup_home)
     }
 
     private fun tileShapeName(radius: Int): String = when (radius) {
