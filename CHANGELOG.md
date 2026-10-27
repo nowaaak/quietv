@@ -5,6 +5,8 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-27
+
 ### Added
 
 - French, Spanish, Italian, Dutch, Polish, Portuguese, Russian, Turkish and Arabic. They are a first
