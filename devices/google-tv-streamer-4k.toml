@@ -1,0 +1,98 @@
+schema = 1
+
+[device]
+name = "Google TV Streamer 4K"
+brand = "Google"
+model = "GZRNL (kirkwood)"
+platform = "googletv"
+os = "Google TV, Android 14"
+firmware = "UTTK.260317.003"
+stock_launcher = "com.google.android.apps.tv.launcherx"
+notes = """
+Imported from cleanyourtv (examples/google-tv-streamer-4k-kirkwood, MIT, Gathin and contributors). Not yet verified with quietv on this device.
+4 GB RAM. No HDMI inputs and no Live TV.
+ADB on port 5555 stays closed until you pair once through Developer options > Wireless debugging
+(quietv pair).
+setupwraith (the setup wizard) holds the Cast receiver's device credentials and owns the Wi-Fi network
+saved during setup. Disabling it breaks casting after every reboot or receiver restart and can take the
+device off Wi-Fi. quietv protects it, so keep launcherx enabled and use the Home redirect (the default
+of quietv install on Google TV).
+Do not disable launcherx here (quietv install --mode replace). The launcher's HOME priority and
+set-home-activity are ignored on this build. cleanyourtv saw setupwraith's RecoveryActivity claim Home
+when it won it, and the system process then crashed about every 47 seconds.
+With launcherx disabled the remote's YouTube (BUTTON_3, 190), Netflix (BUTTON_4, 191) and Star
+(MACRO_1, 313) buttons do nothing.
+cleanyourtv found that an accessibility service that filters keys stops held Volume Up/Down after
+about six steps on this build. quietv's Home redirect does not filter keys, so this should not apply.
+com.google.android.tvrecommendations and com.google.android.apps.education.cast2class ship disabled.
+pm disable-user fails on them, leave them alone.
+"""
+
+[[package]]
+id = "com.google.android.feedback"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.android.tv.feedbackconsent"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.tv.remotecontrol.logging"
+category = "telemetry"
+tier = "recommended"
+note = "remote usage logging"
+
+[[package]]
+id = "com.google.android.federatedcompute"
+category = "telemetry"
+tier = "recommended"
+note = "federated learning module. Re-enable if the Play Store or Assistant misbehave"
+
+[[package]]
+id = "com.google.android.ondevicepersonalization.services"
+category = "telemetry"
+tier = "recommended"
+note = "Privacy Sandbox personalization module. Re-enable if the Play Store or Assistant misbehave"
+
+[[package]]
+id = "com.google.android.adservices.api"
+category = "ads"
+tier = "recommended"
+note = "Privacy Sandbox ad services"
+
+[[package]]
+id = "com.google.android.ext.adservices.api"
+category = "ads"
+tier = "recommended"
+note = "Privacy Sandbox ad services"
+
+[[package]]
+id = "com.google.android.play.games"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.videos"
+category = "preloaded"
+tier = "advanced"
+note = "Google TV / Play Movies, needed to watch purchased titles"
+
+[[package]]
+id = "com.google.android.marvin.talkback"
+category = "preloaded"
+tier = "advanced"
+note = "TalkBack screen reader"
+
+[[keep]]
+id = "com.google.android.tungsten.setupwraith"
+reason = "setup wizard, holds Wi-Fi and Cast credentials. Without it casting fails after every reboot and the device can drop off Wi-Fi"
+
+[[keep]]
+id = "com.google.android.tv.dfuservice"
+reason = "firmware updates for the remote"
+
+[[keep]]
+id = "com.google.android.tv.overlay.dfuservice"
+reason = "firmware updates for the remote"

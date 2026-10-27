@@ -1,0 +1,222 @@
+schema = 1
+
+[device]
+name = "Sony BRAVIA VU31 4K"
+brand = "Sony"
+model = "BRAVIA VU31 4K (BRAVIA_VU31_4K)"
+platform = "googletv"
+os = "Google TV 14"
+firmware = "UKR1.240726.001"
+stock_launcher = "com.google.android.apps.tv.launcherx"
+notes = """
+Imported from cleanyourtv (examples/sony-bravia-vu31, MIT, Gathin and contributors). Not yet verified with quietv on this device.
+Realtek SoC, 2 GB RAM, India firmware. Unlike the MediaTek Sony sets it ships no Samba TV, Qterics or IDD agents.
+Live TV and every HDMI and AV input play in com.android.tv, the inputs come from com.realtek.tv.passthrough.
+Leave com.realtek.*, com.android.tv, sonysystemservice, smartui, m2.devicecontrolservice and ipcontrol alone.
+The Input key opens smartui's menu system-wide, also with the stock launcher disabled.
+USB debugging alone opens port 5555, no wireless debugging pairing is needed.
+Remote app buttons: on one of three tested sets they stopped working once the stock launcher was disabled, because
+com.realtek.advancesetting hands every launch to the stock launcher. YouTube (201, 202), Netflix (191) and Prime
+Video (189) can be remapped by keycode. The SonyLIV and JioHotstar buttons never reach Android, only the stock
+launcher brings them back.
+com.sony.dtv.applicationdisabler re-enables com.sony.dtv.ecodashboard at every boot, so hide its tile instead.
+Before disabling com.google.android.tungsten.setupwraith (quietv protects it) check which app owns the saved Wi-Fi
+network: quietv shell "dumpsys wifi | grep -o 'cname=[^ ]*'". On the source TV it was android.uid.system.
+With 2 GB the set still swaps after the debloat.
+"""
+
+[[package]]
+id = "com.sony.dtv.promos"
+category = "content"
+tier = "recommended"
+note = "My BRAVIA promotions"
+
+[[package]]
+id = "com.sony.dtv.sonyselect"
+category = "content"
+tier = "recommended"
+note = "Sony Select app promotions"
+
+[[package]]
+id = "com.sony.dtv.sonytab"
+category = "content"
+tier = "recommended"
+note = "Sony tab with partner content on the stock home screen"
+
+[[package]]
+id = "com.sony.dtv.multiscreendemo"
+category = "vendor"
+tier = "recommended"
+note = "retail demo"
+
+[[package]]
+id = "com.sony.dtv.smarthelp"
+category = "vendor"
+tier = "recommended"
+note = "Sony help tile"
+
+[[package]]
+id = "com.sony.dtv.helpguidecontents"
+category = "vendor"
+tier = "recommended"
+note = "help guide content"
+
+[[package]]
+id = "com.android.adservices.api"
+category = "ads"
+tier = "recommended"
+note = "Privacy Sandbox ad services"
+
+[[package]]
+id = "com.android.ondevicepersonalization.services"
+category = "ads"
+tier = "recommended"
+note = "on-device ad personalisation"
+
+[[package]]
+id = "com.android.federatedcompute.services"
+category = "telemetry"
+tier = "recommended"
+note = "federated learning for ad and usage models"
+
+[[package]]
+id = "com.google.android.feedback"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "com.google.android.partnersetup"
+category = "telemetry"
+tier = "recommended"
+note = "RLZ install attribution"
+
+[[package]]
+id = "android.autoinstalls.config.google.gtvpai"
+category = "vendor"
+tier = "recommended"
+note = "Play partner auto-installs"
+
+[[package]]
+id = "com.google.android.onetimeinitializer"
+category = "preloaded"
+tier = "recommended"
+note = "runs once after first setup"
+
+[[package]]
+id = "com.google.android.play.games"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.android.printspooler"
+category = "preloaded"
+tier = "recommended"
+note = "printing"
+
+[[package]]
+id = "com.android.camera2"
+category = "preloaded"
+tier = "recommended"
+note = "camera app, crashes on open because the set has no camera"
+
+[[package]]
+id = "com.google.android.syncadapters.calendar"
+category = "preloaded"
+tier = "advanced"
+note = "calendar sync, also carries Google promotions"
+
+[[package]]
+id = "com.android.gallery3d"
+category = "preloaded"
+tier = "advanced"
+note = "legacy photo viewer"
+
+[[package]]
+id = "com.google.android.apps.tv.dreamx"
+category = "content"
+tier = "advanced"
+note = "Ambient screensaver, about 46 MB resident. Choose another screensaver first."
+
+[[package]]
+id = "com.sonypicturescore"
+category = "streaming"
+tier = "advanced"
+note = "Sony Pictures Core"
+
+[[package]]
+id = "com.google.android.videos"
+category = "preloaded"
+tier = "advanced"
+note = "Google TV movies, purchases made there are no longer reachable"
+
+[[package]]
+id = "com.apple.atve.androidtv.appletv"
+category = "streaming"
+tier = "advanced"
+note = "Apple TV"
+
+[[package]]
+id = "com.crunchyroll.crunchyroid"
+category = "streaming"
+tier = "advanced"
+note = "Crunchyroll"
+
+[[package]]
+id = "com.suntv.sunnxt"
+category = "streaming"
+tier = "advanced"
+note = "Sun NXT"
+
+[[package]]
+id = "com.yupptv.scope.tvapp"
+category = "streaming"
+tier = "advanced"
+note = "YuppTV"
+
+[[package]]
+id = "com.viacom18.tv.voot"
+category = "streaming"
+tier = "advanced"
+note = "Voot"
+
+[[package]]
+id = "com.analiti.fastest.android"
+category = "preloaded"
+tier = "advanced"
+note = "analiti network speed test"
+
+[[package]]
+id = "com.google.android.marvin.talkback"
+category = "preloaded"
+tier = "advanced"
+note = "TalkBack screen reader"
+
+[[package]]
+id = "com.google.android.tts"
+category = "preloaded"
+tier = "advanced"
+note = "Google text-to-speech, TalkBack and read-aloud stop working"
+
+[[keep]]
+id = "com.android.tv"
+reason = "Live TV and every HDMI and AV input play in it"
+
+[[keep]]
+id = "com.realtek.tv.passthrough"
+reason = "provides the HDMI and AV inputs"
+
+[[keep]]
+id = "com.realtek.dtv"
+reason = "tuner"
+
+[[keep]]
+id = "com.realtek.tv.atv"
+reason = "analogue tuner"
+
+[[keep]]
+id = "com.sony.dtv.smartui"
+reason = "the Input menu"
+
+[[keep]]
+id = "com.realtek.advancesetting"
+reason = "receives the remote's app buttons"

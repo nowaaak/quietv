@@ -1,0 +1,227 @@
+schema = 1
+
+[device]
+name = "NVIDIA SHIELD TV Pro (2019)"
+brand = "NVIDIA"
+model = "P2897 (mdarcy)"
+platform = "androidtv"
+os = "Android TV 11"
+firmware = "RQ1A.210105.003.7825230_4387.0822"
+stock_launcher = "com.google.android.tvlauncher"
+notes = """
+Imported from cleanyourtv (examples/nvidia-shield-tv-pro-2019, MIT, Gathin and contributors). Not yet verified with quietv on this device.
+Tested on SHIELD Experience 9.2.4, package names also checked on 9.2.2. The 2019 tube (P3430) and the 2015 and 2017 models
+run the same software, so this is a starting point for them too. Check pm list packages first.
+ADB: turn on Developer options > Network debugging. The Pro has no USB device port. Ethernet and Wi-Fi get different
+addresses, so reserve an IP in the router.
+Keep com.google.android.tvrecommendations enabled: without it the SHIELD TV phone app connects but every key press fails.
+The default screensaver is Backdrop. Pick another screensaver before disabling it.
+The remote's Netflix button is handled in firmware. Disabling Netflix does not free it.
+A SHIELD Experience update can re-enable packages. Run quietv check afterwards.
+No HDMI input and no tuner. For a network tuner keep Live Channels (com.google.android.tv).
+Removing Play services, keychain or com.android.se has soft-bricked Shields. Never touch them.
+"""
+
+[[package]]
+id = "com.nvidia.stats"
+category = "telemetry"
+tier = "recommended"
+note = "anonymous usage statistics"
+
+[[package]]
+id = "com.nvidia.feedback"
+category = "telemetry"
+tier = "recommended"
+note = "crash reports and the send feedback form"
+
+[[package]]
+id = "com.nvidia.diagtools"
+category = "telemetry"
+tier = "recommended"
+note = "log collector, re-enable if NVIDIA support asks for logs"
+
+[[package]]
+id = "com.google.android.feedback"
+category = "telemetry"
+tier = "recommended"
+
+[[package]]
+id = "android.autoinstalls.config.nvidia"
+category = "vendor"
+tier = "recommended"
+note = "Play auto-install of partner apps"
+
+[[package]]
+id = "com.nvidia.nvgamecast"
+category = "preloaded"
+tier = "recommended"
+note = "GameStream receiver, the service closed in 2023. Moonlight does not use it."
+
+[[package]]
+id = "com.android.printspooler"
+category = "preloaded"
+tier = "recommended"
+note = "print service"
+
+[[package]]
+id = "com.google.android.play.games"
+category = "preloaded"
+tier = "recommended"
+
+[[package]]
+id = "com.nvidia.tegrazone3"
+category = "preloaded"
+tier = "advanced"
+note = "NVIDIA Games app and row, GeForce NOW is a separate app"
+
+[[package]]
+id = "com.android.gallery3d"
+category = "preloaded"
+tier = "advanced"
+note = "photo viewer"
+
+[[package]]
+id = "com.nvidia.osc"
+category = "preloaded"
+tier = "advanced"
+note = "NVIDIA in-game overlay"
+
+[[package]]
+id = "com.nvidia.shieldtech.hooks"
+category = "vendor"
+tier = "advanced"
+note = "maps an Xbox controller's Guide button to Home"
+
+[[package]]
+id = "com.nvidia.shield.smbserver"
+category = "vendor"
+tier = "advanced"
+note = "Transfer files over local network (SMB share)"
+
+[[package]]
+id = "com.google.android.tv"
+category = "preloaded"
+tier = "advanced"
+note = "Live Channels, keep it for a network tuner"
+
+[[package]]
+id = "com.google.android.backdrop"
+category = "content"
+tier = "advanced"
+note = "Ambient mode screensaver, the default one. Pick another screensaver first."
+
+[[package]]
+id = "com.google.android.katniss"
+category = "assistant"
+tier = "advanced"
+note = "Google Assistant, the microphone button stops working"
+
+[[package]]
+id = "com.google.android.speech.pumpkin"
+category = "assistant"
+tier = "advanced"
+note = "on-device speech recognition, microphone buttons inside apps stop working too"
+
+[[package]]
+id = "com.google.android.apps.mediashell"
+category = "cast"
+tier = "advanced"
+note = "Chromecast built-in"
+
+[[package]]
+id = "com.netflix.ninja"
+category = "streaming"
+tier = "advanced"
+note = "Netflix"
+
+[[package]]
+id = "com.amazon.amazonvideo.livingroom.nvidia"
+category = "streaming"
+tier = "advanced"
+note = "Prime Video (system copy)"
+
+[[package]]
+id = "com.google.android.youtube.tv"
+category = "streaming"
+tier = "advanced"
+note = "YouTube"
+
+[[package]]
+id = "com.google.android.youtube.tvmusic"
+category = "streaming"
+tier = "advanced"
+note = "YouTube Music"
+
+[[package]]
+id = "com.nvidia.ota"
+category = "updates"
+tier = "advanced"
+note = "firmware updates, NVIDIA still ships security patches"
+
+[[keep]]
+id = "com.google.android.tvrecommendations"
+reason = "the SHIELD TV phone app's remote input service stops binding at boot, every key press fails"
+
+[[keep]]
+id = "com.google.android.tv.remote.service"
+reason = "phone remote"
+
+[[keep]]
+id = "com.android.providers.tv"
+reason = "Watch Next and Live Channels data"
+
+[[keep]]
+id = "com.nvidia.blakepairing"
+reason = "remote and controller pairing"
+
+[[keep]]
+id = "com.nvidia.shieldtech.accessoryui"
+reason = "remote and controller accessories"
+
+[[keep]]
+id = "com.nvidia.ControllerMapper"
+reason = "controller button mapping"
+
+[[keep]]
+id = "com.nvidia.remotelocator"
+reason = "remote locator"
+
+[[keep]]
+id = "com.nvidia.irtuner"
+reason = "IR control of TV and receiver"
+
+[[keep]]
+id = "com.nvidia.NvCPLSvc"
+reason = "AI upscaling and display settings"
+
+[[keep]]
+id = "com.nvidia.nvaudiosvc"
+reason = "audio service"
+
+[[keep]]
+id = "com.nvidia.avsync"
+reason = "audio and video sync"
+
+[[keep]]
+id = "com.dolby.android.audio.service"
+reason = "Dolby audio"
+
+[[keep]]
+id = "com.nvidia.shieldservice"
+reason = "core SHIELD service"
+
+[[keep]]
+id = "com.nvidia.packagemanagerservice"
+reason = "core SHIELD service"
+
+[[keep]]
+id = "com.nvidia.KeyComboOta"
+reason = "core SHIELD service, kept by the source"
+
+[[keep]]
+id = "com.android.se"
+reason = "removing it has soft-bricked Shields"
+
+[[keep]]
+id = "com.android.keychain"
+reason = "removing it has soft-bricked Shields"
