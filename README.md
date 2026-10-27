@@ -48,6 +48,14 @@ quietv install                                # latest release, checksum verifie
 Accept the "Allow USB debugging?" prompt on the TV the first time. `quietv restore` undoes the debloat
 from the newest backup. `quietv --help` lists everything.
 
+Some newer TVs only offer **Wireless debugging** with a pairing code. Open it, choose "Pair device with
+pairing code" and run `quietv pair <pairing port> <code> <port>` once. This needs Android's `adb` tool,
+everything after it does not.
+
+After a firmware update, `quietv check` finds packages the update switched back on and
+`quietv check --fix` disables them again. quietv never disables packages a TV needs to work, such as
+TV settings, the keyboard in use or the services behind the HDMI inputs, even if a device list says so.
+
 ### With an AI coding agent
 
 Clone this repo and ask Claude Code, Codex, Gemini CLI or a similar agent to set up your TV.
@@ -102,6 +110,7 @@ telemetry, cast, assistant, ...) and a tier:
 | Toshiba Fire TV (AFTHA004) | Fire OS 7 | [toshiba-fire-tv-aftha004.toml](devices/toshiba-fire-tv-aftha004.toml) |
 
 Your TV is missing? [Add it](CONTRIBUTING.md#add-your-tv). It is the most useful contribution there is.
+`quietv report` writes everything the device report needs into one file.
 
 ## Supported TVs
 

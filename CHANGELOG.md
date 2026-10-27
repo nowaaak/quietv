@@ -12,6 +12,11 @@ and the project uses [Semantic Versioning](https://semver.org).
   has accepted quietv as Home.
 - After a reboot quietv checks that its Home redirect is running and binds it again if not.
 - `quietv redirect on|off|status`. `quietv firetv` still works.
+- `quietv debloat` never disables packages a TV needs: TV settings, Google Play services, the keyboard in
+  use, the packages behind the HDMI and tuner inputs, the current home and launcher partner customisations.
+- `quietv check` finds packages a firmware update enabled again, `--fix` disables them again.
+- `quietv report` writes a device report for a GitHub issue.
+- `quietv pair` pairs with Wireless debugging and opens port 5555 for TVs without a network debugging switch.
 
 ### Changed
 

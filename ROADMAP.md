@@ -26,12 +26,13 @@ anything here.
 
 ## 0.3: Google TV and reliability
 
-- Home redirect for TVs whose stock home cannot be replaced, Google TV first
-- Redirect that survives reboots and firmware quirks
-- Safer home handover and debloat guards for packages that break a TV
-- `quietv check`: find packages a firmware update re-enabled and offer to disable them again
-- `quietv report`: collect what a device report needs in one go
-- `quietv pair`: wireless debugging pairing for TVs without a debugging switch for the network
+- [x] Home redirect for TVs whose stock home cannot be replaced, Google TV first
+- [x] Redirect that survives reboots and firmware quirks
+- [x] Safer home handover and debloat guards for packages that break a TV
+- [x] `quietv check`: find packages a firmware update re-enabled and offer to disable them again
+- [x] `quietv report`: collect what a device report needs in one go
+- [x] `quietv pair`: wireless debugging pairing for TVs without a debugging switch for the network
+- [ ] Google TV redirect confirmed on real hardware
 
 ## 0.4: Everyday comfort
 

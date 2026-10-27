@@ -25,7 +25,7 @@ Run `quietv backup` before changing anything and tell the user where the backup 
 
 1. If `devices/` has a file for this model, run `quietv debloat <file> --dry-run --tier advanced` and
    show the user the list, grouped by category.
-2. Otherwise build a list. Run `quietv shell pm list packages -e`, sort the packages into the categories
+2. Otherwise build a list. Run `quietv report` and `quietv shell pm list packages -e`, sort the packages into the categories
    from [devices/README.md](devices/README.md) and present them. Look up packages you do not recognise
    before suggesting them. When unsure, leave a package alone.
 3. Ask with a checklist which of the `advanced` categories to apply: casting, voice assistant, vendor

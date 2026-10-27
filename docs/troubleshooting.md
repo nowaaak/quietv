@@ -19,6 +19,11 @@ quietv CLI does not use the binary and is not affected.
 **There is no "Wireless debugging" switch.** Not every TV has one. USB debugging alone usually opens
 network ADB on port 5555.
 
+**The TV only has "Wireless debugging" with a pairing code.** Pair once with
+`quietv pair <pairing port> <code> <port>`. The two ports and the code are on the TV's Wireless
+debugging screen. It uses Android's `adb` tool to pair and then opens port 5555 for quietv until the
+TV restarts.
+
 ## After debloating
 
 **No on-screen keyboard.** Seen on Xiaomi: the default input method points at an IME that is not
@@ -31,6 +36,14 @@ backup. To bring back a single package:
 
 **The Input key or HDMI-CEC broke.** Some vendors hide system services in packages that look like bloat.
 Restore, then disable in smaller steps. Please report it so the device list can mark the package as `keep`.
+
+**"keep ...: protected" during a debloat.** quietv refuses to disable packages that break TVs when they
+are gone: TV settings, Google Play services, the keyboard in use, the packages behind the HDMI and tuner
+inputs, the current home screen and launcher partner customisations. Disable one by hand with
+`quietv shell pm disable-user --user 0 <package>` if you are sure.
+
+**Apps came back after a firmware update.** `quietv check` lists packages quietv disabled that are enabled
+again. `quietv check --fix` disables them again after a backup.
 
 ## The launcher
 
