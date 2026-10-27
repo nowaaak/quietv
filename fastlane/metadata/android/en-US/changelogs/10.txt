@@ -1,0 +1,1 @@
+HDMI-CEC devices under their port, redirect repaired after a force stop, Assistant answers stay on Google TV.

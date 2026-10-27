@@ -5,6 +5,8 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-10-27
+
 ### Added
 
 - Inputs menu: a device connected over HDMI-CEC shows under its port with its name ("HDMI 1 · Fire TV")
