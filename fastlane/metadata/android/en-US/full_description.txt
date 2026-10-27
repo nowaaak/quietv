@@ -7,7 +7,7 @@ quietv replaces the home screen of your TV with a small, fast launcher: your app
 <li>Six themes, your own colours, tile corners and an optional wallpaper that stays readable.</li>
 <li>App search with the remote and a clock screensaver.</li>
 <li>Works on Fire TV and Google TV too: where the stock home cannot be replaced, quietv opens itself when it appears.</li>
-<li>English and German.</li>
+<li>English, German, French, Spanish, Italian, Dutch, Polish, Portuguese, Russian, Turkish and Arabic.</li>
 </ul>
 
 quietv has no network access of its own unless you switch on the optional companion feature, which only talks to your other TV device in your home network.

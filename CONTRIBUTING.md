@@ -60,6 +60,17 @@ Every command that changes the TV must ask first (or take `--yes`) and must be r
 Strings live in `launcher/app/src/main/res/values/strings.xml`. Add a `values-<language>/strings.xml`
 with the same names. Keep them short: they have to fit on a TV tile.
 
+quietv ships in English, German, French, Spanish, Italian, Dutch, Polish, Portuguese, Russian, Turkish and Arabic. Only German was written by a native speaker. The others are a first draft:
+if you speak one of them, corrections are very welcome, even single words.
+
+- Every language needs every string. `./gradlew lint` fails when one is missing.
+- Keep placeholders like `%1$s` and `%2$s` exactly as they are.
+- Escape apostrophes as `\'`.
+- `date_format` is a date pattern, not text. Use the order your language writes dates in, for example
+  `EEEE d MMMM` or `EEEE, d 'de' MMMM`.
+- Arabic and other right-to-left languages mirror the layout. If something looks wrong in your
+  language, a screenshot from `quietv screenshot` helps most.
+
 ## Releases
 
 For maintainers:

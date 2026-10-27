@@ -49,8 +49,10 @@ anything here.
 
 ## 0.6: More languages
 
-- Translations through a hosted translation platform
-- Right-to-left layouts
+- [x] Nine more languages (first drafts)
+- [ ] Translations through a hosted translation platform (needs the public repository)
+- [x] Right-to-left layouts in code
+- [ ] Right-to-left layouts checked on a TV set to Arabic or Hebrew
 
 ## 0.7: Distribution
 
