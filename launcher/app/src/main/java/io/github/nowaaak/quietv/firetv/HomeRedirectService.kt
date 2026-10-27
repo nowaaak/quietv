@@ -23,6 +23,7 @@ class HomeRedirectService : AccessibilityService(), SharedPreferences.OnSharedPr
     private var redirect = false
 
     override fun onServiceConnected() {
+        connected = true
         val configStore = ConfigStore(this)
         store = configStore
         configStore.register(this)
@@ -30,6 +31,7 @@ class HomeRedirectService : AccessibilityService(), SharedPreferences.OnSharedPr
     }
 
     override fun onDestroy() {
+        connected = false
         store?.unregister(this)
         super.onDestroy()
     }
@@ -78,6 +80,10 @@ class HomeRedirectService : AccessibilityService(), SharedPreferences.OnSharedPr
     companion object {
         private const val PASS_THROUGH_MS = 3000L
         private const val QUICK_SETTINGS = "com.amazon.tv.quicksettings"
+
+        @Volatile
+        var connected = false
+            private set
 
         @Volatile
         private var allowStock = false

@@ -1,12 +1,10 @@
 package io.github.nowaaak.quietv.firetv
 
-import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
-import android.view.accessibility.AccessibilityManager
 import io.github.nowaaak.quietv.config.LauncherConfig
 
 object Platform {
@@ -42,14 +40,5 @@ object Platform {
         ) ?: return false
         val service = ComponentName(context, HomeRedirectService::class.java)
         return enabled.split(':').any { ComponentName.unflattenFromString(it) == service }
-    }
-
-    fun redirectServiceRunning(context: Context): Boolean {
-        val manager = context.getSystemService(AccessibilityManager::class.java) ?: return false
-        val service = ComponentName(context, HomeRedirectService::class.java)
-        return manager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK).any {
-            val info = it.resolveInfo.serviceInfo
-            ComponentName(info.packageName, info.name) == service
-        }
     }
 }
