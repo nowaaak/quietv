@@ -316,7 +316,10 @@ def cmd_update(args) -> None:
                 print(f"quietv {installed} is up to date.")
                 return
             print(f"Updating quietv {installed} to {version or apk.name}. Settings stay as they are.")
+            redirect = install.redirect_enabled(tv)
             install.install_apk(tv, apk, progress)
+            if redirect:
+                install.start_launcher(tv)
             print(f"Updated to {install.installed_version(tv)}.")
 
 

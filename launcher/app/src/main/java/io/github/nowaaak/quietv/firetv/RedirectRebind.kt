@@ -13,11 +13,11 @@ object RedirectRebind {
     private const val CHECK_DELAY_MS = 5000L
     private const val REBIND_DELAY_MS = 1000L
 
-    fun schedule(context: Context, done: () -> Unit) {
+    fun schedule(context: Context, always: Boolean, done: () -> Unit) {
         val app = context.applicationContext
         val handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
-            if (!Platform.redirectServiceEnabled(app) || Platform.redirectServiceRunning(app)) {
+            if (!Platform.redirectServiceEnabled(app) || (HomeRedirectService.connected && !always)) {
                 done()
                 return@postDelayed
             }
@@ -36,7 +36,7 @@ object RedirectRebind {
                 try {
                     Settings.Secure.putString(resolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, services)
                     Settings.Secure.putInt(resolver, Settings.Secure.ACCESSIBILITY_ENABLED, 1)
-                    Log.i(TAG, "redirect service was not running after boot, rebound it")
+                    Log.i(TAG, "rebound the redirect service")
                 } catch (e: SecurityException) {
                     Log.w(TAG, "cannot restore the accessibility services: ${e.message}")
                 }

@@ -11,11 +11,12 @@ import io.github.nowaaak.quietv.firetv.RedirectRebind
 class BootReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
+        if (intent.action == Intent.ACTION_BOOT_COMPLETED || intent.action == Intent.ACTION_MY_PACKAGE_REPLACED) {
             CompanionReceiverService.sync(context, ConfigStore(context).load())
             if (Platform.redirectServiceEnabled(context)) {
                 val pending = goAsync()
-                RedirectRebind.schedule(context) { pending.finish() }
+                val updated = intent.action == Intent.ACTION_MY_PACKAGE_REPLACED
+                RedirectRebind.schedule(context, always = updated) { pending.finish() }
             }
         }
     }

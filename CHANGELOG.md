@@ -5,6 +5,14 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fire TV: after an update of the launcher, Home kept showing Amazon's home. Fire OS lists the redirect
+  service as bound after an app update but no longer sends it anything. quietv now switches its
+  service off and on again right after each update, and `quietv update` opens quietv when it is done.
+- After a reboot or an update, quietv checks that its redirect service is really connected, not only
+  listed, and binds it again if not.
+
 ## [0.5.0] - 2026-10-27
 
 ### Added

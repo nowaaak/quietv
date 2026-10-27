@@ -211,6 +211,22 @@ def test_update_installs_a_newer_release(connected, monkeypatch, tmp_path):
     assert not any("set-home-activity" in c or "disable-user" in c for c in tv.commands)
 
 
+def test_update_brings_quietv_back_when_it_redirects_home(connected, tmp_path):
+    apk = tmp_path / "quietv.apk"
+    apk.write_bytes(b"apk")
+    service = "io.github.nowaaak.quietv/io.github.nowaaak.quietv.firetv.HomeRedirectService"
+    tv = connected(
+        {
+            "dumpsys package io.github.nowaaak.quietv": "    versionName=0.5.0\n",
+            "pm install": "Success\n",
+            "settings get secure enabled_accessibility_services": service + "\n",
+        }
+    )
+    assert cli.main(["update", "--apk", str(apk)]) == 0
+    install_at = next(i for i, c in enumerate(tv.commands) if c.startswith("pm install"))
+    assert "am start -n io.github.nowaaak.quietv/.MainActivity" in tv.commands[install_at:]
+
+
 def test_update_needs_an_installed_launcher(connected, tmp_path, capsys):
     apk = tmp_path / "quietv.apk"
     apk.write_bytes(b"apk")
