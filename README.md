@@ -104,12 +104,28 @@ telemetry, cast, assistant, ...) and a tier:
 `quietv debloat` applies `recommended` by default. Use `--tier advanced` to go further and
 `--exclude cast` to skip a category.
 
-| TV | OS | File |
-|---|---|---|
-| CHiQ AI PONT | Android TV 11 | [chiq-ai-pont.toml](devices/chiq-ai-pont.toml) |
-| Xiaomi Mi TV 4A | Android TV 10 | [xiaomi-mi-tv-4a.toml](devices/xiaomi-mi-tv-4a.toml) |
-| Fire TV Stick 4K Max (2nd gen) | Fire OS 8 | [amazon-fire-tv-stick-4k-max-2.toml](devices/amazon-fire-tv-stick-4k-max-2.toml) |
-| Toshiba Fire TV (AFTHA004) | Fire OS 7 | [toshiba-fire-tv-aftha004.toml](devices/toshiba-fire-tv-aftha004.toml) |
+| TV | OS | Checked with quietv | File |
+|---|---|---|---|
+| Fire TV Stick 4K Max (2nd gen) | Fire OS 8.1.8.5 (Android 11) | yes | [amazon-fire-tv-stick-4k-max-2.toml](devices/amazon-fire-tv-stick-4k-max-2.toml) |
+| CHiQ AI PONT | Android TV 11 | yes | [chiq-ai-pont.toml](devices/chiq-ai-pont.toml) |
+| Chromecast with Google TV (4K) | Google TV, Android 14 | no, imported | [google-chromecast-google-tv-4k.toml](devices/google-chromecast-google-tv-4k.toml) |
+| Google TV Streamer 4K | Google TV, Android 14 | no, imported | [google-tv-streamer-4k.toml](devices/google-tv-streamer-4k.toml) |
+| Hisense SmartTV 4K FFM (Android 11) | Google TV 11 | no, imported | [hisense-smarttv-4k-ffm-android11.toml](devices/hisense-smarttv-4k-ffm-android11.toml) |
+| NVIDIA SHIELD TV Pro (2019) | Android TV 11 | no, imported | [nvidia-shield-tv-pro-2019.toml](devices/nvidia-shield-tv-pro-2019.toml) |
+| onn 4K Streaming Box (2023) | Google TV, Android 14 | no, imported | [onn-4k-streaming-box-2023.toml](devices/onn-4k-streaming-box-2023.toml) |
+| Philips TPM191E (50PUS8505, 55OLED854, 65OLED804, 50PUS7354) | Android TV 12 | no, imported | [philips-tpm191e.toml](devices/philips-tpm191e.toml) |
+| Sony BRAVIA 4K VH21 (EU) | Google TV 12 | no, imported | [sony-bravia-vh21-eu.toml](devices/sony-bravia-vh21-eu.toml) |
+| Sony BRAVIA VU31 4K | Google TV 14 | no, imported | [sony-bravia-vu31.toml](devices/sony-bravia-vu31.toml) |
+| TCL Smart TV Pro (G08, EU firmware) | Google TV (Android 12) | no, imported | [tcl-g08-eu-android12.toml](devices/tcl-g08-eu-android12.toml) |
+| TCL Smart TV Pro (G09) | Google TV (Android 12) | no, imported | [tcl-g09-google-tv.toml](devices/tcl-g09-google-tv.toml) |
+| TCL 4K Google TV (G10) | Google TV (Android 12) | no, imported | [tcl-g10-google-tv.toml](devices/tcl-g10-google-tv.toml) |
+| Toshiba Fire TV | Fire OS (Android 9) | by the project quietv grew out of | [toshiba-fire-tv-aftha004.toml](devices/toshiba-fire-tv-aftha004.toml) |
+| Xiaomi Mi Box S 2nd gen | Google TV 11 | no, imported | [xiaomi-mi-box-s-2nd-gen.toml](devices/xiaomi-mi-box-s-2nd-gen.toml) |
+| Xiaomi Mi TV 4A | Android TV 10 | by the project quietv grew out of | [xiaomi-mi-tv-4a.toml](devices/xiaomi-mi-tv-4a.toml) |
+
+Lists marked "imported" come from [cleanyourtv](https://github.com/Gathin23/cleanyourtv)'s device reports,
+sorted into quietv's categories and tiers. Nobody has run them with quietv yet. Start with
+`--dry-run`, and please report back how it went.
 
 Your TV is missing? [Add it](CONTRIBUTING.md#add-your-tv). It is the most useful contribution there is.
 `quietv report` writes everything the device report needs into one file.
@@ -124,6 +140,9 @@ others) and Amazon Fire TV. Not Samsung Tizen or LG webOS. Android 8.0 or newer.
 - [Configuration](docs/configuration.md)
 - [Themes](docs/themes.md)
 - [Fire TV](docs/fire-tv.md)
+- [Privacy report](docs/privacy.md)
+- [TVs without Android](docs/other-tvs.md)
+- [Reproducible builds](docs/reproducible-builds.md)
 - [Google TV](docs/google-tv.md)
 - [Troubleshooting](docs/troubleshooting.md)
 - [Install from a phone](docs/phone-install.md)
