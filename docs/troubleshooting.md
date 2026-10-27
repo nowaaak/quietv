@@ -24,6 +24,10 @@ network ADB on port 5555.
 debugging screen. It uses Android's `adb` tool to pair and then opens port 5555 for quietv until the
 TV restarts.
 
+**Windows: "Filename too long" while installing the CLI.** uv checks out the whole repository, and
+Windows limits paths to 260 characters by default. Run `git config --global core.longpaths true` once
+and install again.
+
 ## After debloating
 
 **No on-screen keyboard.** Seen on Xiaomi: the default input method points at an IME that is not
