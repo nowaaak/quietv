@@ -14,6 +14,7 @@ from quietv import (
     guard,
     install,
     pair,
+    privacy,
     release,
     report,
     state,
@@ -222,6 +223,17 @@ def cmd_report(args) -> None:
     print("It lists the installed packages. Attach it to a device report on GitHub if you are happy to share that.")
 
 
+def cmd_privacy(args) -> None:
+    device_list = devicelist.load(args.list) if args.list else None
+    with connect(args) as tv:
+        text = privacy.build(tv, device_list)
+    if args.out:
+        Path(args.out).write_text(text, encoding="utf-8")
+        print(f"Privacy report written to {args.out}")
+    else:
+        sys.stdout.write(text)
+
+
 def cmd_pair(args) -> None:
     host = args.host or os.environ.get("QUIETV_HOST")
     if not host:
@@ -283,6 +295,29 @@ def cmd_install(args) -> None:
                     print(f"  {install.disable_package(tv, stock)}")
             install.start_launcher(tv)
     print("Installed. Press Home on the remote.")
+
+
+def cmd_update(args) -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        if args.apk:
+            apk, version = Path(args.apk), None
+            if not apk.is_file():
+                raise Abort(f"no such file: {apk}")
+        else:
+            print("Downloading the latest release from GitHub")
+            apk, tag = release.download_latest(Path(tmp))
+            version = tag.lstrip("v")
+            print(f"  {apk.name} ({tag}), checksum verified")
+        with connect(args) as tv:
+            installed = install.installed_version(tv)
+            if installed is None:
+                raise Abort("quietv is not installed on this TV. Run quietv install first.")
+            if version and not args.force and install.version_key(installed) >= install.version_key(version):
+                print(f"quietv {installed} is up to date.")
+                return
+            print(f"Updating quietv {installed} to {version or apk.name}. Settings stay as they are.")
+            install.install_apk(tv, apk, progress)
+            print(f"Updated to {install.installed_version(tv)}.")
 
 
 def cmd_config(args) -> None:
@@ -428,6 +463,11 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--out", help="file name (default: quietv-report-<model>.md)")
     p.set_defaults(func=cmd_report)
 
+    p = sub.add_parser("privacy", help="list apps that can use the microphone, camera or location")
+    p.add_argument("--list", help="device list to check for ads and telemetry that are still enabled")
+    p.add_argument("--out", help="write the report to a file instead of the screen")
+    p.set_defaults(func=cmd_privacy)
+
     p = sub.add_parser("pair", help="pair with wireless debugging (Android 11+) and open port 5555")
     p.add_argument("pair_port", type=int, help="port shown under 'Pair device with pairing code'")
     p.add_argument("code", help="six-digit pairing code")
@@ -447,6 +487,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument("--yes", "-y", action="store_true", help="do not ask for confirmation")
     p.set_defaults(func=cmd_install)
+
+    p = sub.add_parser("update", help="update the launcher in place, keeping its settings")
+    p.add_argument("--apk", help="local APK instead of the latest GitHub release")
+    p.add_argument("--force", action="store_true", help="install even if the TV has the same or a newer version")
+    p.set_defaults(func=cmd_update)
 
     p = sub.add_parser("config", help="push, pull or check the launcher config")
     p.add_argument("action", choices=("push", "pull", "check"))
