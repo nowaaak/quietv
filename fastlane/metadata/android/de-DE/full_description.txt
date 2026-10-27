@@ -7,7 +7,7 @@ quietv ersetzt den Startbildschirm deines Fernsehers durch einen kleinen, schnel
 <li>Sechs Designs, eigene Farben, Kachelecken und ein optionales Hintergrundbild, das lesbar bleibt.</li>
 <li>App-Suche mit der Fernbedienung und eine Uhr als Bildschirmschoner.</li>
 <li>Läuft auch auf Fire TV und Google TV: Wo sich der Startbildschirm nicht ersetzen lässt, öffnet sich quietv, sobald er erscheint.</li>
-<li>Deutsch und Englisch.</li>
+<li>Deutsch, Englisch, Französisch, Spanisch, Italienisch, Niederländisch, Polnisch, Portugiesisch, Russisch, Türkisch und Arabisch.</li>
 </ul>
 
 quietv greift selbst nicht aufs Netz zu, außer du schaltest die optionale Companion-Funktion ein. Sie spricht nur mit deinem anderen TV-Gerät im Heimnetz.

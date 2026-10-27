@@ -79,7 +79,7 @@ No computer? See [docs/phone-install.md](docs/phone-install.md).
 - Six themes, your own colours, tile corners and an optional wallpaper that stays readable.
   [Themes](docs/themes.md).
 - Settings on the TV: theme, accent colour, tile corners, tiles per row, wallpaper, hidden apps.
-- Clock, date and greeting in [Geist](https://vercel.com/font). English and German.
+- Clock, date and greeting in [Geist](https://vercel.com/font). English, German, French, Spanish, Italian, Dutch, Polish, Portuguese, Russian, Turkish and Arabic, with right-to-left layouts.
 
 Everything is configurable on the TV. To set up many TVs the same way, keep a JSON file and push it:
 

@@ -5,6 +5,16 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+
+- French, Spanish, Italian, Dutch, Polish, Portuguese, Russian, Turkish and Arabic. They are a first
+  draft, corrections from native speakers are welcome.
+
+### Fixed
+
+- Right-to-left languages: the tile menu opens on the correct side, the edges of the top bar stop the
+  focus on the correct side, and moving a tile left or right follows the screen.
+
 ## [0.5.1] - 2026-10-27
 
 ### Fixed
