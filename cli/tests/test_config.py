@@ -14,6 +14,7 @@ EXAMPLE = {
     "accent": "#6EE7B7",
     "theme": "dark",
     "liveTvPackage": "com.mediatek.wwtv.tvcenter",
+    "inputsKey": True,
     "homeRedirect": {"enabled": True, "stockHomePackage": "com.amazon.tv.launcher"},
     "companion": {"mode": "off"},
 }
@@ -71,6 +72,7 @@ def test_valid_config_has_no_problems():
         ({"startup": {"app": "com.a.b", "input": "last"}}, "either app or input"),
         ({"startup": {"input": "bad id!"}}, "startup.input"),
         ({"startup": {"boot": 1}}, "startup: unknown key 'boot'"),
+        ({"inputsKey": "yes"}, "inputsKey"),
     ],
 )
 def test_invalid_values_are_reported(patch, message):

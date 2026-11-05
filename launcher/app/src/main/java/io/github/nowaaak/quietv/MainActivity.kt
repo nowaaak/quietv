@@ -90,6 +90,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private var tileMenu: DropdownMenu? = null
     private var afterLayout: (() -> Unit)? = null
     private var assigningPkg: String? = null
+    private var inputsRequested = false
     private var tileRadius = 0f
     private var wallpaperVersion = NO_WALLPAPER
     private var wallpaperSamples = IntArray(0)
@@ -110,6 +111,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
         ThemeColors.apply(this, palette)
         super.onCreate(savedInstanceState)
         Platform.syncHomeEntry(this)
+        inputsRequested = intent?.action == Platform.ACTION_VIEW_INPUTS
         setContentView(R.layout.activity_main)
 
         density = resources.displayMetrics.density
@@ -247,12 +249,22 @@ class MainActivity : Activity(), TileAdapter.Listener {
         updateNetwork()
         handler.postDelayed(minuteTick, MINUTE_MS)
         runStartup()
+        Platform.syncInputsEntry(this, config.inputsKey)
 
         grid.post {
             val focused = currentFocus
             if (focused != null && grid.findContainingViewHolder(focused) != null) return@post
             focusTile(lastFocused)
         }
+        if (inputsRequested) {
+            inputsRequested = false
+            grid.post { findViewById<View>(R.id.btnInputs).performClick() }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (intent.action == Platform.ACTION_VIEW_INPUTS) inputsRequested = true
     }
 
     override fun onPause() {
@@ -546,7 +558,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
             startup.app.isNotEmpty() -> openPackage(startup.app)
             startup.input.isNotEmpty() -> {
                 val id = if (startup.input == StartupConfig.LAST_INPUT) store.lastInput else startup.input
-                if (id.isNotEmpty()) AppLauncher.start(this, InputsMenu.inputIntent(id))
+                if (id.isNotEmpty()) InputsMenu.openInput(this, id, config.liveTvPackage)
             }
         }
     }

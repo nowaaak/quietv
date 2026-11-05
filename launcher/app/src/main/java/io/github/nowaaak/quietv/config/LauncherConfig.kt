@@ -65,6 +65,7 @@ data class LauncherConfig(
     val tileRadius: Int = DEFAULT_TILE_RADIUS,
     val wallpaper: WallpaperConfig = WallpaperConfig(),
     val liveTvPackage: String = "",
+    val inputsKey: Boolean = false,
     val homeRedirect: HomeRedirectConfig = HomeRedirectConfig(),
     val shortcuts: Map<String, String> = emptyMap(),
     val startup: StartupConfig = StartupConfig(),
@@ -83,6 +84,7 @@ data class LauncherConfig(
         .put("tileRadius", tileRadius)
         .put("wallpaper", JSONObject().put("enabled", wallpaper.enabled).put("dim", wallpaper.dim))
         .put("liveTvPackage", liveTvPackage)
+        .put("inputsKey", inputsKey)
         .put(
             "homeRedirect",
             JSONObject()
@@ -124,7 +126,7 @@ data class LauncherConfig(
         private val TOKEN = Regex("^[A-Za-z0-9_-]{${CompanionConfig.MIN_TOKEN_LENGTH},}$")
         private val TOP_KEYS = setOf(
             "version", "favorites", "hidden", "extraApps", "columns", "accent", "theme", "colors", "tileRadius",
-            "wallpaper", "liveTvPackage", "homeRedirect", "fireTv", "shortcuts", "startup", "companion",
+            "wallpaper", "liveTvPackage", "inputsKey", "homeRedirect", "fireTv", "shortcuts", "startup", "companion",
         )
         private val WALLPAPER_KEYS = setOf("enabled", "dim")
         val SHORTCUT_KEYS = (0..9).map { it.toString() } + listOf("red", "green", "yellow", "blue")
@@ -178,6 +180,8 @@ data class LauncherConfig(
                 problems += "wallpaper.dim must be a whole number from 0 to ${WallpaperConfig.MAX_DIM}"
             }
             val liveTv = optionalPackage(root, "liveTvPackage", "liveTvPackage", problems)
+            val inputsKey = root.opt("inputsKey") ?: false
+            if (inputsKey !is Boolean) problems += "inputsKey must be true or false"
 
             val redirectJson = homeRedirectJson(root, problems)
             unknownKeys(redirectJson, REDIRECT_KEYS, "homeRedirect.", problems)
@@ -241,6 +245,7 @@ data class LauncherConfig(
                 tileRadius = tileRadius as Int,
                 wallpaper = WallpaperConfig(wallpaperOn as Boolean, dim as Int),
                 liveTvPackage = liveTv,
+                inputsKey = inputsKey as Boolean,
                 homeRedirect = homeRedirect,
                 shortcuts = shortcuts,
                 startup = StartupConfig(startupApp, startupInput),

@@ -43,7 +43,8 @@ More in [examples/](examples/).
 | `tileRadius` | `14` | Tile corner radius in dp, 0 (square) to 24. |
 | `wallpaper.enabled` | `false` | Show the wallpaper image. Set one with `quietv theme wallpaper`. Without an image this does nothing. |
 | `wallpaper.dim` | `30` | How much the wallpaper is darkened (or lightened on a light theme), 0 to 80 percent. quietv dims more if text would be hard to read. |
-| `liveTvPackage` | `""` | The TV's tuner app, offered at the end of the Inputs menu. Empty hides the entry. |
+| `liveTvPackage` | `""` | The TV's tuner app, offered at the end of the Inputs menu. Empty hides the entry. HDMI entries open in this app first, so no "Open with" choice appears. |
+| `inputsKey` | `false` | Answer the remote's Input key with the quietv Inputs menu. For TVs whose Input key does nothing once the stock launcher is disabled. |
 | `homeRedirect.enabled` | `true` | Open quietv when the stock home appears. Only acts if the accessibility service is on, see [fire-tv.md](fire-tv.md) and [google-tv.md](google-tv.md). |
 | `homeRedirect.stockHomePackage` | `""` | The home app to redirect. Empty means `com.amazon.tv.launcher` on Fire OS and nothing elsewhere. `quietv install` fills it in on Google TV. |
 | `homeRedirect.classHint` | `"HomeActivity"` | Part of the stock home activity's class name. Other activities of the same app, such as its settings, are left alone. |

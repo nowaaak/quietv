@@ -18,13 +18,15 @@ object RedirectRebind {
         val app = context.applicationContext
         if (!ConfigStore(app).redirectWanted || Platform.redirectServiceEnabled(app)) return
         val resolver = app.contentResolver
-        val ours = ComponentName(app, HomeRedirectService::class.java).flattenToString()
-        val current = Settings.Secure.getString(resolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-        val services = current.orEmpty().split(':').filter { it.isNotEmpty() && it != "null" } + ours
         try {
-            Settings.Secure.putString(resolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, services.joinToString(":"))
+            if (!Platform.redirectServiceListed(app)) {
+                val ours = ComponentName(app, HomeRedirectService::class.java).flattenToString()
+                val current = Settings.Secure.getString(resolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
+                val services = current.orEmpty().split(':').filter { it.isNotEmpty() && it != "null" } + ours
+                Settings.Secure.putString(resolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, services.joinToString(":"))
+            }
             Settings.Secure.putInt(resolver, Settings.Secure.ACCESSIBILITY_ENABLED, 1)
-            Log.i(TAG, "redirect service was removed, probably by a force stop, added it back")
+            Log.i(TAG, "redirect service was off, probably after a force stop or a reboot, switched it back on")
         } catch (e: SecurityException) {
             Log.w(TAG, "cannot add the redirect service back: ${e.message}")
         }

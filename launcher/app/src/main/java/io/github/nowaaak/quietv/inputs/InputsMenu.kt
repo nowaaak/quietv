@@ -1,6 +1,7 @@
 package io.github.nowaaak.quietv.inputs
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.media.tv.TvContract
@@ -68,7 +69,7 @@ class InputsMenu(
                 active = state == TvInputManager.INPUT_STATE_CONNECTED,
             ) {
                 store.lastInput = id
-                open(inputIntent(id))
+                openInput(activity, id, liveTvPackage)
             }
         }
 
@@ -101,6 +102,18 @@ class InputsMenu(
     private fun open(intent: Intent) = AppLauncher.start(activity, intent)
 
     companion object {
+        fun openInput(context: Context, inputId: String, liveTvPackage: String) {
+            val intent = inputIntent(inputId)
+            if (liveTvPackage.isNotEmpty()) {
+                val targeted = Intent(intent).setPackage(liveTvPackage)
+                if (context.packageManager.resolveActivity(targeted, 0) != null) {
+                    AppLauncher.start(context, targeted)
+                    return
+                }
+            }
+            AppLauncher.start(context, intent)
+        }
+
         fun inputIntent(inputId: String): Intent =
             Intent(Intent.ACTION_VIEW).setDataAndType(
                 TvContract.buildChannelUriForPassthroughInput(inputId),
