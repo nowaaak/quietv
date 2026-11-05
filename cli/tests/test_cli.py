@@ -233,3 +233,17 @@ def test_update_needs_an_installed_launcher(connected, tmp_path, capsys):
     connected({})
     assert cli.main(["update", "--apk", str(apk)]) == 1
     assert "quietv install first" in capsys.readouterr().err
+
+
+def test_install_warns_about_a_second_user(home_tv, capsys):
+    tv, apk = home_tv("com.google.android.tvlauncher/.MainActivity")
+    tv.responses["pm list users"] = "Users:\n\tUserInfo{0:Owner:c13} running\n\tUserInfo{10:Kids:410}\n"
+    assert cli.main(["install", "--apk", apk, "--mode", "replace", "--yes"]) == 0
+    assert "this TV has 2 users" in capsys.readouterr().out
+
+
+def test_install_never_disables_a_protected_stock_launcher(home_tv, capsys):
+    tv, apk = home_tv("com.cvte.tv.launcher.space/.MainActivity")
+    assert cli.main(["install", "--apk", apk, "--mode", "replace", "--yes"]) == 0
+    assert not any(c.startswith("pm disable-user") for c in tv.commands)
+    assert "keeping the stock launcher com.cvte.tv.launcher.space" in capsys.readouterr().out

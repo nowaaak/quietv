@@ -44,6 +44,13 @@ def version_key(version: str) -> tuple[int, ...]:
     return tuple(int(n) for n in numbers)
 
 
+USER_RE = re.compile(r"UserInfo\{\d+:")
+
+
+def user_count(tv: Shell) -> int:
+    return max(1, len(USER_RE.findall(tv.shell("pm list users"))))
+
+
 def home_is_quietv(tv: Shell) -> bool:
     home = parse_home_activity(tv.shell(HOME_QUERY))
     return bool(home) and home.split("/", 1)[0] == PACKAGE

@@ -38,7 +38,7 @@ def services(value: str) -> list[str]:
 
 
 def build(tv: Shell, device_list: DeviceList | None = None) -> str:
-    enabled = parse_package_list(tv.shell("pm list packages -e"))
+    enabled = parse_package_list(tv.shell("pm list packages -e --user 0"))
     grants = granted(tv.shell("dumpsys package packages", timeout=180.0))
     lines = ["# Privacy report", ""]
     for permission, title in WATCHED.items():

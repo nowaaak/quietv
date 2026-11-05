@@ -42,6 +42,46 @@ def test_dynamic_protection_finds_hardware_inputs_keyboard_and_home(fake_tv):
     assert "com.google.android.tvlauncher" in found
 
 
+def test_core_packages_and_prefixes_are_protected():
+    for package in (
+        "com.android.sdksandbox",
+        "com.android.location.fused",
+        "com.google.android.permissioncontroller",
+        "com.cvte.tv.launcher.space",
+        "com.android.providers.tv",
+        "com.android.providers.settings",
+        "com.google.android.overlay.modules.ext.services",
+    ):
+        assert guard.reason(package, {}) is not None, package
+    assert guard.reason("com.android.providers.calendar", {}) is None
+
+
+def test_dynamic_protection_finds_settings_input_apps_and_hardware_users(fake_tv):
+    tv = fake_tv(
+        {
+            **CHIQ,
+            guard.SETTINGS_QUERY: "1 activities found:\n  Activity #0:\n    priority=0\n"
+            "    com.android.tv.settings/.MainSettings\n",
+            guard.INPUT_QUERY: "1 activities found:\n  Activity #0:\n"
+            "    com.mediatek.wwtv.tvcenter/.nav.TurnkeyUiMainActivity\n",
+            "for p in ": "com.heytap.tv.support\nnot a package line\n",
+        }
+    )
+    found = guard.dynamic(tv, ["com.heytap.tv.support", "com.example.ads"])
+    assert "com.mediatek.wwtv.tvcenter" in found
+    assert "com.android.tv.settings" in found
+    assert "com.heytap.tv.support" in found
+    assert "com.example.ads" not in found
+    script = next(c for c in tv.commands if c.startswith("for p in "))
+    assert "com.example.ads com.heytap.tv.support;" in script
+
+
+def test_hardware_check_is_skipped_without_candidates(fake_tv):
+    tv = fake_tv(CHIQ)
+    guard.dynamic(tv)
+    assert not any(c.startswith("for p in ") for c in tv.commands)
+
+
 def test_no_device_list_disables_a_protected_package(repo_root):
     for path in sorted((repo_root / "devices").glob("*.toml")):
         for package in devicelist.load(str(path)).packages:
