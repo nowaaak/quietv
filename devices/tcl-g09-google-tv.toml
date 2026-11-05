@@ -31,9 +31,9 @@ note = "TCL log capture and upload"
 
 [[package]]
 id = "com.graymatrix.did"
-category = "telemetry"
-tier = "recommended"
-note = "device analytics, seen on the Indian AS23 unit"
+category = "streaming"
+tier = "advanced"
+note = "ZEE5, preinstalled on the Indian AS23 unit (cleanyourtv #3157)"
 
 [[package]]
 id = "com.tcl.channelplus"
@@ -80,8 +80,8 @@ note = "TCL account sign-in"
 [[package]]
 id = "com.tcl.exhibit"
 category = "vendor"
-tier = "recommended"
-note = "store demo mode"
+tier = "advanced"
+note = "store demo mode, but also the art mode and the Art button on A300 models (cleanyourtv #3182)"
 
 [[package]]
 id = "com.tcl.esticker"

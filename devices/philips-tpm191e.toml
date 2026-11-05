@@ -22,6 +22,7 @@ Philips Settings button org.droidtv.philipstvdrawer, both keep working.
 The Netflix (scancode 632) and Rakuten TV (779) buttons do nothing once those apps are disabled.
 OLED models draw a moving Philips logo over a still picture after a few minutes. Keys injected over ADB do not
 dismiss it, a real remote key does.
+The board has no clock battery. After a cold boot, Private DNS (DNS over TLS) fails until the time is synced.
 """
 
 [[package]]
