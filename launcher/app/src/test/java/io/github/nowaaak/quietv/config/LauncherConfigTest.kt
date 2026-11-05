@@ -35,6 +35,7 @@ class LauncherConfigTest {
             tileRadius = 6,
             wallpaper = WallpaperConfig(enabled = true, dim = 45),
             liveTvPackage = "com.mediatek.wwtv.tvcenter",
+            inputsKey = true,
             homeRedirect = HomeRedirectConfig(
                 enabled = false,
                 stockHomePackage = "com.google.android.apps.tv.launcherx",
@@ -58,11 +59,12 @@ class LauncherConfigTest {
     fun invalidValuesAreAllReported() {
         val error = assertThrows(InvalidConfigException::class.java) {
             LauncherConfig.parse(
-                """{"columns": 12, "accent": "green", "theme": "blue", "dock": [], "favorites": ["x; reboot"]}""",
+                """{"columns": 12, "accent": "green", "theme": "blue", "dock": [], "favorites": ["x; reboot"],
+                   "inputsKey": "yes"}""",
             )
         }
         val message = error.message.orEmpty()
-        listOf("columns", "accent", "theme", "unknown key 'dock'", "favorites").forEach {
+        listOf("columns", "accent", "theme", "unknown key 'dock'", "favorites", "inputsKey").forEach {
             assertTrue("missing '$it' in: $message", message.contains(it))
         }
     }

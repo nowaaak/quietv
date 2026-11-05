@@ -27,6 +27,7 @@ TOP_KEYS = {
     "tileRadius",
     "wallpaper",
     "liveTvPackage",
+    "inputsKey",
     "homeRedirect",
     "fireTv",
     "shortcuts",
@@ -95,6 +96,8 @@ def validate(config: Any) -> list[str]:
     live = config.get("liveTvPackage", "")
     if live and not is_package(str(live)):
         problems.append("liveTvPackage must be a package name or empty")
+    if not isinstance(config.get("inputsKey", False), bool):
+        problems.append("inputsKey must be true or false")
 
     problems += _redirect_problems(config)
     problems += _shortcut_problems(config)

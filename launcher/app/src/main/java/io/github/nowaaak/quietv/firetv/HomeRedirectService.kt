@@ -4,6 +4,8 @@ import android.accessibilityservice.AccessibilityService
 import android.content.ComponentName
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 import android.view.accessibility.AccessibilityEvent
 import io.github.nowaaak.quietv.MainActivity
@@ -23,6 +25,10 @@ class HomeRedirectService : AccessibilityService(), SharedPreferences.OnSharedPr
     private var redirect = false
 
     private val grace = AssistantGrace()
+    private val handler = Handler(Looper.getMainLooper())
+    private val pendingRedirect = Runnable { startLauncher() }
+    private var settle = false
+    private var otherStockWindowAt = 0L
 
     override fun onServiceConnected() {
         connected = true
@@ -30,16 +36,18 @@ class HomeRedirectService : AccessibilityService(), SharedPreferences.OnSharedPr
         configStore.redirectWanted = true
         store = configStore
         configStore.register(this)
+        settle = !Platform.isFireOs(this)
         refresh()
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        store?.redirectWanted = false
+        store?.redirectWanted = Platform.redirectServiceEnabled(this)
         return super.onUnbind(intent)
     }
 
     override fun onDestroy() {
         connected = false
+        handler.removeCallbacks(pendingRedirect)
         store?.unregister(this)
         super.onDestroy()
     }
@@ -64,12 +72,25 @@ class HomeRedirectService : AccessibilityService(), SharedPreferences.OnSharedPr
 
         if (pkg == stock) {
             val cls = event.className?.toString() ?: return
-            if (!cls.contains(classHint) || allowStock || grace.active(SystemClock.uptimeMillis())) return
-            if (SystemClock.uptimeMillis() < passStockUntil) {
+            val now = SystemClock.uptimeMillis()
+            if (!cls.contains(classHint)) {
+                if (settle && !cls.startsWith("android.")) {
+                    otherStockWindowAt = now
+                    handler.removeCallbacks(pendingRedirect)
+                }
+                return
+            }
+            if (allowStock || grace.active(now)) return
+            if (now < passStockUntil) {
                 passStockUntil = 0
                 return
             }
-            startLauncher()
+            if (!settle) {
+                startLauncher()
+            } else if (now - otherStockWindowAt >= OTHER_WINDOW_MS) {
+                handler.removeCallbacks(pendingRedirect)
+                handler.postDelayed(pendingRedirect, SETTLE_MS)
+            }
         } else if (pkg != "android" && !pkg.startsWith("com.android.") && !pkg.startsWith(QUICK_SETTINGS)) {
             allowStock = false
         }
@@ -88,6 +109,8 @@ class HomeRedirectService : AccessibilityService(), SharedPreferences.OnSharedPr
 
     companion object {
         private const val PASS_THROUGH_MS = 3000L
+        private const val SETTLE_MS = 150L
+        private const val OTHER_WINDOW_MS = 500L
         private const val QUICK_SETTINGS = "com.amazon.tv.quicksettings"
 
         @Volatile

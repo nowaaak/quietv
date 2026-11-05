@@ -76,6 +76,17 @@
             </intent-filter>
         </activity-alias>
 
+        <activity-alias
+            android:name=".InputsEntry"
+            android:targetActivity=".MainActivity"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.tv.action.VIEW_INPUTS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
         <activity
             android:name=".settings.SettingsActivity"
             android:exported="false" />
