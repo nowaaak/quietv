@@ -55,8 +55,8 @@ note = "TCL Live FAST channels with ads"
 [[package]]
 id = "com.tcl.exhibit"
 category = "vendor"
-tier = "recommended"
-note = "store demo mode"
+tier = "advanced"
+note = "store demo mode, but also the art mode and the Art button on A300 models (cleanyourtv #3182)"
 
 [[package]]
 id = "com.tcl.esticker"

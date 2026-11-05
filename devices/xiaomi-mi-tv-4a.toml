@@ -12,6 +12,8 @@ notes = """
 Also a good starting point for other Xiaomi and Redmi Android TVs with PatchWall.
 Known quirk: default_input_method points at com.baidu.input, which is not installed, so no keyboard
 appears in search fields. Fix: quietv shell ime set com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME
+On QTG3 firmware the Input button opens com.google.android.tvlauncher/.inputs.InputsPanelActivity, and the
+PatchWall button stops working once com.mitv.tvhome.atv is disabled (cleanyourtv #2446).
 """
 
 [[package]]
@@ -120,3 +122,7 @@ note = "recommendation rows of the stock launcher"
 id = "com.google.android.leanbacklauncher.recommendations"
 category = "content"
 tier = "advanced"
+
+[[keep]]
+id = "mitv.service"
+reason = "without it the picture menu takes 30 to 40 seconds to open (cleanyourtv #3085, MiTV-MOOQ1)"

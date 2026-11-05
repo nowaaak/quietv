@@ -12,6 +12,12 @@ notes = """
 The stock launcher is protected and cannot be disabled. quietv install switches on the Home redirect
 instead, see docs/fire-tv.md.
 Protected, disable-user is refused: com.amazon.ftvads.deeplinking, com.amazon.device.metrics.
+On another AFTKRT, disabling com.amazon.imp together with shoptv, media.recommendations, sneakpeek,
+systemnotices, tv.earlyaccess and tv.acr left Home running but black on the TV (cleanyourtv
+examples/amazon-fire-tv-stick-4k-max-2023). This list keeps imp and systemnotices.
+An AFTKM stopped opening Settings and apps after a Fire OS update with about 50 packages disabled, until
+they were enabled again (cleanyourtv issue #2950). If an update misbehaves, run quietv restore.
+Appstore updates can enable disabled apps again. quietv check finds them.
 """
 
 [[package]]
@@ -200,3 +206,31 @@ reason = "Appstore, needed to install and update apps"
 [[keep]]
 id = "com.amazon.logan"
 reason = "accessibility framework used by the Home redirect"
+
+[[keep]]
+id = "com.amazon.imp"
+reason = "Home went black when it was disabled together with the content packages on another AFTKRT"
+
+[[keep]]
+id = "com.amazon.tv.oobe"
+reason = "setup wizard, needed for a factory reset"
+
+[[keep]]
+id = "com.amazon.firehomestarter"
+reason = "starts the Fire TV home screen"
+
+[[keep]]
+id = "com.amazon.tv.ime"
+reason = "the on-screen keyboard"
+
+[[keep]]
+id = "com.amazon.device.software.ota"
+reason = "Fire OS updates"
+
+[[keep]]
+id = "com.amazon.device.software.ota.override"
+reason = "Fire OS updates"
+
+[[keep]]
+id = "com.amazon.tv.forcedotaupdater.v2"
+reason = "Fire OS updates"

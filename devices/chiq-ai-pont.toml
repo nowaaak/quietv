@@ -118,7 +118,7 @@ note = "Miracast and AirPlay"
 id = "com.homwee.upgrade"
 category = "updates"
 tier = "advanced"
-note = "vendor app updater, firmware updates are com.homwee.dmt.upgrade"
+note = "vendor app updater, firmware updates are com.homwee.dmt.upgrade. On an RCA AI PONT the firmware check needed it too"
 
 [[keep]]
 id = "com.google.android.leanbacklauncher.partnercustomizer"
@@ -131,3 +131,27 @@ reason = "firmware updates"
 [[keep]]
 id = "com.homwee.synckey"
 reason = "remote key service"
+
+[[keep]]
+id = "com.mediatek.wwtv.tvcenter"
+reason = "Live TV, HDMI and AV, and the picture menu behind the gear key"
+
+[[keep]]
+id = "com.homwee.factory"
+reason = "factory service, handles remote keys and the hotel mode screen; never open it"
+
+[[keep]]
+id = "com.homwee.dynamicbacklight"
+reason = "picture backlight control"
+
+[[keep]]
+id = "com.homwee.mmp.imageplayer"
+reason = "part of AirPlay and screen sharing"
+
+[[keep]]
+id = "com.mediatek.autopair"
+reason = "pairs the Bluetooth remote"
+
+[[keep]]
+id = "com.android.bluetooth"
+reason = "the remote is Bluetooth LE on some AI PONT sets"

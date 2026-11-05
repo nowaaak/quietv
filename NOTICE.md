@@ -36,6 +36,12 @@ packages whose function or safety was unclear and rewrote the notes.
 | [tcl-g10-google-tv.toml](devices/tcl-g10-google-tv.toml) | `examples/tcl-g10-google-tv` |
 | [xiaomi-mi-box-s-2nd-gen.toml](devices/xiaomi-mi-box-s-2nd-gen.toml) | `examples/xiaomi-mi-box-s-2nd-gen` |
 
+Later additions from cleanyourtv (November 2026): keep entries and notes in the Fire TV Stick 4K Max list
+(`examples/amazon-fire-tv-stick-4k-max-2023`, issue #2950), the CHiQ AI PONT list (`examples/chiq-ai-pont`,
+`examples/rca-ai-pont`, `examples/kunft-k8415h40f`), the Xiaomi Mi TV 4A list (issues #3085 and #2446), the
+TCL lists (issues #3157, #3182 and #3212) and the Philips TPM191E list. The core packages the CLI refuses to
+disable follow cleanyourtv's core-package guard and issues #2557, #2803 and #2516.
+
 ## Third-party material
 
 | What | Where | Licence |

@@ -20,7 +20,8 @@ com.tcl.partnercustomizer must stay: without it com.mediatek.tv.service crash-lo
 The source list disables it, this list does not.
 com.google.android.tv.remote.service must stay for the remote's mic button.
 Disabling dreamx leaves the screensaver setting pointing at it and removed the screensaver menu from Settings on the 43P69K.
-TclAppBoot blocks apps from starting at boot until they have the APP_AUTO_START app-op.
+TclAppBoot blocks apps from starting at boot until they have the APP_AUTO_START app-op. On Android 14 it also
+needs ASSOC_START, and launcherx cannot be disabled again from the Apps settings (cleanyourtv #3212).
 TCL remote keys can be remapped through the global setting CustomKeyList (cleanyourtv issue #812).
 HDMI and Live TV come out black in screenshots. Press Home first.
 """
@@ -76,8 +77,8 @@ note = "partner app auto-installs"
 [[package]]
 id = "com.tcl.exhibit"
 category = "vendor"
-tier = "recommended"
-note = "store demo mode"
+tier = "advanced"
+note = "store demo mode, but also the art mode and the Art button on A300 models (cleanyourtv #3182)"
 
 [[package]]
 id = "com.tcl.esticker"
