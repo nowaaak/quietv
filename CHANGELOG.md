@@ -5,6 +5,40 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+
+- `inputsKey` in the config: the remote's Input key opens the quietv Inputs menu, for TVs where it does
+  nothing once the stock launcher is disabled.
+- `quietv probe` warns when the TV accepts ADB from any computer without asking.
+
+### Changed
+
+- Debloat refuses more packages that are known to stop a TV from booting or to break it, among them
+  `com.android.sdksandbox`, `com.android.location.fused`, the permission controller, system content
+  providers and module overlays. It also keeps the apps that open the TV settings and the inputs, and
+  packages that use the TV's input hardware.
+- Device lists: new keep entries for the Fire TV Stick 4K Max, the CHiQ AI PONT and the Xiaomi Mi TV 4A,
+  ZEE5 and the TCL art mode moved to `advanced`. Thanks to the cleanyourtv community for the reports.
+- `quietv install` warns when the TV has more than one user and never disables a stock launcher the
+  TV cannot boot without.
+- Package lists are read for the main user only, so a second profile no longer hides what is enabled.
+
+### Fixed
+
+- Home redirect: a firmware that unbinds accessibility services while it shuts down turned the redirect
+  off for good. A redirect switched off with the global accessibility switch is now also noticed and
+  switched back on.
+- Google TV: the redirect no longer covers screens the stock home opens right after itself, such as the
+  profile chooser. Not yet checked on a Google TV device.
+- HDMI entries in the Inputs menu open in the Live TV app first, so no "Open with" choice appears.
+- A connection that drops during a command ends with a message instead of a traceback. An interrupted
+  debloat still records what it disabled, so `quietv check` knows it.
+- A failed screenshot no longer empties an existing file, and the screenshot is removed from the TV.
+- Connection errors name the likely cause: debugging off, network isolation, a blocking firewall on
+  Windows or the Local Network permission on macOS.
+- Docs: the macOS Local Network entry was wrong, quietv is affected too. Menu paths for LG, Samsung,
+  Roku and Vizio follow what users reported, and Hisense VIDAA has a section.
+
 ## [0.7.0] - 2026-10-27
 
 ### Added
