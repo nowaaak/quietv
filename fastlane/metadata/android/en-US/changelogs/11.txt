@@ -1,0 +1,1 @@
+Debloat protects more system packages, the Home redirect survives restarts, HDMI opens in Live TV, optional Input key.

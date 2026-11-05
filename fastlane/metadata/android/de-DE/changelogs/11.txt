@@ -1,0 +1,1 @@
+Mehr geschützte Systempakete beim Debloat, Home-Umleitung übersteht Neustarts, HDMI öffnet direkt in Live TV, Input-Taste optional.
