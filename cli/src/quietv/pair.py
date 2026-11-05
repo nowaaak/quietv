@@ -32,8 +32,22 @@ def find_adb() -> str | None:
 
 
 def run_adb(adb: str, *args: str) -> str:
-    result = subprocess.run([adb, *args], capture_output=True, text=True, timeout=60)
+    try:
+        result = subprocess.run(
+            [adb, *args], capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60
+        )
+    except subprocess.TimeoutExpired as e:
+        raise PairError(f"adb {args[0]} gave no answer within a minute") from e
     return (result.stdout + result.stderr).strip()
+
+
+def _hint(out: str) -> str:
+    if "No route to host" in out:
+        return (
+            ". On macOS, allow your terminal app under System Settings, Privacy & Security, Local Network, "
+            "then quit and reopen it and run adb kill-server"
+        )
+    return ""
 
 
 def pair(
@@ -46,11 +60,11 @@ def pair(
 ) -> None:
     out = run(adb, "pair", f"{host}:{pair_port}", code)
     if "Successfully paired" not in out:
-        raise PairError(f"pairing failed: {out or 'no answer'}")
+        raise PairError(f"pairing failed: {out or 'no answer'}{_hint(out)}")
     target = f"{host}:{connect_port}"
     out = run(adb, "connect", target)
     if "connected to" not in out:
-        raise PairError(f"connect failed: {out or 'no answer'}")
+        raise PairError(f"connect failed: {out or 'no answer'}{_hint(out)}")
     out = run(adb, "-s", target, "tcpip", str(LEGACY_PORT))
     if "restarting in TCP mode" not in out:
         raise PairError(f"could not switch the TV to port {LEGACY_PORT}: {out or 'no answer'}")

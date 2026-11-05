@@ -78,6 +78,11 @@ def cmd_probe(args) -> None:
             print(f"{prop} = {getprop(tv, prop)}")
         print(f"fire_os = {is_fire_os(tv)}")
         print(f"home = {install.current_home_package(tv) or PACKAGE}")
+        if getprop(tv, "ro.adb.secure") == "0":
+            print(
+                "warning: this TV accepts ADB from any computer without asking. Switch debugging off in "
+                "Developer options when you are done."
+            )
 
 
 def cmd_shell(args) -> None:
@@ -87,10 +92,17 @@ def cmd_shell(args) -> None:
 
 def cmd_screenshot(args) -> None:
     remote = "/sdcard/quietv-screenshot.png"
+    output = Path(args.output)
+    if not args.output.strip() or output.is_dir() or args.output.endswith(("/", "\\")):
+        raise Abort(f"give a file name for the screenshot, not a folder: {args.output!r}")
+    if not output.resolve().parent.is_dir():
+        raise Abort(f"the folder for {args.output} does not exist")
     with connect(args) as tv:
-        tv.shell(f"screencap -p {remote}")
-        tv.pull(remote, Path(args.output))
-        tv.shell(f"rm -f {remote}")
+        try:
+            tv.shell(f"screencap -p {remote}")
+            tv.pull(remote, output)
+        finally:
+            tv.shell(f"rm -f {remote}")
     print(f"Saved {args.output}")
 
 
@@ -139,14 +151,23 @@ def cmd_debloat(args) -> None:
         confirm(f"Disable {len(todo)} packages?", args.yes)
         if not args.no_backup:
             print(f"Backup written to {backup.create(tv, backups_dir())}")
-        failed = []
-        for p in todo:
-            out = install.disable_package(tv, p.id)
-            if "disabled" not in out:
-                failed.append((p.id, out))
-        failed_ids = {package for package, _ in failed}
-        state.record(tv, added=[p.id for p in todo if p.id not in failed_ids])
-        print(f"Disabled {len(todo) - len(failed)} of {len(todo)} packages.")
+        key, model = state.tv_key(tv), getprop(tv, "ro.product.model")
+        done, failed = [], []
+        try:
+            for p in todo:
+                out = install.disable_package(tv, p.id)
+                if "disabled" in out:
+                    done.append(p.id)
+                else:
+                    failed.append((p.id, out))
+        except TvError as e:
+            raise TvError(
+                f"{e}\n{len(done)} of {len(todo)} packages were disabled before that, quietv check knows them. "
+                "Connect again and repeat the debloat, or undo it with quietv restore."
+            ) from e
+        finally:
+            state.save(key, model, added=done)
+        print(f"Disabled {len(done)} of {len(todo)} packages.")
         for package, out in failed:
             print(f"  failed {package}: {out}")
         print("Undo with: quietv restore --backup <folder>   or   quietv restore --list " + args.list)
