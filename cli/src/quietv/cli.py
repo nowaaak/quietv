@@ -115,10 +115,10 @@ def cmd_debloat(args) -> None:
         return
 
     with connect(args) as tv:
-        enabled = parse_package_list(tv.shell("pm list packages -e"))
+        enabled = parse_package_list(tv.shell("pm list packages -e --user 0"))
         installed = [p for p in selected if p.id in enabled]
         skipped = len(selected) - len(installed)
-        protected = guard.dynamic(tv)
+        protected = guard.dynamic(tv, [p.id for p in installed])
         todo = []
         for p in installed:
             why = guard.reason(p.id, protected)
@@ -167,7 +167,7 @@ def cmd_restore(args) -> None:
             if not folder or not (folder / "packages_enabled.txt").is_file():
                 raise Abort("no backup found, pass --backup <folder>")
             print(f"Restoring from {folder}")
-            commands = backup.restore_plan(folder, parse_package_list(tv.shell("pm list packages -e")))
+            commands = backup.restore_plan(folder, parse_package_list(tv.shell("pm list packages -e --user 0")))
         if not commands:
             print("Nothing to restore.")
             return
@@ -176,7 +176,7 @@ def cmd_restore(args) -> None:
         confirm(f"Run {len(commands)} commands?", args.yes)
         for command in commands:
             tv.shell(command)
-        state.record(tv, removed=parse_package_list(tv.shell("pm list packages -e")))
+        state.record(tv, removed=parse_package_list(tv.shell("pm list packages -e --user 0")))
         print("Restored. Press Home on the remote.")
 
 
@@ -186,9 +186,9 @@ def cmd_check(args) -> None:
         if not recorded:
             print("No record of packages quietv disabled on this TV. Run quietv debloat first.")
             return
-        enabled = parse_package_list(tv.shell("pm list packages -e"))
+        enabled = parse_package_list(tv.shell("pm list packages -e --user 0"))
         back = sorted(recorded & enabled)
-        gone = recorded - parse_package_list(tv.shell("pm list packages -u"))
+        gone = recorded - parse_package_list(tv.shell("pm list packages -u --user 0"))
         if gone:
             state.record(tv, removed=gone)
         if not back:
@@ -203,7 +203,7 @@ def cmd_check(args) -> None:
         confirm(f"Disable {len(back)} packages again?", args.yes)
         if not args.no_backup:
             print(f"Backup written to {backup.create(tv, backups_dir())}")
-        protected = guard.dynamic(tv)
+        protected = guard.dynamic(tv, back)
         for package in back:
             why = guard.reason(package, protected)
             if why:
@@ -280,13 +280,23 @@ def cmd_install(args) -> None:
                     config.push(tv, install.with_redirect(config.pull(tv), stock))
                 install.redirect_on(tv)
             else:
+                users = install.user_count(tv)
+                if users > 1:
+                    print(
+                        f"  warning: this TV has {users} users. Other profiles keep their own home screen, and "
+                        "some firmware crashes when their stock launcher is disabled. Remove the extra users "
+                        "or use --mode redirect."
+                    )
                 install.make_default_home(tv)
                 if not install.home_is_quietv(tv):
                     raise Abort(
                         "Android did not accept quietv as Home, so nothing was disabled. "
                         "Try: quietv install --mode redirect"
                     )
-                if stock and not args.keep_stock_launcher:
+                stock_guard = guard.reason(stock, {}) if stock else None
+                if stock_guard:
+                    print(f"  keeping the stock launcher {stock}: {stock_guard}")
+                elif stock and not args.keep_stock_launcher:
                     confirm(
                         f"Disable the stock launcher {stock}? Android TV keeps it as Home otherwise. "
                         "quietv restore brings it back.",

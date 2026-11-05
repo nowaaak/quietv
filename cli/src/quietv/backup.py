@@ -9,9 +9,9 @@ from quietv.tv import Shell, getprop
 
 HOME_QUERY = "cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME"
 FILES = {
-    "packages_enabled.txt": "pm list packages -e",
-    "packages_disabled.txt": "pm list packages -d",
-    "packages_all.txt": "pm list packages -u",
+    "packages_enabled.txt": "pm list packages -e --user 0",
+    "packages_disabled.txt": "pm list packages -d --user 0",
+    "packages_all.txt": "pm list packages -u --user 0",
     "home_activity.txt": HOME_QUERY,
     "getprop.txt": "getprop",
     "settings_global.txt": "settings list global",

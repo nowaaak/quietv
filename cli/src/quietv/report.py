@@ -43,7 +43,10 @@ def build(tv: Shell) -> str:
     inputs = sorted(set(INPUT_RE.findall(tv.shell("dumpsys tv_input"))))
     lines += ["", "## TV inputs", ""] + ([f"- `{i}`" for i in inputs] or ["- none"])
 
-    for title, command in (("Enabled packages", "pm list packages -e"), ("Disabled packages", "pm list packages -d")):
+    for title, command in (
+        ("Enabled packages", "pm list packages -e --user 0"),
+        ("Disabled packages", "pm list packages -d --user 0"),
+    ):
         packages = sorted(parse_package_list(tv.shell(command)))
         lines += ["", f"<details><summary>{title} ({len(packages)})</summary>", "", "```"]
         lines += packages
