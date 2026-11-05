@@ -5,6 +5,8 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-11-05
+
 ### Added
 
 - `inputsKey` in the config: the remote's Input key opens the quietv Inputs menu, for TVs where it does
