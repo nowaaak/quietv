@@ -18,24 +18,35 @@ def tv_key(tv: Shell) -> str:
     return f"{SAFE_NAME.sub('-', model).strip('-')}-{digest}"
 
 
+def file_for(key: str, root: Path | None = None) -> Path:
+    return (root or state_dir()) / f"{key}.json"
+
+
 def path(tv: Shell, root: Path | None = None) -> Path:
-    return (root or state_dir()) / f"{tv_key(tv)}.json"
+    return file_for(tv_key(tv), root)
 
 
-def disabled(tv: Shell, root: Path | None = None) -> set[str]:
-    file = path(tv, root)
+def _read(file: Path) -> set[str]:
     if not file.is_file():
         return set()
     data = json.loads(file.read_text(encoding="utf-8"))
     return {p for p in data.get("disabled", []) if isinstance(p, str) and is_package(p)}
 
 
+def disabled(tv: Shell, root: Path | None = None) -> set[str]:
+    return _read(path(tv, root))
+
+
 def record(tv: Shell, added=(), removed=(), root: Path | None = None) -> None:
-    current = (disabled(tv, root) | set(added)) - set(removed)
-    file = path(tv, root)
+    save(tv_key(tv), getprop(tv, "ro.product.model"), added, removed, root)
+
+
+def save(key: str, model: str, added=(), removed=(), root: Path | None = None) -> None:
+    file = file_for(key, root)
+    current = (_read(file) | set(added)) - set(removed)
     file.parent.mkdir(parents=True, exist_ok=True)
     data = {
-        "model": getprop(tv, "ro.product.model"),
+        "model": model,
         "disabled": sorted(current),
         "updated": datetime.now().isoformat(timespec="seconds"),
     }
