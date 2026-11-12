@@ -42,34 +42,19 @@ class InputsMenu(
                 tunerId = info.id
             }
         }
-        val passthrough = all.filter { it.isPassthroughInput }
-        val ids = passthrough.map { it.id }.toSet()
-        val devices = passthrough.filter { it.parentId != null && it.parentId in ids }.groupBy { it.parentId }
-        val ports = passthrough.filter { it.parentId == null || it.parentId !in ids }.sortedWith(
-            compareBy<TvInputInfo> { it.type != TvInputInfo.TYPE_HDMI }
-                .thenBy(String.CASE_INSENSITIVE_ORDER) { it.loadLabel(activity).toString() },
-        )
-        for (port in ports) {
-            if (tim == null) break
-            val hdmi = port.type == TvInputInfo.TYPE_HDMI
-            var label = port.loadLabel(activity)?.toString() ?: port.id
-            if (hdmi && !label.uppercase().contains("HDMI")) label = "HDMI $label"
-            val device = devices[port.id]?.firstOrNull()
-            device?.loadLabel(activity)?.toString()?.takeIf { it.isNotBlank() }?.let { label = "$label · $it" }
-            if (!hdmi && !menu.isEmpty && !sawNonHdmi) menu.addSeparator()
-            if (!hdmi) sawNonHdmi = true
-            val id = device?.id ?: port.id
-            val state = tim.getInputState(id)
-            if (id == last || port.id == last) lastIndex = rowCount
+        for (input in InputCatalog.passthrough(activity)) {
+            if (!input.hdmi && !menu.isEmpty && !sawNonHdmi) menu.addSeparator()
+            if (!input.hdmi) sawNonHdmi = true
+            if (input.id == last || input.portId == last) lastIndex = rowCount
             rowCount++
             menu.addRow(
-                icon = if (hdmi) R.drawable.ic_input else R.drawable.ic_av,
-                title = label,
-                status = statusText(state, device != null),
-                active = state == TvInputManager.INPUT_STATE_CONNECTED,
+                icon = if (input.hdmi) R.drawable.ic_input else R.drawable.ic_av,
+                title = input.label,
+                status = statusText(input.state, input.hasDevice),
+                active = input.state == TvInputManager.INPUT_STATE_CONNECTED,
             ) {
-                store.lastInput = id
-                openInput(activity, id, liveTvPackage)
+                store.lastInput = input.id
+                openInput(activity, input.id, liveTvPackage)
             }
         }
 

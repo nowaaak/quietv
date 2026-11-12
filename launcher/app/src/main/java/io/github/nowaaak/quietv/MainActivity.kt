@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.nowaaak.quietv.companion.CompanionReceiverService
 import io.github.nowaaak.quietv.companion.CompanionSwitch
+import io.github.nowaaak.quietv.companion.RemoteInput
 import io.github.nowaaak.quietv.config.CompanionMode
 import io.github.nowaaak.quietv.config.ConfigStore
 import io.github.nowaaak.quietv.config.LauncherConfig
@@ -91,6 +92,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private var afterLayout: (() -> Unit)? = null
     private var assigningPkg: String? = null
     private var inputsRequested = false
+    private var companionPending = false
     private var tileRadius = 0f
     private var wallpaperVersion = NO_WALLPAPER
     private var wallpaperSamples = IntArray(0)
@@ -201,9 +203,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
         btnSettings.setOnClickListener { startActivity(Intent(this, SettingsActivity::class.java)) }
         btnInputs.setOnClickListener {
             if (config.companion.mode == CompanionMode.SEND) {
-                CompanionSwitch.send(config.companion) {
-                    Toast.makeText(this, R.string.companion_failed, Toast.LENGTH_SHORT).show()
-                }
+                showCompanionMenu(btnInputs)
             } else {
                 InputsMenu(this, config.liveTvPackage, palette, config.accent, store).show(btnInputs, root)
             }
@@ -357,6 +357,43 @@ class MainActivity : Activity(), TileAdapter.Listener {
         val amount = Contrast.scrimFor(wallpaperSamples, texts, palette.background, config.wallpaper.dim / 100f)
         scrim.setBackgroundColor(Contrast.withAlpha(palette.background, (amount * 255).roundToInt()))
         scrim.visibility = View.VISIBLE
+    }
+
+    private fun showCompanionMenu(anchor: View) {
+        if (companionPending) return
+        companionPending = true
+        val companion = config.companion
+        val failed = { Toast.makeText(this, R.string.companion_failed, Toast.LENGTH_SHORT).show() }
+        CompanionSwitch.fetchInputs(companion) { result ->
+            companionPending = false
+            if (isFinishing || isDestroyed) return@fetchInputs
+            if (result is CompanionSwitch.InputsResult.Unreachable) {
+                failed()
+                return@fetchInputs
+            }
+            val menu = DropdownMenu(this, root, palette, config.accent)
+            menu.addRow(R.drawable.ic_livetv, getString(R.string.companion_switch)) {
+                CompanionSwitch.showHome(companion, failed)
+            }
+            val inputs = (result as? CompanionSwitch.InputsResult.Inputs)?.inputs.orEmpty()
+            if (inputs.isNotEmpty()) menu.addSeparator()
+            for (input in inputs) {
+                menu.addRow(
+                    icon = R.drawable.ic_input,
+                    title = input.label,
+                    status = when (input.state) {
+                        RemoteInput.CONNECTED -> getString(R.string.connected)
+                        RemoteInput.DISCONNECTED -> getString(R.string.not_connected)
+                        RemoteInput.STANDBY -> getString(R.string.standby)
+                        else -> null
+                    },
+                    active = input.state == RemoteInput.CONNECTED,
+                ) {
+                    CompanionSwitch.openInput(companion, input.id, failed)
+                }
+            }
+            menu.show(anchor, Gravity.END)
+        }
     }
 
     private fun applyCompanionButton() {
