@@ -7,6 +7,7 @@ from quietv.accessibility import normalize
 from quietv.packages import is_package, parse_home_activity, parse_package_list
 from quietv.tv import Shell, getprop
 
+ENABLE_FIRST = frozenset({"com.google.android.apps.tv.launcherx"})
 HOME_QUERY = "cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME"
 FILES = {
     "packages_enabled.txt": "pm list packages -e --user 0",
@@ -57,7 +58,7 @@ def read_setting(settings_text: str, key: str) -> str | None:
 
 def enable_commands(packages: list[str] | set[str]) -> list[str]:
     commands = []
-    for name in sorted(packages):
+    for name in sorted(packages, key=lambda p: (p not in ENABLE_FIRST, p)):
         if is_package(name):
             commands.append(f"cmd package install-existing {name}")
             commands.append(f"pm enable {name}")

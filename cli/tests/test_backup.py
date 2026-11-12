@@ -53,3 +53,19 @@ def test_create_writes_all_files(tmp_path, fake_tv):
     assert (folder / "packages_enabled.txt").read_text() == "package:com.a\n"
     assert (folder / "meta.json").is_file()
     assert backup.latest(tmp_path) == folder
+
+
+def test_enable_commands_bring_launcherx_back_before_anything_else():
+    commands = backup.enable_commands(
+        {"com.google.android.tungsten.setupwraith", "com.aaa.first", "com.google.android.apps.tv.launcherx"}
+    )
+    assert commands[:2] == [
+        "cmd package install-existing com.google.android.apps.tv.launcherx",
+        "pm enable com.google.android.apps.tv.launcherx",
+    ]
+    assert commands[2:] == [
+        "cmd package install-existing com.aaa.first",
+        "pm enable com.aaa.first",
+        "cmd package install-existing com.google.android.tungsten.setupwraith",
+        "pm enable com.google.android.tungsten.setupwraith",
+    ]
