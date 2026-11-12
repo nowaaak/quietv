@@ -17,7 +17,8 @@ into Android Recovery ("Can't load Android system") on the next boot.
 Leave every com.mediatek.* package and the Hisense input services alone: they provide HDMI, AV and the tuner.
 Standby kills every third-party app except the one on screen, the launcher's key helpers included.
 com.hisense.evservice (ACR), com.vidaa.oemtabcontentprovider and the assistant and cast entries were tested on two of three
-units for one session with reboots, not over several days.
+units for one session with reboots, not over several days. Two more units (Costa Rica, and one with US preloads)
+used the list in November 2026 without problems, one of them for several days.
 The DLNA renderer keeps its ports (38400, 39500) open until the next reboot after it is disabled.
 Remote: YouTube is keycode 293, Prime Video 295, the gear 83, Input is KEYCODE_TV_INPUT. Netflix is handled by the firmware.
 If you disable the setup wizard by hand, set Settings > Privacy > Usage & diagnostics first: the page no longer opens after.

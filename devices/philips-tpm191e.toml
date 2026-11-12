@@ -23,6 +23,7 @@ The Netflix (scancode 632) and Rakuten TV (779) buttons do nothing once those ap
 OLED models draw a moving Philips logo over a still picture after a few minutes. Keys injected over ADB do not
 dismiss it, a real remote key does.
 The board has no clock battery. After a cold boot, Private DNS (DNS over TLS) fails until the time is synced.
+cleanyourtv owners also used the list on a 70PUS8545/12 and a 58PUS8505/12 with the same firmware (November 2026).
 """
 
 [[package]]

@@ -23,6 +23,8 @@ com.sony.dtv.applicationdisabler re-enables com.sony.dtv.ecodashboard at every b
 Before disabling com.google.android.tungsten.setupwraith (quietv protects it) check which app owns the saved Wi-Fi
 network: quietv shell "dumpsys wifi | grep -o 'cname=[^ ]*'". On the source TV it was android.uid.system.
 With 2 GB the set still swaps after the debloat.
+Also sold as the BRAVIA 2 K-50S20B with the same build. On one set an ad-blocking Private DNS stalled live streams in
+OTTplay, FanCode and Prime Video. That is the DNS, not the debloat (docs/troubleshooting.md).
 """
 
 [[package]]
