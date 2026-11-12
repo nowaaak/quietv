@@ -15,7 +15,8 @@ Realtek RTD2875P, 2023 model year. The source names the product, not ro.product.
 Samba TV ACR, com.tcl.logkit and com.tcl.ttvs ship disabled on some sets and enabled on others.
 Keep launcherx enabled and let quietv install set up the Home redirect. With launcherx disabled the remote's
 YouTube, Netflix, Prime Video and Web buttons do nothing, and the setup wizard (setupwraith) claims Home.
-setupwraith can own the saved Wi-Fi network. Leave it enabled.
+setupwraith can own the saved Wi-Fi network. Leave it enabled. The Cast receiver also loads its device credentials
+from it: an owner of a 65T69C lost phone casting and screen mirroring once it was off (cleanyourtv #3446).
 com.tcl.partnercustomizer must stay: without it com.mediatek.tv.service crash-loops (cleanyourtv issue #2138).
 The source list disables it, this list does not.
 com.google.android.tv.remote.service must stay for the remote's mic button.

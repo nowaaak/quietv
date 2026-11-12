@@ -15,6 +15,8 @@ The Wi-Fi button shows the network name only when Location is on in the TV setti
 One remote for TV and a stick on HDMI: quietv shell settings put global hdmi_control_enabled 1
 Checked against the UAD-ng list (2026-10-20): Google packages rated Expert there (tvlauncher,
 tvrecommendations, mediashell) were disabled here without side effects across several reboots.
+Changhong-branded sets (device ikebukuro, firmware RTO2.250804.001) take the same list and also ship
+com.homwee.howtocast (cleanyourtv, November 2026).
 """
 
 [[package]]
@@ -48,6 +50,12 @@ tier = "recommended"
 id = "com.homwee.help"
 category = "vendor"
 tier = "recommended"
+
+[[package]]
+id = "com.homwee.howtocast"
+category = "vendor"
+tier = "recommended"
+note = "casting guide, only on the Changhong ikebukuro firmware"
 
 [[package]]
 id = "com.google.android.feedback"

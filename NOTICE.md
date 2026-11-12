@@ -42,6 +42,11 @@ Later additions from cleanyourtv (November 2026): keep entries and notes in the 
 TCL lists (issues #3157, #3182 and #3212) and the Philips TPM191E list. The core packages the CLI refuses to
 disable follow cleanyourtv's core-package guard and issues #2557, #2803 and #2516.
 
+Second sync (12 November 2026): unit notes for the Hisense FFM, Philips TPM191E, Sony BRAVIA VU31, TCL G08 and
+TCL G10 lists (issue #3446), the Changhong ikebukuro notes and `com.homwee.howtocast` in the CHiQ AI PONT list,
+the launcherx-before-setupwraith restore order (issue #3578), the Private DNS notes in the troubleshooting guide
+(issue #3697) and tabular clock digits in the launcher.
+
 ## Third-party material
 
 | What | Where | Licence |

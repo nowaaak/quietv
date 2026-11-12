@@ -55,6 +55,13 @@ installed. Fix it with
 backup. To bring back a single package:
 `quietv shell cmd package install-existing <package>` and then `quietv shell pm enable <package>`.
 
+**Google TV: enable launcherx before setupwraith.** With the setup wizard
+(`com.google.android.tungsten.setupwraith`) enabled and `com.google.android.apps.tv.launcherx` disabled,
+Home resolves to the wizard's recovery screen. On a Xiaomi TV a reboot in that state never got past the
+boot animation and only a factory reset helped
+([cleanyourtv #3578](https://github.com/Gathin23/cleanyourtv/issues/3578)). `quietv restore` enables
+launcherx first. When you enable packages by hand, do the same.
+
 **The Input key or HDMI-CEC broke.** Some vendors hide system services in packages that look like bloat.
 Restore, then disable in smaller steps. Please report it so the device list can mark the package as `keep`.
 
@@ -67,6 +74,12 @@ Checking the input hardware runs `dumpsys` once per package and can take a minut
 
 **Apps came back after a firmware update.** `quietv check` lists packages quietv disabled that are enabled
 again. `quietv check --fix` disables them again after a backup.
+
+**Apps load slowly after standby, or live streams stall.** Both come from Private DNS rather than from
+debloating. In hostname mode some TVs need about a minute after standby before lookups work again. An
+ad-blocking DNS service can also block the hosts some streaming apps need for live streams, seen with
+OTTplay, FanCode and Prime Video on a Sony BRAVIA. Switch Private DNS to automatic or off in the network
+settings and try again. Sources: cleanyourtv #3697 and the Sony BRAVIA VU31 notes.
 
 ## The launcher
 

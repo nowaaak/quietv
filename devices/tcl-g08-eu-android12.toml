@@ -10,7 +10,7 @@ firmware = "STT2.221228.001 AS34"
 stock_launcher = "com.google.android.apps.tv.launcherx"
 notes = """
 Imported from cleanyourtv (examples/tcl-g08-eu-android12, MIT, Gathin and contributors). Not yet verified with quietv on this device.
-MediaTek G08 board, product G08_4K_GB, EU and UK firmware. The source list was used on a 75Q7C (AS36), a 50C805X1 (AS34) and a 55C7K.
+MediaTek G08 board, product G08_4K_GB, EU and UK firmware. The source list was used on a 75Q7C (AS36), a 50C805X1 (AS34), a 55C7K and a 50Q6C (AS35).
 Preloads differ by set and region, so some packages on this list may be missing on yours.
 Keep launcherx enabled and let quietv install set up the Home redirect. With launcherx disabled the remote's Netflix,
 Prime Video, YouTube and TCL buttons do nothing, and key helpers that bring them back cost the volume key auto-repeat.
