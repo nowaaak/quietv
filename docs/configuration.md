@@ -72,9 +72,11 @@ power cut or a restart from the settings.
 
 ## Companion switch
 
-For a TV with a streaming stick on one of its HDMI ports. On the stick, the Inputs button becomes a
-"Switch to TV" button. Pressing it asks the TV, over the local network, to bring its own quietv home
-screen to the front.
+For a TV with a streaming stick on one of its HDMI ports. On the stick, the Inputs button opens a menu
+with the TV's own inputs. "Switch to TV" asks the TV, over the local network, to bring its own quietv
+home screen to the front. Picking an input, such as the HDMI port of a game console, asks the TV to
+switch to it. The TV only opens inputs it lists itself. A TV that still runs quietv 0.8 or older only
+offers "Switch to TV".
 
 On the TV (`receive`), quietv runs a small foreground service that listens on `companion.port` and
 accepts a request only from a private network address with the right token. On the stick (`send`), set

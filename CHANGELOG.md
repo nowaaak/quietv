@@ -5,6 +5,11 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+
+- Companion switch: on the streaming stick, the Inputs button lists the TV's inputs, so you can switch
+  the TV to another HDMI port, for example a game console, without the TV remote.
+
 ## [0.8.0] - 2026-11-05
 
 ### Added
