@@ -5,6 +5,20 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-11-12
+
+### Fixed
+
+- `quietv restore` always enables launcherx before any other package. On Google TV, the setup wizard
+  with launcherx still disabled can leave the TV stuck at the boot animation (cleanyourtv #3578).
+- The clock uses digits of equal width, so the date next to it no longer shifts every minute.
+
+### Changed
+
+- Device lists: notes from more units for the Hisense FFM, Philips TPM191E, Sony BRAVIA VU31, TCL G08 and
+  TCL G10 lists, and `com.homwee.howtocast` for Changhong AI PONT sets. Thanks to the cleanyourtv community.
+- Troubleshooting: Private DNS and the launcherx order on Google TV.
+
 ## [0.9.0] - 2026-11-12
 
 ### Added
