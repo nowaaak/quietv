@@ -21,6 +21,7 @@
             android:textSize="112sp"
             android:fontFamily="@font/geist"
             android:fontVariationSettings="'wght' 200"
+            android:fontFeatureSettings="tnum"
             android:letterSpacing="-0.04"
             android:includeFontPadding="false" />
 
