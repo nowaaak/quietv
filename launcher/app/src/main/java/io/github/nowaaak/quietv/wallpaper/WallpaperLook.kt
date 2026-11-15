@@ -35,7 +35,9 @@ object WallpaperLook {
                 val amount = dim + (readable - dim) * weight
                 Contrast.withAlpha(palette.background, (amount * 255).roundToInt())
             }
-            paint.shader = LinearGradient(0f, 0f, 0f, h, colors.toIntArray(), null, Shader.TileMode.CLAMP)
+            paint.shader = LinearGradient(
+                0f, 0f, 0f, h, colors.toIntArray(), GLASS_BANDS, Shader.TileMode.CLAMP,
+            )
             paint.isDither = true
         } else {
             paint.color = Contrast.withAlpha(palette.background, (readable * 255).roundToInt())
@@ -44,6 +46,8 @@ object WallpaperLook {
         return target
     }
 
-    // How much each band, top to bottom, needs readable text: clock, sky, middle, tile names, tiles.
-    private val GLASS_TEXT_WEIGHT = listOf(1f, 0.45f, 0f, 0.7f, 1f)
+    // How much each band needs readable text, top to bottom: the clock, the sky below it, the
+    // middle (picture only), and from the "Favourites" label down everything is text and tiles.
+    private val GLASS_TEXT_WEIGHT = listOf(1f, 0.45f, 0f, 1f, 1f)
+    private val GLASS_BANDS = floatArrayOf(0f, 0.22f, 0.4f, 0.56f, 1f)
 }
