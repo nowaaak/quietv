@@ -101,7 +101,9 @@ object ThemeColors {
 
     fun panel(palette: Palette, radius: Float, strokeWidth: Int): Drawable {
         if (!palette.glass) return rounded(palette.surface, radius, palette.stroke, strokeWidth)
-        return LightEdge(radius, Contrast.withAlpha(palette.surface, GLASS_PANEL_ALPHA), rim(strokeWidth))
+        // Opaque, so nothing of the screen behind a menu or picker shows through. The light edge
+        // gives it the glass look.
+        return LightEdge(radius, Contrast.withAlpha(palette.surface, 0xFF), rim(strokeWidth))
     }
 
     fun edged(palette: Palette, radius: Float, strokeWidth: Int): Drawable =
@@ -137,7 +139,6 @@ object ThemeColors {
 
     private const val GLASS_FROST = 0.5f
     private const val GLASS_FILL_ALPHA = 0x1F
-    private const val GLASS_PANEL_ALPHA = 0xF2
     private const val HALO_ALPHA = 0x59
     private const val HALO_DP = 3f
     private const val ICON_REST_ALPHA = 0xD9
