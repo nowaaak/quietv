@@ -1,36 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Two panes: the title and a live picture of the home screen stay on the left, the settings
+     scroll on the right. The list keeps air above and below and fades out at the edges. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:scrollbars="none">
+    android:orientation="horizontal"
+    android:paddingStart="72dp"
+    android:paddingEnd="72dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingStart="96dp"
-        android:paddingEnd="96dp"
-        android:paddingTop="48dp"
-        android:paddingBottom="48dp">
+        android:paddingTop="64dp">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             android:text="@string/settings"
             android:textSize="40sp"
             android:fontFamily="@font/geist"
             android:fontVariationSettings="'wght' 600"
             android:letterSpacing="-0.03" />
 
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            android:fontFamily="@font/geist" />
+
+        <ImageView
+            android:id="@+id/preview"
+            android:layout_width="280dp"
+            android:layout_height="158dp"
+            android:layout_marginTop="32dp"
+            android:scaleType="fitXY"
+            android:importantForAccessibility="no" />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginStart="56dp"
+        android:paddingTop="64dp"
+        android:paddingBottom="112dp"
+        android:clipToPadding="false"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdgeLength="72dp"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
         <LinearLayout
             android:id="@+id/rows"
-            android:layout_width="560dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:orientation="vertical" />
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>
