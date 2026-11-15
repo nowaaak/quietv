@@ -33,10 +33,6 @@
     <string name="settings_appearance">Apparence</string>
     <string name="settings_theme">Thème</string>
     <string name="theme_graphite">Graphite</string>
-    <string name="theme_paper">Papier</string>
-    <string name="theme_midnight">Minuit</string>
-    <string name="theme_slate">Ardoise</string>
-    <string name="theme_forest">Forêt</string>
     <string name="theme_sand">Sable</string>
     <string name="theme_glass">Verre</string>
     <string name="theme_custom">%1$s, personnalisé</string>
@@ -58,9 +54,11 @@
     <string name="picker_accent_title">Choisir une couleur d\'accent</string>
     <string name="picker_hint">OK pour choisir, Retour pour annuler</string>
     <string name="accent_custom">Couleur personnalisée</string>
-    <string name="accent_hue">Teinte</string>
-    <string name="accent_saturation">Saturation</string>
-    <string name="accent_brightness">Luminosité</string>
+    <string name="accent_red">Rouge</string>
+    <string name="accent_green">Vert</string>
+    <string name="accent_blue">Bleu</string>
+    <string name="picker_slider_hint">Gauche et droite modifient, OK valide, Retour annule</string>
+    <string name="tile_radius">Rayon</string>
     <string name="accent_apply">Utiliser cette couleur</string>
     <string name="accent_low_contrast">Peu visible avec ce thème</string>
     <string name="settings_columns">Tuiles par rangée</string>

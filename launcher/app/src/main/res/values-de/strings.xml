@@ -36,10 +36,6 @@
     <string name="settings_appearance">Darstellung</string>
     <string name="settings_theme">Design</string>
     <string name="theme_graphite">Graphit</string>
-    <string name="theme_paper">Papier</string>
-    <string name="theme_midnight">Mitternacht</string>
-    <string name="theme_slate">Schiefer</string>
-    <string name="theme_forest">Wald</string>
     <string name="theme_sand">Sand</string>
     <string name="theme_glass">Glas</string>
     <string name="theme_custom">%1$s, angepasst</string>
@@ -61,9 +57,11 @@
     <string name="picker_accent_title">Akzentfarbe wählen</string>
     <string name="picker_hint">OK übernimmt, Zurück bricht ab</string>
     <string name="accent_custom">Eigene Farbe</string>
-    <string name="accent_hue">Farbton</string>
-    <string name="accent_saturation">Sättigung</string>
-    <string name="accent_brightness">Helligkeit</string>
+    <string name="accent_red">Rot</string>
+    <string name="accent_green">Grün</string>
+    <string name="accent_blue">Blau</string>
+    <string name="picker_slider_hint">Links und rechts ändern, OK übernimmt, Zurück bricht ab</string>
+    <string name="tile_radius">Radius</string>
     <string name="accent_apply">Diese Farbe verwenden</string>
     <string name="accent_low_contrast">Auf diesem Design schwer zu erkennen</string>
     <string name="settings_columns">Kacheln pro Reihe</string>

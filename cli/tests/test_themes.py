@@ -39,9 +39,9 @@ def test_bundled_themes_are_readable_with_every_accent():
 
 
 def test_bundled_name_resets_custom_colours():
-    theme = themes.load("midnight")
+    theme = themes.load("glass")
     merged = themes.merge({"theme": "graphite", "colors": {"text": "#FFFFFF"}, "accent": "#7DD3FC"}, theme)
-    assert merged["theme"] == "midnight"
+    assert merged["theme"] == "glass"
     assert merged["colors"] == {}
     assert merged["accent"] == "#7DD3FC"
 
@@ -49,7 +49,7 @@ def test_bundled_name_resets_custom_colours():
 def test_switching_to_a_light_theme_maps_the_accent():
     merged = themes.merge({"theme": "dark", "accent": "#FCD34D"}, themes.load("sand"))
     assert merged["accent"] == "#92400E"
-    merged = themes.merge({"theme": "graphite", "accent": "#123456"}, themes.load("paper"))
+    merged = themes.merge({"theme": "graphite", "accent": "#123456"}, themes.load("sand"))
     assert merged["accent"] == "#123456"
 
 
@@ -60,7 +60,7 @@ def test_theme_file_with_wallpaper(tmp_path):
         json.dumps(
             {
                 "name": "Ocean",
-                "theme": "slate",
+                "theme": "graphite",
                 "colors": {"background": "#04223A"},
                 "tileRadius": 22,
                 "wallpaper": {"image": "sea.jpg", "dim": 40},
@@ -91,7 +91,7 @@ def test_invalid_theme_files_are_reported(tmp_path):
 
 
 def test_unknown_source_names_the_bundled_themes():
-    with pytest.raises(ConfigError, match="graphite, paper"):
+    with pytest.raises(ConfigError, match="graphite, sand, glass"):
         themes.load("does-not-exist")
 
 
@@ -107,3 +107,9 @@ def test_example_themes_are_valid(repo_root):
         data = json.loads(path.read_text(encoding="utf-8"))
         assert themes.check(data) == [], path.name
         assert themes.contrast_warnings(themes.merge({}, themes.load(str(path)))) == [], path.name
+
+
+def test_removed_themes_fall_back_to_a_bundled_one():
+    assert themes.load("midnight").settings["theme"] == "graphite"
+    assert themes.load("paper").settings["theme"] == "sand"
+    assert config.validate({"theme": "slate"}) == []

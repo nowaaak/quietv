@@ -78,28 +78,41 @@ class SettingsActivity : Activity() {
                 if (!isFinishing && !isDestroyed) render(index)
             }.show(anchor)
         }
-        row(getString(R.string.settings_tile_shape), tileShapeName(config.tileRadius)) {
-            val next = TILE_RADII.firstOrNull { it > config.tileRadius } ?: TILE_RADII.first()
-            store.update { it.copy(tileRadius = next) }
+        row(
+            getString(R.string.settings_tile_shape),
+            getString(R.string.tile_shape_value, tileShapeName(config.tileRadius), config.tileRadius),
+            rerender = false,
+        ) { anchor ->
+            val index = focusableIndex(anchor)
+            TileShapePicker(this, palette, config) { radius ->
+                store.update { it.copy(tileRadius = radius) }
+                if (!isFinishing && !isDestroyed) render(index)
+            }.show(anchor)
         }
         val wallpaper = config.wallpaper
         val choices = backgroundChoices()
         val current = currentBackground(wallpaper, choices)
-        row(getString(R.string.settings_background), backgroundName(current)) {
-            val next = choices[(choices.indexOf(current) + 1) % choices.size]
-            store.update {
-                it.copy(
-                    wallpaper = it.wallpaper.copy(
-                        enabled = next != BACKGROUND_COLOR,
-                        scene = if (next == BACKGROUND_IMAGE || next == BACKGROUND_COLOR) "" else next,
-                    ),
-                )
-            }
+        val openBackgrounds = { anchor: View, focusDimming: Boolean ->
+            val index = focusableIndex(anchor)
+            BackgroundPicker(this, palette, config, choices, current, this::backgroundName) { next, dim ->
+                store.update {
+                    it.copy(
+                        wallpaper = it.wallpaper.copy(
+                            enabled = next != BACKGROUND_COLOR,
+                            scene = if (next == BACKGROUND_IMAGE || next == BACKGROUND_COLOR) "" else next,
+                            dim = dim,
+                        ),
+                    )
+                }
+                if (!isFinishing && !isDestroyed) render(index)
+            }.show(anchor, focusDimming)
+        }
+        row(getString(R.string.settings_background), backgroundName(current), rerender = false) { anchor ->
+            openBackgrounds(anchor, false)
         }
         if (current != BACKGROUND_COLOR) {
-            row(getString(R.string.settings_wallpaper_dim), getString(R.string.percent, wallpaper.dim)) {
-                val next = WALLPAPER_DIMS.firstOrNull { it > wallpaper.dim } ?: WALLPAPER_DIMS.first()
-                store.update { it.copy(wallpaper = it.wallpaper.copy(dim = next)) }
+            row(getString(R.string.settings_wallpaper_dim), getString(R.string.percent, wallpaper.dim), rerender = false) { anchor ->
+                openBackgrounds(anchor, true)
             }
         }
         row(getString(R.string.settings_columns), config.columns.toString()) {
@@ -263,14 +276,12 @@ class SettingsActivity : Activity() {
 
     private fun versionName(): String = packageManager.getPackageInfo(packageName, 0).versionName.orEmpty()
 
-    private companion object {
+    companion object {
         const val BACKGROUND_COLOR = "color"
         const val BACKGROUND_IMAGE = "image"
-        const val MIN_COLUMNS_ON_TV = 4
-        const val MAX_COLUMNS_ON_TV = 6
-        val TILE_RADII = intArrayOf(0, 6, 14, 22)
-        val WALLPAPER_DIMS = intArrayOf(0, 15, 30, 45, 60)
-        const val GROUP_RADIUS_DP = 18f
-        const val GROUP_PADDING_DP = 5f
+        private const val MIN_COLUMNS_ON_TV = 4
+        private const val MAX_COLUMNS_ON_TV = 6
+        private const val GROUP_RADIUS_DP = 18f
+        private const val GROUP_PADDING_DP = 5f
     }
 }

@@ -72,8 +72,9 @@ class LauncherConfigTest {
     @Test
     fun legacyThemeNamesStillWork() {
         assertEquals(ThemePreset.GRAPHITE, LauncherConfig.parse("""{"theme": "dark"}""").theme)
-        assertEquals(ThemePreset.PAPER, LauncherConfig.parse("""{"theme": "light"}""").theme)
-        assertEquals(ThemePreset.MIDNIGHT, LauncherConfig.parse("""{"theme": "midnight"}""").theme)
+        assertEquals(ThemePreset.SAND, LauncherConfig.parse("""{"theme": "light"}""").theme)
+        assertEquals(ThemePreset.SAND, LauncherConfig.parse("""{"theme": "paper"}""").theme)
+        assertEquals(ThemePreset.GRAPHITE, LauncherConfig.parse("""{"theme": "midnight"}""").theme)
     }
 
     @Test

@@ -2,7 +2,14 @@ package io.github.nowaaak.quietv.ui
 
 import android.app.Activity
 import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.RadialGradient
+import android.graphics.Shader
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -60,21 +67,33 @@ object ThemeColors {
         activity.window.setBackgroundDrawable(windowBackground(activity, palette))
     }
 
+    /**
+     * The window background. Glass renders its gradient and light once into a small picture that is
+     * stretched to the screen: the gradients are soft enough that nobody sees the difference, and the
+     * graphics chip draws one picture per frame instead of two full-screen gradients on top of each
+     * other, which made switching back from an app stutter on Fire TV sticks.
+     */
     fun windowBackground(activity: Activity, palette: Palette): Drawable {
         if (!palette.glass) return ColorDrawable(palette.background)
-        val base = GradientDrawable(
-            GradientDrawable.Orientation.TL_BR,
-            intArrayOf(palette.background, palette.backgroundEnd),
-        )
-        if (palette.glow == 0) return base
         val metrics = activity.resources.displayMetrics
-        val glow = GradientDrawable().apply {
-            gradientType = GradientDrawable.RADIAL_GRADIENT
-            colors = intArrayOf(palette.glow, Color.TRANSPARENT)
-            gradientRadius = maxOf(metrics.widthPixels, metrics.heightPixels) * GLOW_RADIUS
-            setGradientCenter(GLOW_X, GLOW_Y)
+        val w = (metrics.widthPixels / GLASS_BACKGROUND_SCALE).coerceAtLeast(1)
+        val h = (metrics.heightPixels / GLASS_BACKGROUND_SCALE).coerceAtLeast(1)
+        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint(Paint.DITHER_FLAG)
+        paint.shader = LinearGradient(
+            0f, 0f, w.toFloat(), h.toFloat(),
+            palette.background, palette.backgroundEnd, Shader.TileMode.CLAMP,
+        )
+        canvas.drawRect(0f, 0f, w.toFloat(), h.toFloat(), paint)
+        if (palette.glow != 0) {
+            paint.shader = RadialGradient(
+                w * GLOW_X, h * GLOW_Y, maxOf(w, h) * GLOW_RADIUS,
+                palette.glow, Color.TRANSPARENT, Shader.TileMode.CLAMP,
+            )
+            canvas.drawRect(0f, 0f, w.toFloat(), h.toFloat(), paint)
         }
-        return LayerDrawable(arrayOf(base, glow))
+        return BitmapDrawable(activity.resources, bitmap).apply { isFilterBitmap = true }
     }
 
     fun surfaceFill(palette: Palette): Int = if (palette.glass) {
@@ -149,4 +168,5 @@ object ThemeColors {
     private const val GLOW_RADIUS = 0.55f
     private const val GLOW_X = 0.12f
     private const val GLOW_Y = 0.05f
+    private const val GLASS_BACKGROUND_SCALE = 4
 }
