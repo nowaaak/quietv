@@ -116,3 +116,6 @@ Nothing is blurred,
 everything is drawn once, so the launcher stays as light as with the other themes. On a landscape
 or your own picture the darkening is a gradient: strong behind the clock and the tiles, light in
 the middle.
+
+The colours are neutral: a near-black graphite background with a faint gradient, a soft white light
+at the top left and grey surfaces. Only your accent colour adds a tint, also to the light particles.

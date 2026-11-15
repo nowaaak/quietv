@@ -14,6 +14,9 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ### Changed
 
+- Theme `glass` is now a neutral graphite: near black with a soft white light at the top left, grey
+  surfaces and lines, instead of indigo and violet. The light particles follow it and drift in white
+  and grey, tinted only by your accent colour.
 - Settings, Theme opens a picker with a small picture of the home screen for every theme, instead
   of switching to the next theme on each press. You see what you get before you choose.
 - Settings, Accent colour opens a picker with twelve colours (six more than before) and a live

@@ -45,11 +45,11 @@ enum class ThemePreset(
     ),
     GLASS(
         "glass", false,
-        0xFF0C1022.toInt(), 0xFF1F2440.toInt(), 0xFFF5F7FB.toInt(),
-        0xFFAEB6CC.toInt(), 0xFF9AA3BB.toInt(), 0xFF343B5C.toInt(),
+        0xFF0B0B0D.toInt(), 0xFF1C1D21.toInt(), 0xFFF5F5F7.toInt(),
+        0xFFA1A1AA.toInt(), 0xFF8E8E96.toInt(), 0xFF2E2F35.toInt(),
         glass = true,
-        backgroundEnd = 0xFF1A1233.toInt(),
-        glow = 0x553D5AFE,
+        backgroundEnd = 0xFF18191C.toInt(),
+        glow = 0x14FFFFFF,
     ),
     ;
 

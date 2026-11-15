@@ -27,7 +27,7 @@ PRESETS = {
         Preset("slate", False, "#0F172A", "#1E293B", "#F1F5F9", "#A3B1C6", "#94A3B8", "#334155"),
         Preset("forest", False, "#0B1510", "#15231C", "#EBF3EE", "#9DB2A5", "#8CA295", "#2B3D33"),
         Preset("sand", True, "#F2ECE2", "#FFFCF5", "#2A231B", "#685C4E", "#6F6355", "#DAD0C0"),
-        Preset("glass", False, "#0C1022", "#1F2440", "#F5F7FB", "#AEB6CC", "#9AA3BB", "#343B5C"),
+        Preset("glass", False, "#0B0B0D", "#1C1D21", "#F5F5F7", "#A1A1AA", "#8E8E96", "#2E2F35"),
     )
 }
 LEGACY = dict(zip(LEGACY_THEMES, ("graphite", "paper"), strict=True))
