@@ -54,6 +54,15 @@
     <string name="scene_forest">Floresta</string>
     <string name="settings_wallpaper_dim">Escurecer o fundo</string>
     <string name="settings_accent">Cor de destaque</string>
+    <string name="picker_theme_title">Escolher um tema</string>
+    <string name="picker_accent_title">Escolher uma cor de destaque</string>
+    <string name="picker_hint">OK para escolher, Voltar para cancelar</string>
+    <string name="accent_custom">Cor personalizada</string>
+    <string name="accent_hue">Matiz</string>
+    <string name="accent_saturation">Saturação</string>
+    <string name="accent_brightness">Brilho</string>
+    <string name="accent_apply">Usar esta cor</string>
+    <string name="accent_low_contrast">Pouco visível neste tema</string>
     <string name="settings_columns">Mosaicos por linha</string>
     <string name="settings_apps">Apps</string>
     <string name="settings_reset_order">Repor a ordem dos mosaicos</string>

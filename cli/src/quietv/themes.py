@@ -31,8 +31,34 @@ PRESETS = {
     )
 }
 LEGACY = dict(zip(LEGACY_THEMES, ("graphite", "paper"), strict=True))
-DARK_ACCENTS = ("#6EE7B7", "#7DD3FC", "#FCD34D", "#FCA5A5", "#C4B5FD", "#F3F4F6")
-LIGHT_ACCENTS = ("#047857", "#1D4ED8", "#92400E", "#B91C1C", "#6D28D9", "#15171C")
+DARK_ACCENTS = (
+    "#6EE7B7",
+    "#7DD3FC",
+    "#FCD34D",
+    "#FCA5A5",
+    "#C4B5FD",
+    "#F3F4F6",
+    "#FDBA74",
+    "#BEF264",
+    "#5EEAD4",
+    "#A5B4FC",
+    "#F0ABFC",
+    "#F9A8D4",
+)
+LIGHT_ACCENTS = (
+    "#047857",
+    "#1D4ED8",
+    "#92400E",
+    "#B91C1C",
+    "#6D28D9",
+    "#15171C",
+    "#9A3412",
+    "#3F6212",
+    "#0F766E",
+    "#4338CA",
+    "#A21CAF",
+    "#BE185D",
+)
 THEME_KEYS = {"name", "theme", "accent", "colors", "tileRadius", "wallpaper"}
 WALLPAPER_KEYS = {"image", "dim"}
 TARGET = 4.5
