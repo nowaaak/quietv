@@ -36,6 +36,10 @@ and the project uses [Semantic Versioning](https://semver.org).
   applies behind the clock and the tiles, the middle of the screen follows the dimming setting. Before,
   a bright picture like Dunes needed more darkening than the setting allowed, so it changed nothing.
 
+### Fixed
+
+- Search: the name of the focused app was white on the white highlight and could not be read.
+
 ## [0.10.1] - 2026-11-16
 
 ### Fixed

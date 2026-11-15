@@ -55,6 +55,10 @@ class SettingsActivity : Activity() {
     private var category = Category.APPEARANCE
     private var group: LinearLayout? = null
 
+    // True while the right side is rebuilt. Removing the focused row moves the focus somewhere,
+    // often to a category, and that must not switch the category.
+    private var rendering = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         store = ConfigStore(this)
         palette = Palette.of(store.load())
@@ -78,9 +82,22 @@ class SettingsActivity : Activity() {
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_DPAD_LEFT && inContent(currentFocus)) {
-            categoryViews[category]?.requestFocus()
-            return true
+        if (event.action == KeyEvent.ACTION_DOWN) {
+            val focused = currentFocus
+            when (event.keyCode) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> if (inContent(focused)) {
+                    categoryViews[category]?.requestFocus()
+                    return true
+                }
+                // Up and down stay in their own column: past the end of the list nothing happens,
+                // instead of the focus jumping to another category.
+                KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> if (focused != null) {
+                    val direction = if (event.keyCode == KeyEvent.KEYCODE_DPAD_UP) View.FOCUS_UP else View.FOCUS_DOWN
+                    val next = focused.focusSearch(direction)
+                    val sameColumn = if (inContent(focused)) inContent(next) else inside(next, categoryList)
+                    if (!sameColumn) return true
+                }
+            }
         }
         return super.dispatchKeyEvent(event)
     }
@@ -122,7 +139,7 @@ class SettingsActivity : Activity() {
             view.findViewById<View>(R.id.swatch).visibility = View.GONE
             view.isSelected = entry == category
             view.setOnFocusChangeListener { _, focused ->
-                if (focused && category != entry) {
+                if (focused && !rendering && category != entry) {
                     category = entry
                     categoryViews.forEach { (key, v) -> v.isSelected = key == entry }
                     render(focus = NO_FOCUS)
@@ -144,6 +161,7 @@ class SettingsActivity : Activity() {
 
     /** Shows the settings of the current category, and focuses the row at [focus] unless it is [NO_FOCUS]. */
     private fun render(focus: Int) {
+        rendering = true
         rows.removeAllViews()
         group = null
         val config = store.load()
@@ -154,9 +172,11 @@ class SettingsActivity : Activity() {
             Category.HOME_BUTTON -> homeButton()
             Category.SYSTEM -> system(config)
         }
-        if (focus == NO_FOCUS) return
-        val focusable = focusableRows()
-        focusable.getOrNull(focus.coerceIn(0, (focusable.size - 1).coerceAtLeast(0)))?.requestFocus()
+        if (focus != NO_FOCUS) {
+            val focusable = focusableRows()
+            focusable.getOrNull(focus.coerceIn(0, (focusable.size - 1).coerceAtLeast(0)))?.requestFocus()
+        }
+        rendering = false
     }
 
     private fun appearance(config: LauncherConfig) {
@@ -363,10 +383,12 @@ class SettingsActivity : Activity() {
         }
     }
 
-    private fun inContent(view: View?): Boolean {
+    private fun inContent(view: View?): Boolean = inside(view, rows)
+
+    private fun inside(view: View?, container: View): Boolean {
         var current: View? = view
         while (current != null) {
-            if (current === rows) return true
+            if (current === container) return true
             current = current.parent as? View
         }
         return false
