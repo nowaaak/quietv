@@ -20,6 +20,8 @@ class ThemePreview(
     private val palette: Palette,
     private val accent: Int,
     private val tileRadiusDp: Int,
+    /** False leaves the background out, to draw the home screen over a wallpaper. */
+    private val drawBackground: Boolean = true,
 ) : Drawable() {
 
     private val box = RectF()
@@ -55,8 +57,10 @@ class ThemePreview(
         val w = box.width()
         val h = box.height()
         val corner = w * CORNER
-        canvas.drawRoundRect(box, corner, corner, background)
-        if (glow.shader != null) canvas.drawRoundRect(box, corner, corner, glow)
+        if (drawBackground) {
+            canvas.drawRoundRect(box, corner, corner, background)
+            if (glow.shader != null) canvas.drawRoundRect(box, corner, corner, glow)
+        }
 
         val margin = w * MARGIN
         // Clock and date.

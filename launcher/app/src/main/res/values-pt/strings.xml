@@ -33,10 +33,6 @@
     <string name="settings_appearance">Aparência</string>
     <string name="settings_theme">Tema</string>
     <string name="theme_graphite">Grafite</string>
-    <string name="theme_paper">Papel</string>
-    <string name="theme_midnight">Meia-noite</string>
-    <string name="theme_slate">Ardósia</string>
-    <string name="theme_forest">Floresta</string>
     <string name="theme_sand">Areia</string>
     <string name="theme_glass">Vidro</string>
     <string name="theme_custom">%1$s, personalizado</string>
@@ -58,9 +54,11 @@
     <string name="picker_accent_title">Escolher uma cor de destaque</string>
     <string name="picker_hint">OK para escolher, Voltar para cancelar</string>
     <string name="accent_custom">Cor personalizada</string>
-    <string name="accent_hue">Matiz</string>
-    <string name="accent_saturation">Saturação</string>
-    <string name="accent_brightness">Brilho</string>
+    <string name="accent_red">Vermelho</string>
+    <string name="accent_green">Verde</string>
+    <string name="accent_blue">Azul</string>
+    <string name="picker_slider_hint">Esquerda e direita alteram, OK escolhe, Voltar cancela</string>
+    <string name="tile_radius">Raio</string>
     <string name="accent_apply">Usar esta cor</string>
     <string name="accent_low_contrast">Pouco visível neste tema</string>
     <string name="settings_columns">Mosaicos por linha</string>

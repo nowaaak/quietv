@@ -1,19 +1,15 @@
 # Themes
 
-quietv comes with seven themes. Pick one on the TV (Settings, Theme) or from your computer:
+quietv comes with three themes. Pick one on the TV (Settings, Theme) or from your computer:
 
 ```bash
 quietv theme list
-quietv theme apply midnight
+quietv theme apply glass
 ```
 
 | Theme | Look |
 |---|---|
 | `graphite` | Dark grey, the default |
-| `paper` | Light, warm white |
-| `midnight` | Pure black, kind to OLED screens |
-| `slate` | Dark blue grey |
-| `forest` | Dark green |
 | `sand` | Light, beige |
 | `glass` | Dark, in the style of Apple TV, see [Glass](#glass) |
 
@@ -28,10 +24,11 @@ shade of the same colour.
 
 Settings, Accent colour offers twelve colours. Each has a shade for dark and one for light themes,
 and both are easy to read on every bundled theme. While you move between them, the picture above
-shows the home screen with the focused colour. Custom colour opens sliders for hue, saturation and
-brightness: left and right change the value, holding the key speeds it up. If a colour is hard to
-see on your theme, the picker says so, but lets you keep it. From your computer, set `accent` in the
-[config](configuration.md).
+shows the home screen with the focused colour. Custom colour has a field for the hex code
+(`#RRGGBB`, OK opens the keyboard) and sliders for red, green and blue from 0 to 255: left and
+right change the value, holding the key speeds it up. Field, sliders and preview follow each other.
+If a colour is hard to see on your theme, the picker says so, but lets you keep it. From your
+computer, set `accent` in the [config](configuration.md).
 
 ## Your own theme
 
@@ -40,7 +37,7 @@ A theme file is a small JSON file. Start from one of the [examples](examples/the
 ```json
 {
   "name": "Ocean",
-  "theme": "slate",
+  "theme": "graphite",
   "accent": "#5EEAD4",
   "colors": {
     "background": "#071A2B",
@@ -86,11 +83,18 @@ setting.
 
 ## Background
 
-On the TV, Settings, Background switches between the theme's colour, four built-in landscapes and
+On the TV, Settings, Background opens a list of the theme's colour, four built-in landscapes and
 your own picture, once you have set one: Mountains (dusk), Mountain lake (night), Dunes (sunset) and
-Forest (morning mist). The landscapes are drawn by the launcher, no download, no photo. A second
-row sets the dimming. In the config they are `wallpaper.scene`: `"mountains"`, `"lake"`, `"dunes"`
+Forest (morning mist). Next to the list a picture of the home screen shows the focused background,
+and the slider below sets the dimming from 0 to 80 percent, with the picture following along. OK
+keeps both, Back leaves everything as it was. The landscapes are drawn by the launcher, no
+download, no photo. In the config they are `wallpaper.scene`: `"mountains"`, `"lake"`, `"dunes"`
 or `"forest"`, with `wallpaper.enabled` set to `true`. An empty scene shows your own picture.
+
+## Tile corners
+
+Settings, Tile corners opens a slider from 0 (square) to 24 dp with a picture of the home screen
+above it that changes as you move it. OK keeps the value, Back leaves it as it was.
 
 ## Glass
 
@@ -99,10 +103,10 @@ shadow instead of the accent ring, app names only appear under the focused tile,
 above the favourites is left out so the background shows, and Settings groups its rows on cards.
 Tiles, cards, menus and the search field share a fine light edge, brighter at the top left. The top
 buttons have no frame. Focused, they turn into a white circle with a glow in your accent colour.
-Nothing is blurred,
-everything is drawn once, so the launcher stays as light as with the other themes. On a landscape
+Nothing is blurred and every gradient is drawn once into a picture, so switching between apps is
+as smooth as with the other themes, even on a Fire TV stick. On a landscape
 or your own picture the darkening is a gradient: strong behind the clock and the tiles, light in
 the middle.
 
 The colours are neutral: a near-black graphite background with a faint gradient, a soft white light
-at the top left and grey surfaces. Only your accent colour adds a tint, also to the light particles.
+at the top left and grey surfaces. Only your accent colour adds a tint.

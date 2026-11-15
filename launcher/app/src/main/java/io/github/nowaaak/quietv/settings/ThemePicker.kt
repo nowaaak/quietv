@@ -101,10 +101,6 @@ class ThemePicker(
 
         fun nameRes(preset: ThemePreset): Int = when (preset) {
             ThemePreset.GRAPHITE -> R.string.theme_graphite
-            ThemePreset.PAPER -> R.string.theme_paper
-            ThemePreset.MIDNIGHT -> R.string.theme_midnight
-            ThemePreset.SLATE -> R.string.theme_slate
-            ThemePreset.FOREST -> R.string.theme_forest
             ThemePreset.SAND -> R.string.theme_sand
             ThemePreset.GLASS -> R.string.theme_glass
         }

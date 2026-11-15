@@ -38,14 +38,14 @@ class PaletteTest {
     @Test
     fun customBackgroundDecidesLightOrDark() {
         val light = Palette.of(ThemePreset.GRAPHITE, mapOf(LauncherConfig.COLOR_BACKGROUND to 0xFFFAFAFA.toInt()))
-        val dark = Palette.of(ThemePreset.PAPER, mapOf(LauncherConfig.COLOR_BACKGROUND to 0xFF101010.toInt()))
+        val dark = Palette.of(ThemePreset.SAND, mapOf(LauncherConfig.COLOR_BACKGROUND to 0xFF101010.toInt()))
         assertTrue(light.light)
         assertFalse(dark.light)
     }
 
     @Test
     fun mutedOverrideAlsoSetsDim() {
-        val p = Palette.of(ThemePreset.PAPER, mapOf(LauncherConfig.COLOR_TEXT_MUTED to 0xFF444444.toInt()))
+        val p = Palette.of(ThemePreset.SAND, mapOf(LauncherConfig.COLOR_TEXT_MUTED to 0xFF444444.toInt()))
         assertEquals(0xFF444444.toInt(), p.textDim)
     }
 }

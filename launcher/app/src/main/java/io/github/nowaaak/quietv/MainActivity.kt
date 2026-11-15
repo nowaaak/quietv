@@ -5,7 +5,8 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Rect
-import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -33,7 +34,6 @@ import io.github.nowaaak.quietv.config.CompanionMode
 import io.github.nowaaak.quietv.config.ConfigStore
 import io.github.nowaaak.quietv.config.LauncherConfig
 import io.github.nowaaak.quietv.config.StartupConfig
-import io.github.nowaaak.quietv.config.WallpaperConfig
 import io.github.nowaaak.quietv.firetv.Platform
 import io.github.nowaaak.quietv.firetv.RedirectRebind
 import io.github.nowaaak.quietv.home.AppCatalog
@@ -48,11 +48,11 @@ import io.github.nowaaak.quietv.inputs.InputsMenu
 import io.github.nowaaak.quietv.net.NetworkLabel
 import io.github.nowaaak.quietv.search.SearchActivity
 import io.github.nowaaak.quietv.settings.SettingsActivity
-import io.github.nowaaak.quietv.ui.Contrast
 import io.github.nowaaak.quietv.ui.DropdownMenu
 import io.github.nowaaak.quietv.ui.Palette
 import io.github.nowaaak.quietv.ui.ThemeColors
 import io.github.nowaaak.quietv.wallpaper.Scenes
+import io.github.nowaaak.quietv.wallpaper.WallpaperLook
 import io.github.nowaaak.quietv.wallpaper.WallpaperStore
 import java.util.Calendar
 import kotlin.math.abs
@@ -80,7 +80,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private lateinit var wifiLabel: TextView
     private lateinit var wifiDot: View
     private lateinit var wallpaper: ImageView
-    private lateinit var scrim: View
+    private var themeBackground: Drawable? = null
     private lateinit var springX: SpringAnimation
     private lateinit var springY: SpringAnimation
 
@@ -98,8 +98,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private var inputsRequested = false
     private var companionPending = false
     private var tileRadius = 0f
-    private var wallpaperVersion = NO_WALLPAPER
-    private var wallpaperSamples = IntArray(0)
+    private var wallpaperKey = ""
 
     private val handler = Handler(Looper.getMainLooper())
     private val minuteTick = object : Runnable {
@@ -138,7 +137,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
         wifiDot = findViewById(R.id.wifiDot)
         grid = findViewById(R.id.grid)
         wallpaper = findViewById(R.id.wallpaper)
-        scrim = findViewById(R.id.scrim)
+        themeBackground = window.decorView.background
 
         val frame = grid.parent as View
         val column = frame.parent as View
@@ -329,55 +328,44 @@ class MainActivity : Activity(), TileAdapter.Listener {
         val wallpapers = WallpaperStore(this)
         val scene = config.wallpaper.scene.takeIf { Scenes.drawable(it) != null }
         if (!config.wallpaper.enabled || (scene == null && !wallpapers.exists())) {
-            wallpaperVersion = NO_WALLPAPER
-            wallpaper.setImageDrawable(null)
-            wallpaper.visibility = View.GONE
-            scrim.visibility = View.GONE
+            hideWallpaper()
             return
         }
-        val version = if (scene != null) SCENE_VERSION - WallpaperConfig.SCENES.indexOf(scene) else wallpapers.version()
-        if (version == wallpaperVersion) {
-            applyScrim()
-            return
-        }
-        wallpaperVersion = version
+        // The theme cannot change here (that recreates the activity), so picture and dimming say it all.
+        val dim = config.wallpaper.dim
+        val key = "${scene ?: "image:" + wallpapers.version()}|$dim"
+        if (key == wallpaperKey) return
+        wallpaperKey = key
         val width = resources.displayMetrics.widthPixels
         val height = resources.displayMetrics.heightPixels
+        val look = palette
         Thread {
-            val bitmap = if (scene != null) {
+            val picture = if (scene != null) {
                 Scenes.render(this, scene, width, height)
             } else {
                 WallpaperStore.decode(wallpapers.file, width, height)
             }
-            val samples = bitmap?.let { WallpaperStore.samples(it) } ?: IntArray(0)
+            val bitmap = picture?.let { WallpaperLook.dim(it, look, dim) }
             runOnUiThread {
-                if (isDestroyed || wallpaperVersion != version) return@runOnUiThread
+                if (isDestroyed || wallpaperKey != key) return@runOnUiThread
                 if (bitmap == null) {
-                    wallpaper.visibility = View.GONE
-                    scrim.visibility = View.GONE
+                    hideWallpaper()
                     return@runOnUiThread
                 }
-                wallpaperSamples = samples
                 wallpaper.setImageBitmap(bitmap)
                 wallpaper.visibility = View.VISIBLE
-                applyScrim()
+                // The picture covers the whole window, so the theme's own background would only be
+                // drawn and then painted over on every frame. A plain colour costs next to nothing.
+                window.setBackgroundDrawable(ColorDrawable(palette.background))
             }
         }.start()
     }
 
-    private fun applyScrim() {
-        val texts = intArrayOf(palette.text, palette.textMuted, palette.textDim)
-        val amount = Contrast.scrimFor(wallpaperSamples, texts, palette.background, config.wallpaper.dim / 100f)
-        val alpha = (amount * 255).roundToInt()
-        if (palette.glass) {
-            scrim.background = GradientDrawable(
-                GradientDrawable.Orientation.TOP_BOTTOM,
-                GLASS_SCRIM.map { Contrast.withAlpha(palette.background, (alpha * it).roundToInt()) }.toIntArray(),
-            )
-        } else {
-            scrim.setBackgroundColor(Contrast.withAlpha(palette.background, alpha))
-        }
-        scrim.visibility = View.VISIBLE
+    private fun hideWallpaper() {
+        wallpaperKey = ""
+        wallpaper.setImageDrawable(null)
+        wallpaper.visibility = View.GONE
+        if (window.decorView.background !== themeBackground) window.setBackgroundDrawable(themeBackground)
     }
 
     private fun showCompanionMenu(anchor: View) {
@@ -706,10 +694,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
 
     private companion object {
         const val MINUTE_MS = 60_000L
-        const val NO_WALLPAPER = -1L
-        const val SCENE_VERSION = -10L
         val TOP_BUTTONS = listOf(R.id.btnSearch, R.id.btnWifi, R.id.btnInputs, R.id.btnSettings)
-        val GLASS_SCRIM = listOf(1f, 0.45f, 0.25f, 0.7f, 1f)
         const val STARTUP_WINDOW_MS = 5 * 60_000L
         const val KEY_CAP_RADIUS_DP = 5f
         const val MAX_TILE_WIDTH_DP = 148f

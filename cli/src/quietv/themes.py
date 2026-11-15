@@ -22,15 +22,11 @@ PRESETS = {
     p.name: p
     for p in (
         Preset("graphite", False, "#0E1014", "#171A20", "#F3F4F6", "#9AA1AD", "#8B93A0", "#3A404B"),
-        Preset("paper", True, "#F4F4F1", "#FFFFFF", "#15171C", "#5F6673", "#676E7B", "#D4D7DD"),
-        Preset("midnight", False, "#000000", "#121316", "#F5F5F5", "#A1A1A8", "#8F8F96", "#2E2F33"),
-        Preset("slate", False, "#0F172A", "#1E293B", "#F1F5F9", "#A3B1C6", "#94A3B8", "#334155"),
-        Preset("forest", False, "#0B1510", "#15231C", "#EBF3EE", "#9DB2A5", "#8CA295", "#2B3D33"),
         Preset("sand", True, "#F2ECE2", "#FFFCF5", "#2A231B", "#685C4E", "#6F6355", "#DAD0C0"),
         Preset("glass", False, "#0B0B0D", "#1C1D21", "#F5F5F7", "#A1A1AA", "#8E8E96", "#2E2F35"),
     )
 }
-LEGACY = dict(zip(LEGACY_THEMES, ("graphite", "paper"), strict=True))
+LEGACY = dict(zip(LEGACY_THEMES, ("graphite", "sand", "sand", "graphite", "graphite", "graphite"), strict=True))
 DARK_ACCENTS = (
     "#6EE7B7",
     "#7DD3FC",
