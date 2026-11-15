@@ -1,5 +1,6 @@
 import base64
 import json
+import re
 
 import pytest
 
@@ -43,6 +44,7 @@ def test_valid_config_has_no_problems():
     }
     assert config.validate({**EXAMPLE, **comfort}) == []
     assert config.validate({"startup": {"input": "last"}}) == []
+    assert config.validate({"wallpaper": {"enabled": True, "scene": "particles"}}) == []
 
 
 @pytest.mark.parametrize(
@@ -120,3 +122,13 @@ def test_pull_without_launcher_fails(fake_tv):
     tv = fake_tv({"am broadcast": "Broadcast completed: result=0\n"})
     with pytest.raises(ConfigError, match="installed"):
         config.pull(tv)
+
+
+def test_scenes_match_the_launcher(repo_root):
+    source = (repo_root / "launcher/app/src/main/java/io/github/nowaaak/quietv/config/LauncherConfig.kt").read_text(
+        encoding="utf-8"
+    )
+    names = re.search(r"val SCENES = listOf\((.*?)\)\n", source).group(1)
+    particles = re.search(r'const val PARTICLES = "(\w+)"', source).group(1)
+    scenes = [particles if n.strip() == "PARTICLES" else n.strip().strip('"') for n in names.split(",")]
+    assert tuple(scenes) == config.SCENES

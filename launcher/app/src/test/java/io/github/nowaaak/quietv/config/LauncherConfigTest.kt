@@ -33,7 +33,7 @@ class LauncherConfigTest {
             theme = ThemePreset.SAND,
             colors = mapOf("background" to 0xFF101820.toInt(), "textMuted" to 0xFFA0A8B0.toInt()),
             tileRadius = 6,
-            wallpaper = WallpaperConfig(enabled = true, dim = 45, scene = "lake"),
+            wallpaper = WallpaperConfig(enabled = true, dim = 45, scene = WallpaperConfig.PARTICLES),
             liveTvPackage = "com.mediatek.wwtv.tvcenter",
             inputsKey = true,
             homeRedirect = HomeRedirectConfig(
