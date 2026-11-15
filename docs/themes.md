@@ -83,8 +83,10 @@ or `"forest"`, with `wallpaper.enabled` set to `true`. An empty scene shows your
 
 `glass` looks like Apple TV rather than like the other themes. The focused tile lifts with a soft
 shadow instead of the accent ring, app names only appear under the focused tile, the large title
-above the favourites is left out so the background shows, and Settings groups its rows on frosted
-cards. Buttons, menus and the search field are translucent with a light edge. Nothing is blurred,
+above the favourites is left out so the background shows, and Settings groups its rows on cards.
+Tiles, cards, menus and the search field share a fine light edge, brighter at the top left. The top
+buttons have no frame. Focused, they turn into a white circle with a glow in your accent colour.
+Nothing is blurred,
 everything is drawn once, so the launcher stays as light as with the other themes. On a landscape
 or your own picture the darkening is a gradient: strong behind the clock and the tiles, light in
 the middle.

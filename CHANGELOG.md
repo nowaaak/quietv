@@ -5,12 +5,16 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-11-15
+
 ### Added
 
 - Theme `glass` in the style of Apple TV: the focused tile lifts with a shadow instead of the accent ring,
-  names only under the focused tile, no title block, Settings grouped on frosted cards, translucent buttons,
-  menus and search field with light edges. No blur, no animation beyond the focus lift. Pick it in
-  Settings or with `quietv theme apply glass`.
+  names only under the focused tile, no title block, Settings grouped on cards, a fine light edge on tiles,
+  cards, menus and the search field, and borderless top buttons that turn into a white circle with an
+  accent glow when focused. No blur, no animation beyond the focus lift. Pick it in Settings or with
+  `quietv theme apply glass`.
+- The top buttons are smaller in every theme.
 - Background setting for every theme: the theme's colour, four built-in landscapes (mountains, mountain
   lake, dunes, forest) or your own picture. New config key `wallpaper.scene`.
 
