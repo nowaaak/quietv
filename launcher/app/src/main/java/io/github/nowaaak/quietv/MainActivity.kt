@@ -52,7 +52,6 @@ import io.github.nowaaak.quietv.ui.Contrast
 import io.github.nowaaak.quietv.ui.DropdownMenu
 import io.github.nowaaak.quietv.ui.Palette
 import io.github.nowaaak.quietv.ui.ThemeColors
-import io.github.nowaaak.quietv.wallpaper.ParticleView
 import io.github.nowaaak.quietv.wallpaper.Scenes
 import io.github.nowaaak.quietv.wallpaper.WallpaperStore
 import java.util.Calendar
@@ -81,7 +80,6 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private lateinit var wifiLabel: TextView
     private lateinit var wifiDot: View
     private lateinit var wallpaper: ImageView
-    private lateinit var particles: ParticleView
     private lateinit var scrim: View
     private lateinit var springX: SpringAnimation
     private lateinit var springY: SpringAnimation
@@ -140,7 +138,6 @@ class MainActivity : Activity(), TileAdapter.Listener {
         wifiDot = findViewById(R.id.wifiDot)
         grid = findViewById(R.id.grid)
         wallpaper = findViewById(R.id.wallpaper)
-        particles = findViewById(R.id.particles)
         scrim = findViewById(R.id.scrim)
 
         val frame = grid.parent as View
@@ -278,7 +275,6 @@ class MainActivity : Activity(), TileAdapter.Listener {
     override fun onPause() {
         super.onPause()
         handler.removeCallbacks(minuteTick)
-        particles.stop()
         stopMoving()
     }
 
@@ -330,19 +326,6 @@ class MainActivity : Activity(), TileAdapter.Listener {
     }
 
     private fun applyWallpaper() {
-        if (config.wallpaper.enabled && config.wallpaper.scene == WallpaperConfig.PARTICLES) {
-            // Drawn over the theme's own background, which stays readable, so no scrim.
-            wallpaperVersion = NO_WALLPAPER
-            wallpaper.setImageDrawable(null)
-            wallpaper.visibility = View.GONE
-            scrim.visibility = View.GONE
-            particles.configure(palette, config.accent)
-            particles.visibility = View.VISIBLE
-            particles.start()
-            return
-        }
-        particles.stop()
-        particles.visibility = View.GONE
         val wallpapers = WallpaperStore(this)
         val scene = config.wallpaper.scene.takeIf { Scenes.drawable(it) != null }
         if (!config.wallpaper.enabled || (scene == null && !wallpapers.exists())) {
@@ -577,7 +560,6 @@ class MainActivity : Activity(), TileAdapter.Listener {
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.action == KeyEvent.ACTION_DOWN) particles.hold()
         if (event.action != KeyEvent.ACTION_DOWN || event.repeatCount != 0) return super.dispatchKeyEvent(event)
         val key = Shortcuts.keyName(event.keyCode)
         val pending = assigningPkg

@@ -5,13 +5,6 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
-### Added
-
-- Background "Light particles" (`wallpaper.scene: "particles"`): large soft lights in the accent colour
-  and small sparks drift slowly across the screen, drawn at full screen resolution. At most 30 frames a
-  second, only while the home screen is in front, paused for a moment after every key press, and without
-  movement on low-memory devices or with animations switched off. Off unless you pick it.
-
 ### Changed
 
 - Theme `glass` is now a neutral graphite: near black with a soft white light at the top left, grey
