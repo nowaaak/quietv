@@ -26,6 +26,9 @@ class TileAdapter(
     private val cornerRadius: Float,
 ) : RecyclerView.Adapter<TileAdapter.Holder>() {
 
+    val focusScale: Float = if (palette.glass) GLASS_FOCUS_SCALE else FOCUS_SCALE
+    private val dockNamed = !palette.glass
+
     interface Listener {
         fun onTileFocused(position: Int, card: View)
         fun onTileKey(position: Int, card: View, event: KeyEvent): Boolean
@@ -63,7 +66,7 @@ class TileAdapter(
 
     override fun onBindViewHolder(holder: Holder, position: Int, payloads: MutableList<Any>) {
         if (payloads.isNotEmpty() && payloads.all { it == SECTION_CHANGED }) {
-            holder.showName(position < dockSize, holder.card.isFocused)
+            holder.showName(dockNamed && position < dockSize, holder.card.isFocused)
         } else {
             onBindViewHolder(holder, position)
         }
@@ -72,9 +75,10 @@ class TileAdapter(
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val entry = items[position]
         holder.name.text = entry.label
-        holder.showName(position < dockSize, focused = false)
+        holder.showName(dockNamed && position < dockSize, focused = false)
         holder.card.scaleX = 1f
         holder.card.scaleY = 1f
+        holder.card.translationZ = 0f
         if (entry.banner != null) {
             holder.banner.setImageDrawable(entry.banner)
             holder.banner.visibility = View.VISIBLE
@@ -143,13 +147,14 @@ class TileAdapter(
                 handled
             }
             card.setOnFocusChangeListener { v, focused ->
-                val scale = if (focused) FOCUS_SCALE else 1f
-                v.animate().scaleX(scale).scaleY(scale)
+                val scale = if (focused) focusScale else 1f
+                val lift = if (focused && palette.glass) GLASS_LIFT_DP * density else 0f
+                v.animate().scaleX(scale).scaleY(scale).translationZ(lift)
                     .setDuration(if (focused) 260 else 180)
                     .setInterpolator(OvershootInterpolator(if (focused) 1.6f else 0f))
                     .start()
                 val pos = position()
-                if (pos != null && pos < dockSize) {
+                if (pos != null && dockNamed && pos < dockSize) {
                     name.setTextColor(if (focused) text else dimText)
                     name.animate().alpha(1f).translationY(if (focused) density * 4f else 0f).setDuration(220).start()
                 } else {
@@ -178,6 +183,8 @@ class TileAdapter(
     companion object {
         private val SECTION_CHANGED = Any()
         const val FOCUS_SCALE = 1.06f
+        const val GLASS_FOCUS_SCALE = 1.1f
+        const val GLASS_LIFT_DP = 18f
         const val NAME_GAP_DP = 9f
         const val NAME_HEIGHT_DP = 22f
         const val VERTICAL_PADDING_DP = 8f

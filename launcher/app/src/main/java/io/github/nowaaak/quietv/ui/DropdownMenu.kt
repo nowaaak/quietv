@@ -28,12 +28,7 @@ class DropdownMenu(
     private val content = ThemeColors.pillContent(palette)
 
     init {
-        panel.background = ThemeColors.rounded(
-            palette.surface,
-            PANEL_RADIUS_DP * density,
-            ThemeColors.edge(palette),
-            density.toInt().coerceAtLeast(1),
-        )
+        panel.background = ThemeColors.panel(palette, PANEL_RADIUS_DP * density, density.toInt().coerceAtLeast(1))
     }
     private val popup = PopupWindow(panel, (WIDTH_DP * density).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT, true)
         .apply {

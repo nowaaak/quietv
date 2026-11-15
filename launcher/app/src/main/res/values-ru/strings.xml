@@ -45,7 +45,13 @@
     <string name="tile_soft">Слегка скруглённые</string>
     <string name="tile_rounded">Скруглённые</string>
     <string name="tile_round">Сильно скруглённые</string>
-    <string name="settings_wallpaper">Обои</string>
+    <string name="settings_background">Фон</string>
+    <string name="background_color">Цвет</string>
+    <string name="background_image">Своё изображение</string>
+    <string name="scene_mountains">Горы</string>
+    <string name="scene_lake">Горное озеро</string>
+    <string name="scene_dunes">Дюны</string>
+    <string name="scene_forest">Лес</string>
     <string name="settings_wallpaper_dim">Затемнение обоев</string>
     <string name="settings_accent">Цвет акцента</string>
     <string name="settings_columns">Плиток в ряду</string>

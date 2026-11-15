@@ -7,9 +7,12 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ### Added
 
-- Theme `glass`: dark, with translucent tiles, buttons and search field, a soft sheen and light edges over a
-  blue to violet gradient. Drawn once, without blur or animation. Pick it in Settings or with
-  `quietv theme apply glass`.
+- Theme `glass` in the style of Apple TV: the focused tile lifts with a shadow instead of the accent ring,
+  names only under the focused tile, no title block, Settings grouped on frosted cards, translucent buttons,
+  menus and search field with light edges. No blur, no animation beyond the focus lift. Pick it in
+  Settings or with `quietv theme apply glass`.
+- Background setting for every theme: the theme's colour, four built-in landscapes (mountains, mountain
+  lake, dunes, forest) or your own picture. New config key `wallpaper.scene`.
 
 ## [0.9.1] - 2026-11-12
 

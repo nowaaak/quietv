@@ -45,7 +45,13 @@
     <string name="tile_soft">Ligeiramente arredondados</string>
     <string name="tile_rounded">Arredondados</string>
     <string name="tile_round">Muito arredondados</string>
-    <string name="settings_wallpaper">Imagem de fundo</string>
+    <string name="settings_background">Fundo</string>
+    <string name="background_color">Cor</string>
+    <string name="background_image">A sua imagem</string>
+    <string name="scene_mountains">Montanhas</string>
+    <string name="scene_lake">Lago de montanha</string>
+    <string name="scene_dunes">Dunas</string>
+    <string name="scene_forest">Floresta</string>
     <string name="settings_wallpaper_dim">Escurecer o fundo</string>
     <string name="settings_accent">Cor de destaque</string>
     <string name="settings_columns">Mosaicos por linha</string>

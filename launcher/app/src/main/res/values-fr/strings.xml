@@ -45,7 +45,13 @@
     <string name="tile_soft">Légèrement arrondis</string>
     <string name="tile_rounded">Arrondis</string>
     <string name="tile_round">Très arrondis</string>
-    <string name="settings_wallpaper">Fond d\'écran</string>
+    <string name="settings_background">Arrière-plan</string>
+    <string name="background_color">Couleur</string>
+    <string name="background_image">Votre image</string>
+    <string name="scene_mountains">Montagnes</string>
+    <string name="scene_lake">Lac de montagne</string>
+    <string name="scene_dunes">Dunes</string>
+    <string name="scene_forest">Forêt</string>
     <string name="settings_wallpaper_dim">Atténuation du fond</string>
     <string name="settings_accent">Couleur d\'accent</string>
     <string name="settings_columns">Tuiles par rangée</string>

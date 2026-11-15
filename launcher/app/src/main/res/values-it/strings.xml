@@ -45,7 +45,13 @@
     <string name="tile_soft">Leggermente arrotondati</string>
     <string name="tile_rounded">Arrotondati</string>
     <string name="tile_round">Molto arrotondati</string>
-    <string name="settings_wallpaper">Sfondo</string>
+    <string name="settings_background">Sfondo</string>
+    <string name="background_color">Colore</string>
+    <string name="background_image">La tua immagine</string>
+    <string name="scene_mountains">Montagne</string>
+    <string name="scene_lake">Lago di montagna</string>
+    <string name="scene_dunes">Dune</string>
+    <string name="scene_forest">Foresta</string>
     <string name="settings_wallpaper_dim">Attenuazione dello sfondo</string>
     <string name="settings_accent">Colore di accento</string>
     <string name="settings_columns">Riquadri per riga</string>

@@ -45,7 +45,13 @@
     <string name="tile_soft">Hafif yuvarlak</string>
     <string name="tile_rounded">Yuvarlak</string>
     <string name="tile_round">Çok yuvarlak</string>
-    <string name="settings_wallpaper">Duvar kâğıdı</string>
+    <string name="settings_background">Arka plan</string>
+    <string name="background_color">Renk</string>
+    <string name="background_image">Kendi resminiz</string>
+    <string name="scene_mountains">Dağlar</string>
+    <string name="scene_lake">Dağ gölü</string>
+    <string name="scene_dunes">Kumullar</string>
+    <string name="scene_forest">Orman</string>
     <string name="settings_wallpaper_dim">Duvar kâğıdını karart</string>
     <string name="settings_accent">Vurgu rengi</string>
     <string name="settings_columns">Satır başına kutucuk</string>

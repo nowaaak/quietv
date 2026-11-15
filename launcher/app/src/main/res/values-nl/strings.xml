@@ -45,7 +45,13 @@
     <string name="tile_soft">Licht afgerond</string>
     <string name="tile_rounded">Afgerond</string>
     <string name="tile_round">Sterk afgerond</string>
-    <string name="settings_wallpaper">Achtergrond</string>
+    <string name="settings_background">Achtergrond</string>
+    <string name="background_color">Kleur</string>
+    <string name="background_image">Eigen afbeelding</string>
+    <string name="scene_mountains">Bergen</string>
+    <string name="scene_lake">Bergmeer</string>
+    <string name="scene_dunes">Duinen</string>
+    <string name="scene_forest">Bos</string>
     <string name="settings_wallpaper_dim">Achtergrond dimmen</string>
     <string name="settings_accent">Accentkleur</string>
     <string name="settings_columns">Tegels per rij</string>

@@ -45,7 +45,8 @@ COMPANION_KEYS = {"mode", "host", "port", "token"}
 THEMES = ("graphite", "paper", "midnight", "slate", "forest", "sand", "glass")
 LEGACY_THEMES = ("dark", "light")
 COLOR_KEYS = ("background", "surface", "text", "textMuted", "line")
-WALLPAPER_KEYS = {"enabled", "dim"}
+WALLPAPER_KEYS = {"enabled", "dim", "scene"}
+SCENES = ("mountains", "lake", "dunes", "forest")
 MAX_TILE_RADIUS = 24
 SHORTCUT_KEYS = tuple(str(n) for n in range(10)) + ("red", "green", "yellow", "blue")
 STARTUP_KEYS = {"app", "input"}
@@ -93,6 +94,9 @@ def validate(config: Any) -> list[str]:
             problems.append("wallpaper.enabled must be true or false")
         if not _whole(wallpaper.get("dim", 30), 0, MAX_DIM):
             problems.append(f"wallpaper.dim must be a whole number from 0 to {MAX_DIM}")
+        scene = wallpaper.get("scene", "")
+        if scene != "" and scene not in SCENES:
+            problems.append(f"wallpaper.scene must be empty or one of {', '.join(SCENES)}")
     live = config.get("liveTvPackage", "")
     if live and not is_package(str(live)):
         problems.append("liveTvPackage must be a package name or empty")

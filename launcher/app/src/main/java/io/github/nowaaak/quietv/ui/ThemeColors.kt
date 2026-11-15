@@ -82,14 +82,21 @@ object ThemeColors {
 
     fun card(palette: Palette, radius: Float): Drawable {
         if (!palette.glass) return rounded(palette.surface, radius)
-        val sheen = GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Contrast.withAlpha(Color.WHITE, GLASS_SHEEN_TOP_ALPHA),
-                Contrast.withAlpha(Color.WHITE, GLASS_SHEEN_BOTTOM_ALPHA),
-            ),
-        ).apply { cornerRadius = radius }
-        return LayerDrawable(arrayOf(rounded(surfaceFill(palette), radius), sheen))
+        return LayerDrawable(arrayOf(rounded(surfaceFill(palette), radius), sheen(radius)))
+    }
+
+    private fun sheen(radius: Float): Drawable = GradientDrawable(
+        GradientDrawable.Orientation.TOP_BOTTOM,
+        intArrayOf(
+            Contrast.withAlpha(Color.WHITE, GLASS_SHEEN_TOP_ALPHA),
+            Contrast.withAlpha(Color.WHITE, GLASS_SHEEN_BOTTOM_ALPHA),
+        ),
+    ).apply { cornerRadius = radius }
+
+    fun panel(palette: Palette, radius: Float, strokeWidth: Int): Drawable {
+        if (!palette.glass) return rounded(palette.surface, radius, palette.stroke, strokeWidth)
+        val base = rounded(Contrast.withAlpha(palette.surface, GLASS_PANEL_ALPHA), radius, edge(palette), strokeWidth)
+        return LayerDrawable(arrayOf(base, sheen(radius)))
     }
 
     fun pillContent(palette: Palette): ColorStateList = focusable(palette.onText, palette.text)
@@ -112,6 +119,7 @@ object ThemeColors {
 
     private const val GLASS_FROST = 0.5f
     private const val GLASS_FILL_ALPHA = 0x38
+    private const val GLASS_PANEL_ALPHA = 0xEB
     private const val GLASS_EDGE_ALPHA = 0x38
     private const val GLASS_SHEEN_TOP_ALPHA = 0x1C
     private const val GLASS_SHEEN_BOTTOM_ALPHA = 0x03

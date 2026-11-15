@@ -45,7 +45,13 @@
     <string name="tile_soft">Lekko zaokrąglone</string>
     <string name="tile_rounded">Zaokrąglone</string>
     <string name="tile_round">Mocno zaokrąglone</string>
-    <string name="settings_wallpaper">Tapeta</string>
+    <string name="settings_background">Tło</string>
+    <string name="background_color">Kolor</string>
+    <string name="background_image">Własny obraz</string>
+    <string name="scene_mountains">Góry</string>
+    <string name="scene_lake">Górskie jezioro</string>
+    <string name="scene_dunes">Wydmy</string>
+    <string name="scene_forest">Las</string>
     <string name="settings_wallpaper_dim">Przyciemnienie tapety</string>
     <string name="settings_accent">Kolor akcentu</string>
     <string name="settings_columns">Kafelki w rzędzie</string>

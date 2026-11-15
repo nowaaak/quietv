@@ -15,7 +15,7 @@ quietv theme apply midnight
 | `slate` | Dark blue grey |
 | `forest` | Dark green |
 | `sand` | Light, beige |
-| `glass` | Dark, translucent tiles and buttons with a soft sheen over a blue to violet gradient |
+| `glass` | Dark, in the style of Apple TV, see [Glass](#glass) |
 
 Switching themes keeps your accent colour. Between a dark and a light theme it picks the matching
 shade of the same colour.
@@ -71,5 +71,20 @@ is. If the picture is too bright behind the clock and the labels, quietv makes t
 until all text is readable. A few bright spots do not count, so a mostly dark photo keeps your
 setting.
 
-On the TV, Settings shows two more rows once a wallpaper is set: one to switch it off and on, one
-for the dimming.
+## Background
+
+On the TV, Settings, Background switches between the theme's colour, four built-in landscapes and
+your own picture, once you have set one: Mountains (dusk), Mountain lake (night), Dunes (sunset) and
+Forest (morning mist). The landscapes are drawn by the launcher, no download, no photo. A second
+row sets the dimming. In the config they are `wallpaper.scene`: `"mountains"`, `"lake"`, `"dunes"`
+or `"forest"`, with `wallpaper.enabled` set to `true`. An empty scene shows your own picture.
+
+## Glass
+
+`glass` looks like Apple TV rather than like the other themes. The focused tile lifts with a soft
+shadow instead of the accent ring, app names only appear under the focused tile, the large title
+above the favourites is left out so the background shows, and Settings groups its rows on frosted
+cards. Buttons, menus and the search field are translucent with a light edge. Nothing is blurred,
+everything is drawn once, so the launcher stays as light as with the other themes. On a landscape
+or your own picture the darkening is a gradient: strong behind the clock and the tiles, light in
+the middle.
