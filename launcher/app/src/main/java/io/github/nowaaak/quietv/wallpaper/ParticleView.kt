@@ -24,7 +24,8 @@ import kotlin.random.Random
  *
  * Every particle is a radial gradient the GPU draws at screen resolution, so nothing is scaled up or
  * blurred. It redraws at most 30 times a second, only while the home screen is visible, and stands
- * still while a direction key is held, on low-memory devices and when animations are switched off.
+ * still for a moment after every key press (so focus moves and scrolling get the whole frame), on
+ * low-memory devices and when animations are switched off.
  */
 class ParticleView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
@@ -96,7 +97,7 @@ class ParticleView(context: Context, attrs: AttributeSet?) : View(context, attrs
         Choreographer.getInstance().removeFrameCallback(frame)
     }
 
-    /** Stands still for a moment, so a held direction key gets the whole device for scrolling. */
+    /** Stands still for a moment, so the focus move or scroll after a key press gets the whole device. */
     fun hold() {
         holdUntil = SystemClock.uptimeMillis() + HOLD_MS
     }
