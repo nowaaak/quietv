@@ -57,7 +57,6 @@
     <string name="scene_lake">Mountain lake</string>
     <string name="scene_dunes">Dunes</string>
     <string name="scene_forest">Forest</string>
-    <string name="scene_particles">Light particles</string>
     <string name="settings_wallpaper_dim">Wallpaper dimming</string>
     <string name="percent" translatable="false">%1$d %%</string>
     <string name="settings_accent">Accent colour</string>

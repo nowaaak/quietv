@@ -52,7 +52,6 @@
     <string name="scene_lake">Горное озеро</string>
     <string name="scene_dunes">Дюны</string>
     <string name="scene_forest">Лес</string>
-    <string name="scene_particles">Световые частицы</string>
     <string name="settings_wallpaper_dim">Затемнение обоев</string>
     <string name="settings_accent">Цвет акцента</string>
     <string name="picker_theme_title">Выберите тему</string>

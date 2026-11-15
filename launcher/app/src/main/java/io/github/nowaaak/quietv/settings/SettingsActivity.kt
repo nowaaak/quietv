@@ -96,7 +96,7 @@ class SettingsActivity : Activity() {
                 )
             }
         }
-        if (current != BACKGROUND_COLOR && current != WallpaperConfig.PARTICLES) {
+        if (current != BACKGROUND_COLOR) {
             row(getString(R.string.settings_wallpaper_dim), getString(R.string.percent, wallpaper.dim)) {
                 val next = WALLPAPER_DIMS.firstOrNull { it > wallpaper.dim } ?: WALLPAPER_DIMS.first()
                 store.update { it.copy(wallpaper = it.wallpaper.copy(dim = next)) }

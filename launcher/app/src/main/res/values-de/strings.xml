@@ -55,7 +55,6 @@
     <string name="scene_lake">Bergsee</string>
     <string name="scene_dunes">Dünen</string>
     <string name="scene_forest">Wald</string>
-    <string name="scene_particles">Lichtpartikel</string>
     <string name="settings_wallpaper_dim">Hintergrund dämpfen</string>
     <string name="settings_accent">Akzentfarbe</string>
     <string name="picker_theme_title">Design wählen</string>
