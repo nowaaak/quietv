@@ -14,7 +14,6 @@ import io.github.nowaaak.quietv.R
 import io.github.nowaaak.quietv.config.ConfigStore
 import io.github.nowaaak.quietv.config.LauncherConfig
 import io.github.nowaaak.quietv.config.StartupConfig
-import io.github.nowaaak.quietv.config.ThemePreset
 import io.github.nowaaak.quietv.config.WallpaperConfig
 import io.github.nowaaak.quietv.firetv.HomeRedirectService
 import io.github.nowaaak.quietv.firetv.Platform
@@ -55,19 +54,29 @@ class SettingsActivity : Activity() {
         val catalog = AppCatalog(this)
 
         section(R.string.settings_appearance)
-        row(getString(R.string.settings_theme), themeName(config)) {
-            val next = ThemePreset.entries[(config.theme.ordinal + 1) % ThemePreset.entries.size]
-            store.update {
-                it.copy(
-                    theme = next,
-                    colors = emptyMap(),
-                    accent = ThemeColors.accentForTheme(it.accent, palette.light, next.light),
-                )
-            }
-            recreate()
+        row(getString(R.string.settings_theme), themeName(config), rerender = false) { anchor ->
+            ThemePicker(this, palette, config) { next ->
+                store.update {
+                    it.copy(
+                        theme = next,
+                        colors = emptyMap(),
+                        accent = ThemeColors.accentForTheme(it.accent, palette.light, next.light),
+                    )
+                }
+                recreate()
+            }.show(anchor)
         }
-        row(getString(R.string.settings_accent), LauncherConfig.formatColor(config.accent), swatch = config.accent) {
-            store.update { it.copy(accent = ThemeColors.nextAccent(palette.light, it.accent)) }
+        row(
+            getString(R.string.settings_accent),
+            LauncherConfig.formatColor(config.accent),
+            swatch = config.accent,
+            rerender = false,
+        ) { anchor ->
+            val index = focusableIndex(anchor)
+            AccentPicker(this, palette, config) { color ->
+                store.update { it.copy(accent = color) }
+                if (!isFinishing && !isDestroyed) render(index)
+            }.show(anchor)
         }
         row(getString(R.string.settings_tile_shape), tileShapeName(config.tileRadius)) {
             val next = TILE_RADII.firstOrNull { it > config.tileRadius } ?: TILE_RADII.first()
@@ -160,7 +169,8 @@ class SettingsActivity : Activity() {
         value: String?,
         swatch: Int? = null,
         focusable: Boolean = true,
-        action: () -> Unit,
+        rerender: Boolean = true,
+        action: (View) -> Unit,
     ) {
         val parent = group ?: rows
         val view = layoutInflater.inflate(R.layout.item_setting, parent, false)
@@ -183,8 +193,8 @@ class SettingsActivity : Activity() {
         if (focusable) {
             view.setOnClickListener {
                 val index = focusableIndex(view)
-                action()
-                if (!isFinishing && !isDestroyed) render(index)
+                action(view)
+                if (rerender && !isFinishing && !isDestroyed) render(index)
             }
         }
         parent.addView(view)
@@ -213,17 +223,7 @@ class SettingsActivity : Activity() {
     private fun focusableIndex(view: View): Int = focusableRows().indexOf(view)
 
     private fun themeName(config: LauncherConfig): String {
-        val name = getString(
-            when (config.theme) {
-                ThemePreset.GRAPHITE -> R.string.theme_graphite
-                ThemePreset.PAPER -> R.string.theme_paper
-                ThemePreset.MIDNIGHT -> R.string.theme_midnight
-                ThemePreset.SLATE -> R.string.theme_slate
-                ThemePreset.FOREST -> R.string.theme_forest
-                ThemePreset.SAND -> R.string.theme_sand
-                ThemePreset.GLASS -> R.string.theme_glass
-            },
-        )
+        val name = getString(ThemePicker.nameRes(config.theme))
         return if (config.colors.isEmpty()) name else getString(R.string.theme_custom, name)
     }
 

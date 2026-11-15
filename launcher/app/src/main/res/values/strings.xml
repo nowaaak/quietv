@@ -60,6 +60,15 @@
     <string name="settings_wallpaper_dim">Wallpaper dimming</string>
     <string name="percent" translatable="false">%1$d %%</string>
     <string name="settings_accent">Accent colour</string>
+    <string name="picker_theme_title">Choose a theme</string>
+    <string name="picker_accent_title">Choose an accent colour</string>
+    <string name="picker_hint">OK to choose, Back to cancel</string>
+    <string name="accent_custom">Custom colour</string>
+    <string name="accent_hue">Hue</string>
+    <string name="accent_saturation">Saturation</string>
+    <string name="accent_brightness">Brightness</string>
+    <string name="accent_apply">Use this colour</string>
+    <string name="accent_low_contrast">Hard to see on this theme</string>
     <string name="settings_columns">Tiles per row</string>
     <string name="settings_apps">Apps</string>
     <string name="settings_reset_order">Reset tile order</string>

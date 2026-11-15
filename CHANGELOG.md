@@ -5,6 +5,14 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Changed
+
+- Settings, Theme opens a picker with a small picture of the home screen for every theme, instead
+  of switching to the next theme on each press. You see what you get before you choose.
+- Settings, Accent colour opens a picker with twelve colours (six more than before) and a live
+  preview of the home screen. Custom colour offers sliders for hue, saturation and brightness, and
+  the picker warns when a colour is hard to see on the theme.
+
 ## [0.10.1] - 2026-11-16
 
 ### Fixed
