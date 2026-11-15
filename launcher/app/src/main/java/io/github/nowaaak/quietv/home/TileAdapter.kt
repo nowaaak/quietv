@@ -109,7 +109,7 @@ class TileAdapter(
             card.background = ThemeColors.card(palette, cornerRadius)
             val hairline = density.toInt().coerceAtLeast(1)
             card.foreground = if (palette.glass) {
-                ThemeColors.liquidEdge(cornerRadius, hairline)
+                ThemeColors.edgeOnly(cornerRadius, hairline)
             } else {
                 ThemeColors.rounded(Color.TRANSPARENT, cornerRadius, ThemeColors.edge(palette), hairline)
             }

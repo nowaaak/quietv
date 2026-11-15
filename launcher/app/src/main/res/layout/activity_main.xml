@@ -199,9 +199,9 @@
                 <LinearLayout
                     android:id="@+id/btnWifi"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="14dp"
+                    android:layout_height="32dp"
+                    android:paddingStart="11dp"
+                    android:paddingEnd="12dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:background="@drawable/pill_bg"
@@ -211,8 +211,8 @@
 
                     <ImageView
                         android:id="@+id/wifiIcon"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
                         android:src="@drawable/ic_wifi"
                         android:duplicateParentState="true"
                         android:contentDescription="@null" />
@@ -221,10 +221,10 @@
                         android:id="@+id/wifiLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="7dp"
                         android:text="@string/wifi"
                         android:duplicateParentState="true"
-                        android:textSize="12sp"
+                        android:textSize="11sp"
                         android:fontFamily="@font/geist"
                         android:fontVariationSettings="'wght' 500"
                         android:singleLine="true" />

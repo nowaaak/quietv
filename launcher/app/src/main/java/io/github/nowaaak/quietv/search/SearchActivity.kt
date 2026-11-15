@@ -44,7 +44,7 @@ class SearchActivity : Activity() {
         if (palette.glass) {
             val density = resources.displayMetrics.density
             query.backgroundTintList = null
-            query.background = ThemeColors.liquid(palette, SEARCH_RADIUS_DP * density, density.toInt().coerceAtLeast(1))
+            query.background = ThemeColors.edged(palette, SEARCH_RADIUS_DP * density, density.toInt().coerceAtLeast(1))
         } else {
             query.backgroundTintList = ColorStateList.valueOf(palette.surface)
         }

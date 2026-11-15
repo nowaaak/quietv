@@ -197,7 +197,7 @@ class SettingsActivity : Activity() {
         return LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(padding, padding, padding, padding)
-            background = ThemeColors.liquid(palette, radius, density.toInt().coerceAtLeast(1))
+            background = ThemeColors.edged(palette, radius, density.toInt().coerceAtLeast(1))
             rows.addView(this)
         }
     }
