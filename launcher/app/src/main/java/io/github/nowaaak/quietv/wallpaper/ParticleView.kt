@@ -218,11 +218,11 @@ class ParticleView(context: Context, attrs: AttributeSet?) : View(context, attrs
 
     private companion object {
         const val SEED = 7
-        const val LIGHTS = 11
+        const val LIGHTS = 9
         const val SPARKS = 26
-        const val LIGHT_MIN_DP = 50f
-        const val LIGHT_MAX_DP = 150f
-        const val LIGHT_ALPHA = 0x30
+        const val LIGHT_MIN_DP = 40f
+        const val LIGHT_MAX_DP = 110f
+        const val LIGHT_ALPHA = 0x22
         const val LIGHT_ALPHA_ON_LIGHT = 0x40
         const val SPARK_MIN_DP = 1.2f
         const val SPARK_MAX_DP = 2.6f
