@@ -34,7 +34,7 @@ def test_valid_config_has_no_problems():
         "theme": "midnight",
         "colors": {"background": "#000000", "textMuted": "#A1A1A8"},
         "tileRadius": 0,
-        "wallpaper": {"enabled": True, "dim": 80},
+        "wallpaper": {"enabled": True, "dim": 80, "scene": "forest"},
     }
     assert config.validate({**EXAMPLE, **appearance}) == []
     comfort = {
@@ -67,6 +67,7 @@ def test_valid_config_has_no_problems():
         ({"wallpaper": {"enabled": "yes"}}, "wallpaper.enabled"),
         ({"wallpaper": {"dim": 90}}, "wallpaper.dim"),
         ({"wallpaper": {"blur": 3}}, "wallpaper: unknown key 'blur'"),
+        ({"wallpaper": {"scene": "moon"}}, "wallpaper.scene"),
         ({"shortcuts": {"f1": "com.a.b"}}, "'f1' is not a number or colour key"),
         ({"shortcuts": {"1": "nope"}}, "shortcuts.1"),
         ({"startup": {"app": "com.a.b", "input": "last"}}, "either app or input"),

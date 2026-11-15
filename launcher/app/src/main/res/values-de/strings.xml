@@ -48,7 +48,13 @@
     <string name="tile_soft">Leicht gerundet</string>
     <string name="tile_rounded">Gerundet</string>
     <string name="tile_round">Stark gerundet</string>
-    <string name="settings_wallpaper">Hintergrundbild</string>
+    <string name="settings_background">Hintergrund</string>
+    <string name="background_color">Farbe</string>
+    <string name="background_image">Eigenes Bild</string>
+    <string name="scene_mountains">Berge</string>
+    <string name="scene_lake">Bergsee</string>
+    <string name="scene_dunes">Dünen</string>
+    <string name="scene_forest">Wald</string>
     <string name="settings_wallpaper_dim">Hintergrund dämpfen</string>
     <string name="settings_accent">Akzentfarbe</string>
     <string name="settings_columns">Kacheln pro Reihe</string>

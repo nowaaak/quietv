@@ -33,7 +33,7 @@ class LauncherConfigTest {
             theme = ThemePreset.SAND,
             colors = mapOf("background" to 0xFF101820.toInt(), "textMuted" to 0xFFA0A8B0.toInt()),
             tileRadius = 6,
-            wallpaper = WallpaperConfig(enabled = true, dim = 45),
+            wallpaper = WallpaperConfig(enabled = true, dim = 45, scene = "lake"),
             liveTvPackage = "com.mediatek.wwtv.tvcenter",
             inputsKey = true,
             homeRedirect = HomeRedirectConfig(
@@ -81,12 +81,12 @@ class LauncherConfigTest {
         val error = assertThrows(InvalidConfigException::class.java) {
             LauncherConfig.parse(
                 """{"colors": {"text": "white", "glow": "#FFFFFF"}, "tileRadius": 40,
-                   "wallpaper": {"enabled": "yes", "dim": 95, "blur": 3}}""",
+                   "wallpaper": {"enabled": "yes", "dim": 95, "blur": 3, "scene": "moon"}}""",
             )
         }
         val message = error.message.orEmpty()
         listOf("colors.text", "unknown key 'colors.glow'", "tileRadius", "wallpaper.enabled", "wallpaper.dim",
-            "unknown key 'wallpaper.blur'").forEach {
+            "unknown key 'wallpaper.blur'", "wallpaper.scene").forEach {
             assertTrue("missing '$it' in: $message", message.contains(it))
         }
     }

@@ -38,10 +38,12 @@ data class CompanionConfig(
 data class WallpaperConfig(
     val enabled: Boolean = false,
     val dim: Int = DEFAULT_DIM,
+    val scene: String = "",
 ) {
     companion object {
         const val DEFAULT_DIM = 30
         const val MAX_DIM = 80
+        val SCENES = listOf("mountains", "lake", "dunes", "forest")
     }
 }
 
@@ -82,7 +84,10 @@ data class LauncherConfig(
         .put("theme", theme.key)
         .put("colors", JSONObject().also { json -> colors.toSortedMap().forEach { (k, v) -> json.put(k, formatColor(v)) } })
         .put("tileRadius", tileRadius)
-        .put("wallpaper", JSONObject().put("enabled", wallpaper.enabled).put("dim", wallpaper.dim))
+        .put(
+            "wallpaper",
+            JSONObject().put("enabled", wallpaper.enabled).put("dim", wallpaper.dim).put("scene", wallpaper.scene),
+        )
         .put("liveTvPackage", liveTvPackage)
         .put("inputsKey", inputsKey)
         .put(
@@ -128,7 +133,7 @@ data class LauncherConfig(
             "version", "favorites", "hidden", "extraApps", "columns", "accent", "theme", "colors", "tileRadius",
             "wallpaper", "liveTvPackage", "inputsKey", "homeRedirect", "fireTv", "shortcuts", "startup", "companion",
         )
-        private val WALLPAPER_KEYS = setOf("enabled", "dim")
+        private val WALLPAPER_KEYS = setOf("enabled", "dim", "scene")
         val SHORTCUT_KEYS = (0..9).map { it.toString() } + listOf("red", "green", "yellow", "blue")
         private val STARTUP_KEYS = setOf("app", "input")
         private val INPUT_ID = Regex("^[A-Za-z0-9_.$/-]+$")
@@ -178,6 +183,10 @@ data class LauncherConfig(
             val dim = wallpaperJson.opt("dim") ?: WallpaperConfig.DEFAULT_DIM
             if (dim !is Int || dim !in 0..WallpaperConfig.MAX_DIM) {
                 problems += "wallpaper.dim must be a whole number from 0 to ${WallpaperConfig.MAX_DIM}"
+            }
+            val scene = wallpaperJson.opt("scene") ?: ""
+            if (scene !is String || (scene.isNotEmpty() && scene !in WallpaperConfig.SCENES)) {
+                problems += "wallpaper.scene must be empty or one of ${WallpaperConfig.SCENES.joinToString(", ")}"
             }
             val liveTv = optionalPackage(root, "liveTvPackage", "liveTvPackage", problems)
             val inputsKey = root.opt("inputsKey") ?: false
@@ -243,7 +252,7 @@ data class LauncherConfig(
                 theme = theme!!,
                 colors = colors,
                 tileRadius = tileRadius as Int,
-                wallpaper = WallpaperConfig(wallpaperOn as Boolean, dim as Int),
+                wallpaper = WallpaperConfig(wallpaperOn as Boolean, dim as Int, scene as String),
                 liveTvPackage = liveTv,
                 inputsKey = inputsKey as Boolean,
                 homeRedirect = homeRedirect,

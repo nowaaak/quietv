@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Rect
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -32,6 +33,7 @@ import io.github.nowaaak.quietv.config.CompanionMode
 import io.github.nowaaak.quietv.config.ConfigStore
 import io.github.nowaaak.quietv.config.LauncherConfig
 import io.github.nowaaak.quietv.config.StartupConfig
+import io.github.nowaaak.quietv.config.WallpaperConfig
 import io.github.nowaaak.quietv.firetv.Platform
 import io.github.nowaaak.quietv.firetv.RedirectRebind
 import io.github.nowaaak.quietv.home.AppCatalog
@@ -50,6 +52,7 @@ import io.github.nowaaak.quietv.ui.Contrast
 import io.github.nowaaak.quietv.ui.DropdownMenu
 import io.github.nowaaak.quietv.ui.Palette
 import io.github.nowaaak.quietv.ui.ThemeColors
+import io.github.nowaaak.quietv.wallpaper.Scenes
 import io.github.nowaaak.quietv.wallpaper.WallpaperStore
 import java.util.Calendar
 import kotlin.math.abs
@@ -323,14 +326,15 @@ class MainActivity : Activity(), TileAdapter.Listener {
 
     private fun applyWallpaper() {
         val wallpapers = WallpaperStore(this)
-        if (!config.wallpaper.enabled || !wallpapers.exists()) {
+        val scene = config.wallpaper.scene.takeIf { Scenes.drawable(it) != null }
+        if (!config.wallpaper.enabled || (scene == null && !wallpapers.exists())) {
             wallpaperVersion = NO_WALLPAPER
             wallpaper.setImageDrawable(null)
             wallpaper.visibility = View.GONE
             scrim.visibility = View.GONE
             return
         }
-        val version = wallpapers.version()
+        val version = if (scene != null) SCENE_VERSION - WallpaperConfig.SCENES.indexOf(scene) else wallpapers.version()
         if (version == wallpaperVersion) {
             applyScrim()
             return
@@ -339,7 +343,11 @@ class MainActivity : Activity(), TileAdapter.Listener {
         val width = resources.displayMetrics.widthPixels
         val height = resources.displayMetrics.heightPixels
         Thread {
-            val bitmap = WallpaperStore.decode(wallpapers.file, width, height)
+            val bitmap = if (scene != null) {
+                Scenes.render(this, scene, width, height)
+            } else {
+                WallpaperStore.decode(wallpapers.file, width, height)
+            }
             val samples = bitmap?.let { WallpaperStore.samples(it) } ?: IntArray(0)
             runOnUiThread {
                 if (isDestroyed || wallpaperVersion != version) return@runOnUiThread
@@ -359,7 +367,15 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private fun applyScrim() {
         val texts = intArrayOf(palette.text, palette.textMuted, palette.textDim)
         val amount = Contrast.scrimFor(wallpaperSamples, texts, palette.background, config.wallpaper.dim / 100f)
-        scrim.setBackgroundColor(Contrast.withAlpha(palette.background, (amount * 255).roundToInt()))
+        val alpha = (amount * 255).roundToInt()
+        if (palette.glass) {
+            scrim.background = GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                GLASS_SCRIM.map { Contrast.withAlpha(palette.background, (alpha * it).roundToInt()) }.toIntArray(),
+            )
+        } else {
+            scrim.setBackgroundColor(Contrast.withAlpha(palette.background, alpha))
+        }
         scrim.visibility = View.VISIBLE
     }
 
@@ -421,8 +437,8 @@ class MainActivity : Activity(), TileAdapter.Listener {
         val r = Rect(0, 0, card.width, card.height)
         root.offsetDescendantRectToMyCoords(card, r)
         val pad = FocusRing.INSET_DP * density
-        val w = card.width * TileAdapter.FOCUS_SCALE + 2 * pad
-        val h = card.height * TileAdapter.FOCUS_SCALE + 2 * pad
+        val w = card.width * adapter.focusScale + 2 * pad
+        val h = card.height * adapter.focusScale + 2 * pad
         val x = r.exactCenterX() - w / 2f
         val y = r.exactCenterY() - h / 2f
 
@@ -431,7 +447,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
             lp.width = w.toInt()
             lp.height = h.toInt()
             ring.layoutParams = lp
-            ring.setRadius(tileRadius * TileAdapter.FOCUS_SCALE)
+            ring.setRadius(tileRadius * adapter.focusScale)
         }
         ringTargetY = y
         if (!ringShown) {
@@ -451,7 +467,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
             val decoratedTop = item.top - (6 * density).toInt()
             val dy = decoratedTop - grid.paddingTop
             if (abs(dy) > 1) grid.smoothScrollBy(0, dy)
-            showHero(position, (r.top - dy).toFloat())
+            if (!palette.glass) showHero(position, (r.top - dy).toFloat())
         } else {
             hideHero()
             val want = Rect(0, -(pad.toInt()) * 2, item.width, item.height + pad.toInt())
@@ -689,6 +705,8 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private companion object {
         const val MINUTE_MS = 60_000L
         const val NO_WALLPAPER = -1L
+        const val SCENE_VERSION = -10L
+        val GLASS_SCRIM = listOf(1f, 0.45f, 0.25f, 0.7f, 1f)
         const val STARTUP_WINDOW_MS = 5 * 60_000L
         const val KEY_CAP_RADIUS_DP = 5f
         const val PILL_RADIUS_DP = 999f

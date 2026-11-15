@@ -25,6 +25,7 @@ class FocusRing(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private val rect = RectF()
     private var accent = LauncherConfig.DEFAULT_ACCENT
     private var moving = false
+    private var onlyWhenMoving = false
     private var radius = 20f * density
 
     init {
@@ -39,6 +40,7 @@ class FocusRing(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     fun setPalette(palette: Palette) {
         gapPaint.color = if (palette.glass) Color.TRANSPARENT else palette.background
+        onlyWhenMoving = palette.glass
         movingColor = palette.text
         if (moving) rimPaint.color = movingColor
         invalidate()
@@ -56,6 +58,7 @@ class FocusRing(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     override fun onDraw(canvas: Canvas) {
+        if (onlyWhenMoving && !moving) return
         val inset = INSET_DP * density
         rect.set(inset, inset, width - inset, height - inset)
 

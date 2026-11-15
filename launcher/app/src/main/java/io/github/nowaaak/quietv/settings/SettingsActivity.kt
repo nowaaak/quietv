@@ -15,6 +15,7 @@ import io.github.nowaaak.quietv.config.ConfigStore
 import io.github.nowaaak.quietv.config.LauncherConfig
 import io.github.nowaaak.quietv.config.StartupConfig
 import io.github.nowaaak.quietv.config.ThemePreset
+import io.github.nowaaak.quietv.config.WallpaperConfig
 import io.github.nowaaak.quietv.firetv.HomeRedirectService
 import io.github.nowaaak.quietv.firetv.Platform
 import io.github.nowaaak.quietv.home.AppCatalog
@@ -22,6 +23,7 @@ import io.github.nowaaak.quietv.home.AppLauncher
 import io.github.nowaaak.quietv.home.Shortcuts
 import io.github.nowaaak.quietv.ui.Palette
 import io.github.nowaaak.quietv.ui.ThemeColors
+import io.github.nowaaak.quietv.wallpaper.Scenes
 import io.github.nowaaak.quietv.wallpaper.WallpaperStore
 
 class SettingsActivity : Activity() {
@@ -29,6 +31,7 @@ class SettingsActivity : Activity() {
     private lateinit var store: ConfigStore
     private lateinit var rows: LinearLayout
     private lateinit var palette: Palette
+    private var group: LinearLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         store = ConfigStore(this)
@@ -47,6 +50,7 @@ class SettingsActivity : Activity() {
 
     private fun render(focus: Int) {
         rows.removeAllViews()
+        group = null
         val config = store.load()
         val catalog = AppCatalog(this)
 
@@ -69,16 +73,24 @@ class SettingsActivity : Activity() {
             val next = TILE_RADII.firstOrNull { it > config.tileRadius } ?: TILE_RADII.first()
             store.update { it.copy(tileRadius = next) }
         }
-        if (WallpaperStore(this).exists()) {
-            val wallpaper = config.wallpaper
-            row(getString(R.string.settings_wallpaper), getString(if (wallpaper.enabled) R.string.on else R.string.off)) {
-                store.update { it.copy(wallpaper = it.wallpaper.copy(enabled = !it.wallpaper.enabled)) }
+        val wallpaper = config.wallpaper
+        val choices = backgroundChoices()
+        val current = currentBackground(wallpaper, choices)
+        row(getString(R.string.settings_background), backgroundName(current)) {
+            val next = choices[(choices.indexOf(current) + 1) % choices.size]
+            store.update {
+                it.copy(
+                    wallpaper = it.wallpaper.copy(
+                        enabled = next != BACKGROUND_COLOR,
+                        scene = if (next == BACKGROUND_IMAGE || next == BACKGROUND_COLOR) "" else next,
+                    ),
+                )
             }
-            if (wallpaper.enabled) {
-                row(getString(R.string.settings_wallpaper_dim), getString(R.string.percent, wallpaper.dim)) {
-                    val next = WALLPAPER_DIMS.firstOrNull { it > wallpaper.dim } ?: WALLPAPER_DIMS.first()
-                    store.update { it.copy(wallpaper = it.wallpaper.copy(dim = next)) }
-                }
+        }
+        if (current != BACKGROUND_COLOR) {
+            row(getString(R.string.settings_wallpaper_dim), getString(R.string.percent, wallpaper.dim)) {
+                val next = WALLPAPER_DIMS.firstOrNull { it > wallpaper.dim } ?: WALLPAPER_DIMS.first()
+                store.update { it.copy(wallpaper = it.wallpaper.copy(dim = next)) }
             }
         }
         row(getString(R.string.settings_columns), config.columns.toString()) {
@@ -131,7 +143,7 @@ class SettingsActivity : Activity() {
         }
         row(getString(R.string.settings_about), getString(R.string.settings_version, versionName()), focusable = false) {}
 
-        val focusable = (0 until rows.childCount).map { rows.getChildAt(it) }.filter { it.isFocusable }
+        val focusable = focusableRows()
         focusable.getOrNull(focus.coerceIn(0, (focusable.size - 1).coerceAtLeast(0)))?.requestFocus()
     }
 
@@ -140,6 +152,7 @@ class SettingsActivity : Activity() {
         view.setText(title)
         view.setTextColor(palette.textMuted)
         rows.addView(view)
+        group = if (palette.glass) glassGroup() else null
     }
 
     private fun row(
@@ -149,7 +162,8 @@ class SettingsActivity : Activity() {
         focusable: Boolean = true,
         action: () -> Unit,
     ) {
-        val view = layoutInflater.inflate(R.layout.item_setting, rows, false)
+        val parent = group ?: rows
+        val view = layoutInflater.inflate(R.layout.item_setting, parent, false)
         view.backgroundTintList = ThemeColors.rowBackground(palette)
         view.findViewById<TextView>(R.id.title).apply {
             text = title
@@ -173,11 +187,31 @@ class SettingsActivity : Activity() {
                 if (!isFinishing && !isDestroyed) render(index)
             }
         }
-        rows.addView(view)
+        parent.addView(view)
     }
 
-    private fun focusableIndex(view: View): Int =
-        (0 until rows.childCount).map { rows.getChildAt(it) }.filter { it.isFocusable }.indexOf(view)
+    private fun glassGroup(): LinearLayout {
+        val density = resources.displayMetrics.density
+        val radius = GROUP_RADIUS_DP * density
+        val padding = (GROUP_PADDING_DP * density).toInt()
+        return LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(padding, padding, padding, padding)
+            background = ThemeColors.card(palette, radius)
+            foreground = ThemeColors.outline(palette, radius, density.toInt().coerceAtLeast(1))
+            rows.addView(this)
+        }
+    }
+
+    private fun focusableRows(): List<View> = (0 until rows.childCount).map { rows.getChildAt(it) }.flatMap { child ->
+        if (child is LinearLayout && !child.isFocusable) {
+            (0 until child.childCount).map { child.getChildAt(it) }
+        } else {
+            listOf(child)
+        }
+    }.filter { it.isFocusable }
+
+    private fun focusableIndex(view: View): Int = focusableRows().indexOf(view)
 
     private fun themeName(config: LauncherConfig): String {
         val name = getString(
@@ -208,12 +242,36 @@ class SettingsActivity : Activity() {
         else -> getString(R.string.tile_round)
     }
 
+    private fun backgroundChoices(): List<String> {
+        val image = if (WallpaperStore(this).exists()) listOf(BACKGROUND_IMAGE) else emptyList()
+        return listOf(BACKGROUND_COLOR) + WallpaperConfig.SCENES + image
+    }
+
+    private fun currentBackground(wallpaper: WallpaperConfig, choices: List<String>): String {
+        val current = when {
+            !wallpaper.enabled -> BACKGROUND_COLOR
+            wallpaper.scene.isNotEmpty() -> wallpaper.scene
+            else -> BACKGROUND_IMAGE
+        }
+        return if (current in choices) current else BACKGROUND_COLOR
+    }
+
+    private fun backgroundName(choice: String): String = when (choice) {
+        BACKGROUND_COLOR -> getString(R.string.background_color)
+        BACKGROUND_IMAGE -> getString(R.string.background_image)
+        else -> Scenes.label(choice)?.let { getString(it) } ?: choice
+    }
+
     private fun versionName(): String = packageManager.getPackageInfo(packageName, 0).versionName.orEmpty()
 
     private companion object {
+        const val BACKGROUND_COLOR = "color"
+        const val BACKGROUND_IMAGE = "image"
         const val MIN_COLUMNS_ON_TV = 4
         const val MAX_COLUMNS_ON_TV = 6
         val TILE_RADII = intArrayOf(0, 6, 14, 22)
         val WALLPAPER_DIMS = intArrayOf(0, 15, 30, 45, 60)
+        const val GROUP_RADIUS_DP = 18f
+        const val GROUP_PADDING_DP = 5f
     }
 }
