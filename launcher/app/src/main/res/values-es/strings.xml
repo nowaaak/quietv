@@ -52,6 +52,7 @@
     <string name="scene_lake">Lago de montaña</string>
     <string name="scene_dunes">Dunas</string>
     <string name="scene_forest">Bosque</string>
+    <string name="scene_particles">Partículas de luz</string>
     <string name="settings_wallpaper_dim">Atenuación del fondo</string>
     <string name="settings_accent">Color de acento</string>
     <string name="picker_theme_title">Elegir un tema</string>

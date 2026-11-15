@@ -43,7 +43,8 @@ data class WallpaperConfig(
     companion object {
         const val DEFAULT_DIM = 30
         const val MAX_DIM = 80
-        val SCENES = listOf("mountains", "lake", "dunes", "forest")
+        const val PARTICLES = "particles"
+        val SCENES = listOf("mountains", "lake", "dunes", "forest", PARTICLES)
     }
 }
 

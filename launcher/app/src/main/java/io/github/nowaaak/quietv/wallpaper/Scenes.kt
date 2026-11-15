@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import io.github.nowaaak.quietv.R
+import io.github.nowaaak.quietv.config.WallpaperConfig
 
 object Scenes {
 
@@ -24,6 +25,7 @@ object Scenes {
         "lake" -> R.string.scene_lake
         "dunes" -> R.string.scene_dunes
         "forest" -> R.string.scene_forest
+        WallpaperConfig.PARTICLES -> R.string.scene_particles
         else -> null
     }
 
