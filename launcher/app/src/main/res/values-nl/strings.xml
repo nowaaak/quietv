@@ -52,6 +52,7 @@
     <string name="scene_lake">Bergmeer</string>
     <string name="scene_dunes">Duinen</string>
     <string name="scene_forest">Bos</string>
+    <string name="scene_particles">Lichtdeeltjes</string>
     <string name="settings_wallpaper_dim">Achtergrond dimmen</string>
     <string name="settings_accent">Accentkleur</string>
     <string name="picker_theme_title">Kies een thema</string>
