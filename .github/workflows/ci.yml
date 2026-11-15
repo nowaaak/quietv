@@ -43,6 +43,13 @@ jobs:
       - uses: android-actions/setup-android@v4
       - run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
       - uses: gradle/actions/setup-gradle@v6
+      # A fixed debug key, so a debug build can update the previous one on a TV without
+      # uninstalling. Without the secret (forks) Gradle makes a new key, as before.
+      - name: Fixed debug key
+        env:
+          DEBUG_KEYSTORE: ${{ secrets.QUIETV_DEBUG_KEYSTORE_BASE64 }}
+        if: env.DEBUG_KEYSTORE != ''
+        run: mkdir -p ~/.android && echo "$DEBUG_KEYSTORE" | base64 -d > ~/.android/debug.keystore
       - run: ./gradlew lint testDebugUnitTest assembleDebug --console=plain
       - uses: actions/upload-artifact@v7
         if: always()
