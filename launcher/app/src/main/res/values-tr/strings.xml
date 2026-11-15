@@ -38,6 +38,7 @@
     <string name="theme_slate">Arduvaz</string>
     <string name="theme_forest">Orman</string>
     <string name="theme_sand">Kum</string>
+    <string name="theme_glass">Cam</string>
     <string name="theme_custom">%1$s, özel</string>
     <string name="settings_tile_shape">Kutucuk köşeleri</string>
     <string name="tile_square">Köşeli</string>

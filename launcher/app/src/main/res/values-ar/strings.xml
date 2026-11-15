@@ -38,6 +38,7 @@
     <string name="theme_slate">أردواز</string>
     <string name="theme_forest">غابة</string>
     <string name="theme_sand">رمل</string>
+    <string name="theme_glass">زجاج</string>
     <string name="theme_custom">%1$s، مخصصة</string>
     <string name="settings_tile_shape">زوايا المربعات</string>
     <string name="tile_square">حادة</string>

@@ -5,6 +5,12 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+
+- Theme `glass`: dark, with translucent tiles, buttons and search field, a soft sheen and light edges over a
+  blue to violet gradient. Drawn once, without blur or animation. Pick it in Settings or with
+  `quietv theme apply glass`.
+
 ## [0.9.1] - 2026-11-12
 
 ### Fixed

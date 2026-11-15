@@ -38,6 +38,7 @@
     <string name="theme_slate">Ardoise</string>
     <string name="theme_forest">Forêt</string>
     <string name="theme_sand">Sable</string>
+    <string name="theme_glass">Verre</string>
     <string name="theme_custom">%1$s, personnalisé</string>
     <string name="settings_tile_shape">Coins des tuiles</string>
     <string name="tile_square">Carrés</string>

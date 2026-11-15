@@ -41,7 +41,7 @@ class SearchActivity : Activity() {
         apps = AppCatalog(this).load(config, store.tileOrder).filter { !it.isStockHome }.sortedBy { it.label.lowercase() }
 
         val query = findViewById<EditText>(R.id.query)
-        query.backgroundTintList = ColorStateList.valueOf(palette.surface)
+        query.backgroundTintList = ColorStateList.valueOf(ThemeColors.surfaceFill(palette))
         query.setTextColor(palette.text)
         query.setHintTextColor(palette.textMuted)
         query.addTextChangedListener(object : TextWatcher {

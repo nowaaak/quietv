@@ -102,11 +102,11 @@ class TileAdapter(
         val dimText = palette.textDim
 
         init {
-            card.background = ThemeColors.rounded(palette.surface, cornerRadius)
+            card.background = ThemeColors.card(palette, cornerRadius)
             card.foreground = ThemeColors.rounded(
                 Color.TRANSPARENT,
                 cornerRadius,
-                palette.stroke,
+                ThemeColors.edge(palette),
                 density.toInt().coerceAtLeast(1),
             )
             label.setTextColor(palette.text)

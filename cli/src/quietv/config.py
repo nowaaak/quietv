@@ -42,7 +42,7 @@ LEGACY_REDIRECT_KEYS = {
     "showStockHomeTile": "showStockHomeTile",
 }
 COMPANION_KEYS = {"mode", "host", "port", "token"}
-THEMES = ("graphite", "paper", "midnight", "slate", "forest", "sand")
+THEMES = ("graphite", "paper", "midnight", "slate", "forest", "sand", "glass")
 LEGACY_THEMES = ("dark", "light")
 COLOR_KEYS = ("background", "surface", "text", "textMuted", "line")
 WALLPAPER_KEYS = {"enabled", "dim"}

@@ -43,6 +43,7 @@
     <string name="theme_slate">Slate</string>
     <string name="theme_forest">Forest</string>
     <string name="theme_sand">Sand</string>
+    <string name="theme_glass">Glass</string>
     <string name="theme_custom">%1$s, custom</string>
     <string name="settings_tile_shape">Tile corners</string>
     <string name="tile_square">Square</string>

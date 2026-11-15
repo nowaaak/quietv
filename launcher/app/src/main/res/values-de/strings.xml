@@ -41,6 +41,7 @@
     <string name="theme_slate">Schiefer</string>
     <string name="theme_forest">Wald</string>
     <string name="theme_sand">Sand</string>
+    <string name="theme_glass">Glas</string>
     <string name="theme_custom">%1$s, angepasst</string>
     <string name="settings_tile_shape">Kachelecken</string>
     <string name="tile_square">Eckig</string>

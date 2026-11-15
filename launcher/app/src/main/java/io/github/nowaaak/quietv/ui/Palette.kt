@@ -11,6 +11,9 @@ data class Palette(
     val textMuted: Int,
     val textDim: Int,
     val line: Int,
+    val glass: Boolean = false,
+    val backgroundEnd: Int = background,
+    val glow: Int = 0,
 ) {
     val stroke: Int get() = Contrast.withAlpha(text, if (light) 0x1A else 0x14)
     val onText: Int get() = background
@@ -34,6 +37,9 @@ data class Palette(
                 textMuted = muted ?: theme.textMuted,
                 textDim = muted ?: theme.textDim,
                 line = colors[LauncherConfig.COLOR_LINE] ?: theme.line,
+                glass = theme.glass,
+                backgroundEnd = if (LauncherConfig.COLOR_BACKGROUND in colors) background else theme.backgroundEnd,
+                glow = theme.glow,
             )
         }
 

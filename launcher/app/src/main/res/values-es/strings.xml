@@ -38,6 +38,7 @@
     <string name="theme_slate">Pizarra</string>
     <string name="theme_forest">Bosque</string>
     <string name="theme_sand">Arena</string>
+    <string name="theme_glass">Cristal</string>
     <string name="theme_custom">%1$s, personalizado</string>
     <string name="settings_tile_shape">Esquinas de los mosaicos</string>
     <string name="tile_square">Rectas</string>

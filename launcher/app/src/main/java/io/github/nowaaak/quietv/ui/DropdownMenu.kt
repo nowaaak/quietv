@@ -31,7 +31,7 @@ class DropdownMenu(
         panel.background = ThemeColors.rounded(
             palette.surface,
             PANEL_RADIUS_DP * density,
-            palette.stroke,
+            ThemeColors.edge(palette),
             density.toInt().coerceAtLeast(1),
         )
     }
