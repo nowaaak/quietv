@@ -4,10 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Outline
 import android.os.Bundle
 import android.provider.Settings
+import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -23,19 +26,34 @@ import io.github.nowaaak.quietv.firetv.Platform
 import io.github.nowaaak.quietv.home.AppCatalog
 import io.github.nowaaak.quietv.home.AppLauncher
 import io.github.nowaaak.quietv.home.Shortcuts
+import io.github.nowaaak.quietv.ui.Contrast
 import io.github.nowaaak.quietv.ui.Palette
 import io.github.nowaaak.quietv.ui.ThemeColors
 import io.github.nowaaak.quietv.ui.ThemePreview
 import io.github.nowaaak.quietv.wallpaper.Scenes
 import io.github.nowaaak.quietv.wallpaper.WallpaperStore
 
+/**
+ * Categories on the left, the settings of the focused one on the right. Moving through the
+ * categories shows their settings right away. Right or OK goes into them, Left or Back comes back.
+ */
 class SettingsActivity : Activity() {
 
+    private enum class Category(val title: Int) {
+        APPEARANCE(R.string.settings_appearance),
+        APPS(R.string.settings_apps),
+        REMOTE(R.string.settings_remote),
+        HOME_BUTTON(R.string.settings_home_button),
+        SYSTEM(R.string.settings_system),
+    }
+
     private lateinit var store: ConfigStore
-    private lateinit var rows: LinearLayout
     private lateinit var palette: Palette
+    private lateinit var categoryList: LinearLayout
+    private lateinit var rows: LinearLayout
+    private val categoryViews = LinkedHashMap<Category, View>()
+    private var category = Category.APPEARANCE
     private var group: LinearLayout? = null
-    private lateinit var preview: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         store = ConfigStore(this)
@@ -43,36 +61,125 @@ class SettingsActivity : Activity() {
         ThemeColors.apply(this, palette)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+        categoryList = findViewById(R.id.categories)
         rows = findViewById(R.id.rows)
-        preview = findViewById(R.id.preview)
         findViewById<TextView>(R.id.title).setTextColor(palette.text)
         findViewById<TextView>(R.id.subtitle).apply {
             text = getString(R.string.settings_version, versionName())
             setTextColor(palette.textMuted)
         }
-        val density = resources.displayMetrics.density
-        preview.outlineProvider = object : ViewOutlineProvider() {
-            override fun getOutline(view: View, outline: Outline) {
-                outline.setRoundRect(0, 0, view.width, view.height, PREVIEW_RADIUS_DP * density)
-            }
-        }
-        preview.clipToOutline = true
     }
 
     override fun onResume() {
         super.onResume()
-        render(focus = 0)
+        buildCategories()
+        render(focus = NO_FOCUS)
+        categoryViews[category]?.requestFocus()
     }
 
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_DPAD_LEFT && inContent(currentFocus)) {
+            categoryViews[category]?.requestFocus()
+            return true
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (inContent(currentFocus)) {
+            categoryViews[category]?.requestFocus()
+        } else {
+            @Suppress("DEPRECATION")
+            super.onBackPressed()
+        }
+    }
+
+    private fun buildCategories() {
+        categoryList.removeAllViews()
+        categoryViews.clear()
+        val config = store.load()
+        val available = Category.entries.filter {
+            it != Category.HOME_BUTTON || Platform.isFireOs(this) || config.homeRedirect.stockHomePackage.isNotEmpty()
+        }
+        if (category !in available) category = Category.APPEARANCE
+        val focusedSelectedDefault = arrayOf(
+            intArrayOf(android.R.attr.state_focused),
+            intArrayOf(android.R.attr.state_selected),
+            intArrayOf(),
+        )
+        for (entry in available) {
+            val view = layoutInflater.inflate(R.layout.item_setting, categoryList, false)
+            view.backgroundTintList = ColorStateList(
+                focusedSelectedDefault,
+                intArrayOf(palette.text, Contrast.withAlpha(palette.text, SELECTED_ALPHA), Color.TRANSPARENT),
+            )
+            view.findViewById<TextView>(R.id.title).apply {
+                setText(entry.title)
+                setTextColor(ColorStateList(focusedSelectedDefault, intArrayOf(palette.onText, palette.text, palette.textMuted)))
+            }
+            view.findViewById<View>(R.id.value).visibility = View.GONE
+            view.findViewById<View>(R.id.swatch).visibility = View.GONE
+            view.isSelected = entry == category
+            view.setOnFocusChangeListener { _, focused ->
+                if (focused && category != entry) {
+                    category = entry
+                    categoryViews.forEach { (key, v) -> v.isSelected = key == entry }
+                    render(focus = NO_FOCUS)
+                }
+            }
+            view.setOnClickListener { render(focus = 0) }
+            view.setOnKeyListener { _, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT && event.action == KeyEvent.ACTION_DOWN) {
+                    focusableRows().firstOrNull()?.requestFocus()
+                    true
+                } else {
+                    false
+                }
+            }
+            categoryViews[entry] = view
+            categoryList.addView(view)
+        }
+    }
+
+    /** Shows the settings of the current category, and focuses the row at [focus] unless it is [NO_FOCUS]. */
     private fun render(focus: Int) {
         rows.removeAllViews()
         group = null
         val config = store.load()
-        val catalog = AppCatalog(this)
-        // The picture on the left follows every change to theme, accent colour and tile corners.
-        preview.setImageDrawable(ThemePreview(palette, config.accent, config.tileRadius))
+        when (category) {
+            Category.APPEARANCE -> appearance(config)
+            Category.APPS -> apps(config)
+            Category.REMOTE -> remote(config)
+            Category.HOME_BUTTON -> homeButton()
+            Category.SYSTEM -> system(config)
+        }
+        if (focus == NO_FOCUS) return
+        val focusable = focusableRows()
+        focusable.getOrNull(focus.coerceIn(0, (focusable.size - 1).coerceAtLeast(0)))?.requestFocus()
+    }
 
-        section(R.string.settings_appearance)
+    private fun appearance(config: LauncherConfig) {
+        // A picture of the home screen that follows every change to theme, accent colour and tile corners.
+        val density = resources.displayMetrics.density
+        val preview = ImageView(this).apply {
+            scaleType = ImageView.ScaleType.FIT_XY
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            setImageDrawable(ThemePreview(palette, config.accent, config.tileRadius))
+            outlineProvider = object : ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: Outline) {
+                    outline.setRoundRect(0, 0, view.width, view.height, PREVIEW_RADIUS_DP * density)
+                }
+            }
+            clipToOutline = true
+        }
+        rows.addView(
+            preview,
+            LinearLayout.LayoutParams((PREVIEW_WIDTH_DP * density).toInt(), (PREVIEW_HEIGHT_DP * density).toInt()).apply {
+                bottomMargin = (PREVIEW_GAP_DP * density).toInt()
+            },
+        )
+
         row(getString(R.string.settings_theme), themeName(config), rerender = false) { anchor ->
             ThemePicker(this, palette, config) { next ->
                 store.update {
@@ -138,8 +245,10 @@ class SettingsActivity : Activity() {
             val next = if (config.columns >= MAX_COLUMNS_ON_TV) MIN_COLUMNS_ON_TV else config.columns + 1
             store.update { it.copy(columns = next) }
         }
+    }
 
-        section(R.string.settings_apps)
+    private fun apps(config: LauncherConfig) {
+        val catalog = AppCatalog(this)
         row(getString(R.string.settings_reset_order), null) {
             store.tileOrder = emptyList()
             Toast.makeText(this, R.string.settings_order_reset, Toast.LENGTH_SHORT).show()
@@ -149,11 +258,11 @@ class SettingsActivity : Activity() {
                 store.update { it.copy(hidden = it.hidden - pkg) }
             }
         }
+    }
 
-        section(R.string.settings_remote)
-        if (config.shortcuts.isEmpty()) {
-            row(getString(R.string.settings_shortcut_hint), null, focusable = false) {}
-        }
+    private fun remote(config: LauncherConfig) {
+        val catalog = AppCatalog(this)
+        if (config.shortcuts.isEmpty()) hint(getString(R.string.settings_shortcut_hint))
         for (key in LauncherConfig.SHORTCUT_KEYS.filter { it in config.shortcuts }) {
             val pkg = config.shortcuts.getValue(key)
             val title = getString(R.string.settings_shortcut, Shortcuts.label(this, key), catalog.label(pkg))
@@ -161,19 +270,19 @@ class SettingsActivity : Activity() {
                 store.update { it.copy(shortcuts = it.shortcuts - key) }
             }
         }
+    }
 
-        if (Platform.isFireOs(this) || config.homeRedirect.stockHomePackage.isNotEmpty()) {
-            section(R.string.settings_home_button)
-            val on = Platform.redirectServiceEnabled(this)
-            row(getString(R.string.settings_home_redirect), getString(if (on) R.string.on else R.string.off)) {
-                AppLauncher.start(this, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-            }
+    private fun homeButton() {
+        val on = Platform.redirectServiceEnabled(this)
+        row(getString(R.string.settings_home_redirect), getString(if (on) R.string.on else R.string.off)) {
+            AppLauncher.start(this, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
         }
+    }
 
-        section(R.string.settings_system)
+    private fun system(config: LauncherConfig) {
         val startup = config.startup
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_LIVE_TV) || startup != StartupConfig()) {
-            row(getString(R.string.settings_startup), startupName(startup, catalog)) {
+            row(getString(R.string.settings_startup), startupName(startup, AppCatalog(this))) {
                 val next = if (startup == StartupConfig()) StartupConfig(input = StartupConfig.LAST_INPUT) else StartupConfig()
                 store.update { it.copy(startup = next) }
             }
@@ -183,19 +292,21 @@ class SettingsActivity : Activity() {
             AppLauncher.start(this, Intent(Settings.ACTION_SETTINGS))
         }
         row(getString(R.string.settings_about), getString(R.string.settings_version, versionName()), focusable = false) {}
-
-        val focusable = focusableRows()
-        focusable.getOrNull(focus.coerceIn(0, (focusable.size - 1).coerceAtLeast(0)))?.requestFocus()
     }
 
-    private fun section(title: Int) {
-        val view = layoutInflater.inflate(R.layout.item_settings_section, rows, false) as TextView
-        view.setText(title)
-        view.setTextColor(palette.textMuted)
-        // The list already starts below the top padding, so the first heading needs no more.
-        if (rows.childCount == 0) view.setPadding(view.paddingLeft, 0, view.paddingRight, view.paddingBottom)
-        rows.addView(view)
-        group = card()
+    /** A note in muted text, not a row: nothing to press. */
+    private fun hint(text: String) {
+        val density = resources.displayMetrics.density
+        val padding = (HINT_PADDING_DP * density).toInt()
+        val view = TextView(this).apply {
+            this.text = text
+            setTextColor(palette.textMuted)
+            textSize = HINT_SP
+            typeface = resources.getFont(R.font.geist)
+            setPadding(padding, 0, padding, padding)
+        }
+        rows.addView(view, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+        group = null
     }
 
     private fun row(
@@ -206,7 +317,7 @@ class SettingsActivity : Activity() {
         rerender: Boolean = true,
         action: (View) -> Unit,
     ) {
-        val parent = group ?: rows
+        val parent = group ?: card().also { group = it }
         val view = layoutInflater.inflate(R.layout.item_setting, parent, false)
         view.backgroundTintList = ThemeColors.rowBackground(palette)
         view.findViewById<TextView>(R.id.title).apply {
@@ -234,7 +345,7 @@ class SettingsActivity : Activity() {
         parent.addView(view)
     }
 
-    /** Rows of one section sit on a card: a glass card on Glass, the theme's surface colour otherwise. */
+    /** Rows sit on a card: a glass card on Glass, the theme's surface colour otherwise. */
     private fun card(): LinearLayout {
         val density = resources.displayMetrics.density
         val radius = GROUP_RADIUS_DP * density
@@ -250,6 +361,15 @@ class SettingsActivity : Activity() {
             }
             rows.addView(this)
         }
+    }
+
+    private fun inContent(view: View?): Boolean {
+        var current: View? = view
+        while (current != null) {
+            if (current === rows) return true
+            current = current.parent as? View
+        }
+        return false
     }
 
     private fun focusableRows(): List<View> = (0 until rows.childCount).map { rows.getChildAt(it) }.flatMap { child ->
@@ -306,10 +426,17 @@ class SettingsActivity : Activity() {
     companion object {
         const val BACKGROUND_COLOR = "color"
         const val BACKGROUND_IMAGE = "image"
+        private const val NO_FOCUS = -1
         private const val MIN_COLUMNS_ON_TV = 4
         private const val MAX_COLUMNS_ON_TV = 6
         private const val GROUP_RADIUS_DP = 18f
         private const val GROUP_PADDING_DP = 5f
         private const val PREVIEW_RADIUS_DP = 14f
+        private const val PREVIEW_WIDTH_DP = 320f
+        private const val PREVIEW_HEIGHT_DP = 180f
+        private const val PREVIEW_GAP_DP = 24f
+        private const val SELECTED_ALPHA = 0x1F
+        private const val HINT_PADDING_DP = 20f
+        private const val HINT_SP = 15f
     }
 }
