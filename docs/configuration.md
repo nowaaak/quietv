@@ -43,7 +43,7 @@ More in [examples/](examples/).
 | `tileRadius` | `14` | Tile corner radius in dp, 0 (square) to 24. |
 | `wallpaper.enabled` | `false` | Show the wallpaper image. Set one with `quietv theme wallpaper`. Without an image this does nothing. |
 | `wallpaper.scene` | `""` | A built-in landscape instead of your picture: `"mountains"`, `"lake"`, `"dunes"` or `"forest"`. Needs `wallpaper.enabled`. Empty shows the picture set with `quietv theme wallpaper`. |
-| `wallpaper.dim` | `30` | How much the wallpaper is darkened (or lightened on a light theme), 0 to 80 percent. quietv dims more if text would be hard to read. |
+| `wallpaper.dim` | `30` | How much the wallpaper is darkened (or lightened on a light theme), 0 to 80 percent. quietv dims more if text would be hard to read. On Glass that applies only behind the clock and the tiles, the middle of the screen follows this value alone. |
 | `liveTvPackage` | `""` | The TV's tuner app, offered at the end of the Inputs menu. Empty hides the entry. HDMI entries open in this app first, so no "Open with" choice appears. |
 | `inputsKey` | `false` | Answer the remote's Input key with the quietv Inputs menu. For TVs whose Input key does nothing once the stock launcher is disabled. |
 | `homeRedirect.enabled` | `true` | Open quietv when the stock home appears. Only acts if the accessibility service is on, see [fire-tv.md](fire-tv.md) and [google-tv.md](google-tv.md). |

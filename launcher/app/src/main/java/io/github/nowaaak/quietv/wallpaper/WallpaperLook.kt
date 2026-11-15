@@ -20,23 +20,30 @@ object WallpaperLook {
     fun dim(bitmap: Bitmap, palette: Palette, dimPercent: Int): Bitmap {
         val samples = WallpaperStore.samples(bitmap)
         val texts = intArrayOf(palette.text, palette.textMuted, palette.textDim)
-        val amount = Contrast.scrimFor(samples, texts, palette.background, dimPercent / 100f)
-        val alpha = (amount * 255).roundToInt()
+        val dim = dimPercent / 100f
+        // What the text needs to stay readable on this picture. On a bright picture this is more
+        // than any dimming setting, so it may only decide where text actually is.
+        val readable = Contrast.scrimFor(samples, texts, palette.background, dim)
         val target = if (bitmap.isMutable) bitmap else bitmap.copy(Bitmap.Config.ARGB_8888, true)
         val w = target.width.toFloat()
         val h = target.height.toFloat()
         val paint = Paint()
         if (palette.glass) {
-            // Strong behind the clock and the tiles, light in the middle, so the picture shows.
-            val colors = GLASS_SCRIM.map { Contrast.withAlpha(palette.background, (alpha * it).roundToInt()) }
+            // Readable behind the clock and the tiles. In the middle, where only the picture is,
+            // the dimming setting decides, so the slider always visibly changes the picture.
+            val colors = GLASS_TEXT_WEIGHT.map { weight ->
+                val amount = dim + (readable - dim) * weight
+                Contrast.withAlpha(palette.background, (amount * 255).roundToInt())
+            }
             paint.shader = LinearGradient(0f, 0f, 0f, h, colors.toIntArray(), null, Shader.TileMode.CLAMP)
             paint.isDither = true
         } else {
-            paint.color = Contrast.withAlpha(palette.background, alpha)
+            paint.color = Contrast.withAlpha(palette.background, (readable * 255).roundToInt())
         }
         Canvas(target).drawRect(0f, 0f, w, h, paint)
         return target
     }
 
-    private val GLASS_SCRIM = listOf(1f, 0.45f, 0.25f, 0.7f, 1f)
+    // How much each band, top to bottom, needs readable text: clock, sky, middle, tile names, tiles.
+    private val GLASS_TEXT_WEIGHT = listOf(1f, 0.45f, 0f, 0.7f, 1f)
 }

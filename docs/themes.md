@@ -79,7 +79,8 @@ the TV. The picture is copied to the launcher's private storage. It never leaves
 quietv lays a layer of the theme's background colour over the picture. `--dim` sets how strong it
 is. If the picture is too bright behind the clock and the labels, quietv makes the layer stronger
 until all text is readable. A few bright spots do not count, so a mostly dark photo keeps your
-setting.
+setting. On Glass this only applies where text is, behind the clock and the tiles: in the
+middle of the screen, where there is only the picture, `--dim` alone decides, so it always shows.
 
 ## Background
 
