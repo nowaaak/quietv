@@ -1,6 +1,6 @@
 # Themes
 
-quietv comes with six themes. Pick one on the TV (Settings, Theme) or from your computer:
+quietv comes with seven themes. Pick one on the TV (Settings, Theme) or from your computer:
 
 ```bash
 quietv theme list
@@ -15,6 +15,7 @@ quietv theme apply midnight
 | `slate` | Dark blue grey |
 | `forest` | Dark green |
 | `sand` | Light, beige |
+| `glass` | Dark, translucent tiles and buttons with a soft sheen over a blue to violet gradient |
 
 Switching themes keeps your accent colour. Between a dark and a light theme it picks the matching
 shade of the same colour.

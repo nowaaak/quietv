@@ -188,6 +188,7 @@ class SettingsActivity : Activity() {
                 ThemePreset.SLATE -> R.string.theme_slate
                 ThemePreset.FOREST -> R.string.theme_forest
                 ThemePreset.SAND -> R.string.theme_sand
+                ThemePreset.GLASS -> R.string.theme_glass
             },
         )
         return if (config.colors.isEmpty()) name else getString(R.string.theme_custom, name)

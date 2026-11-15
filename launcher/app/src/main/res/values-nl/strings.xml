@@ -38,6 +38,7 @@
     <string name="theme_slate">Leisteen</string>
     <string name="theme_forest">Bos</string>
     <string name="theme_sand">Zand</string>
+    <string name="theme_glass">Glas</string>
     <string name="theme_custom">%1$s, aangepast</string>
     <string name="settings_tile_shape">Hoeken van tegels</string>
     <string name="tile_square">Hoekig</string>

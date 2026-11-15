@@ -9,6 +9,9 @@ enum class ThemePreset(
     val textMuted: Int,
     val textDim: Int,
     val line: Int,
+    val glass: Boolean = false,
+    val backgroundEnd: Int = background,
+    val glow: Int = 0,
 ) {
     GRAPHITE(
         "graphite", false,
@@ -39,6 +42,14 @@ enum class ThemePreset(
         "sand", true,
         0xFFF2ECE2.toInt(), 0xFFFFFCF5.toInt(), 0xFF2A231B.toInt(),
         0xFF685C4E.toInt(), 0xFF6F6355.toInt(), 0xFFDAD0C0.toInt(),
+    ),
+    GLASS(
+        "glass", false,
+        0xFF0C1022.toInt(), 0xFF1F2440.toInt(), 0xFFF5F7FB.toInt(),
+        0xFFAEB6CC.toInt(), 0xFF9AA3BB.toInt(), 0xFF343B5C.toInt(),
+        glass = true,
+        backgroundEnd = 0xFF1A1233.toInt(),
+        glow = 0x553D5AFE,
     ),
     ;
 

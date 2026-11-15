@@ -38,6 +38,7 @@
     <string name="theme_slate">Сланец</string>
     <string name="theme_forest">Лес</string>
     <string name="theme_sand">Песок</string>
+    <string name="theme_glass">Стекло</string>
     <string name="theme_custom">%1$s, своя</string>
     <string name="settings_tile_shape">Углы плиток</string>
     <string name="tile_square">Прямые</string>

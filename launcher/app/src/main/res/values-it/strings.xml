@@ -38,6 +38,7 @@
     <string name="theme_slate">Ardesia</string>
     <string name="theme_forest">Foresta</string>
     <string name="theme_sand">Sabbia</string>
+    <string name="theme_glass">Vetro</string>
     <string name="theme_custom">%1$s, personalizzato</string>
     <string name="settings_tile_shape">Angoli dei riquadri</string>
     <string name="tile_square">Squadrati</string>

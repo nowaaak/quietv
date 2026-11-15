@@ -38,6 +38,7 @@
     <string name="theme_slate">Ardósia</string>
     <string name="theme_forest">Floresta</string>
     <string name="theme_sand">Areia</string>
+    <string name="theme_glass">Vidro</string>
     <string name="theme_custom">%1$s, personalizado</string>
     <string name="settings_tile_shape">Cantos dos mosaicos</string>
     <string name="tile_square">Retos</string>

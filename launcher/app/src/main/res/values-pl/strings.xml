@@ -38,6 +38,7 @@
     <string name="theme_slate">Łupek</string>
     <string name="theme_forest">Las</string>
     <string name="theme_sand">Piasek</string>
+    <string name="theme_glass">Szkło</string>
     <string name="theme_custom">%1$s, własny</string>
     <string name="settings_tile_shape">Narożniki kafelków</string>
     <string name="tile_square">Proste</string>

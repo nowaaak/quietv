@@ -2,6 +2,7 @@ package io.github.nowaaak.quietv.home
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
@@ -37,7 +38,7 @@ class FocusRing(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     fun setPalette(palette: Palette) {
-        gapPaint.color = palette.background
+        gapPaint.color = if (palette.glass) Color.TRANSPARENT else palette.background
         movingColor = palette.text
         if (moving) rimPaint.color = movingColor
         invalidate()
