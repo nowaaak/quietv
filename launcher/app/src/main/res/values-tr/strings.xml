@@ -33,10 +33,6 @@
     <string name="settings_appearance">Görünüm</string>
     <string name="settings_theme">Tema</string>
     <string name="theme_graphite">Grafit</string>
-    <string name="theme_paper">Kâğıt</string>
-    <string name="theme_midnight">Gece yarısı</string>
-    <string name="theme_slate">Arduvaz</string>
-    <string name="theme_forest">Orman</string>
     <string name="theme_sand">Kum</string>
     <string name="theme_glass">Cam</string>
     <string name="theme_custom">%1$s, özel</string>
@@ -58,9 +54,11 @@
     <string name="picker_accent_title">Vurgu rengi seçin</string>
     <string name="picker_hint">Seçmek için OK, iptal için Geri</string>
     <string name="accent_custom">Özel renk</string>
-    <string name="accent_hue">Ton</string>
-    <string name="accent_saturation">Doygunluk</string>
-    <string name="accent_brightness">Parlaklık</string>
+    <string name="accent_red">Kırmızı</string>
+    <string name="accent_green">Yeşil</string>
+    <string name="accent_blue">Mavi</string>
+    <string name="picker_slider_hint">Sol ve sağ değiştirir, OK seçer, Geri iptal eder</string>
+    <string name="tile_radius">Yarıçap</string>
     <string name="accent_apply">Bu rengi kullan</string>
     <string name="accent_low_contrast">Bu temada zor görünür</string>
     <string name="settings_columns">Satır başına kutucuk</string>

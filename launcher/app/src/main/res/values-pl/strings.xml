@@ -33,10 +33,6 @@
     <string name="settings_appearance">Wygląd</string>
     <string name="settings_theme">Motyw</string>
     <string name="theme_graphite">Grafit</string>
-    <string name="theme_paper">Papier</string>
-    <string name="theme_midnight">Północ</string>
-    <string name="theme_slate">Łupek</string>
-    <string name="theme_forest">Las</string>
     <string name="theme_sand">Piasek</string>
     <string name="theme_glass">Szkło</string>
     <string name="theme_custom">%1$s, własny</string>
@@ -58,9 +54,11 @@
     <string name="picker_accent_title">Wybierz kolor akcentu</string>
     <string name="picker_hint">OK wybiera, Wstecz anuluje</string>
     <string name="accent_custom">Własny kolor</string>
-    <string name="accent_hue">Odcień</string>
-    <string name="accent_saturation">Nasycenie</string>
-    <string name="accent_brightness">Jasność</string>
+    <string name="accent_red">Czerwony</string>
+    <string name="accent_green">Zielony</string>
+    <string name="accent_blue">Niebieski</string>
+    <string name="picker_slider_hint">Lewo i prawo zmieniają, OK wybiera, Wstecz anuluje</string>
+    <string name="tile_radius">Promień</string>
     <string name="accent_apply">Użyj tego koloru</string>
     <string name="accent_low_contrast">Słabo widoczny w tym motywie</string>
     <string name="settings_columns">Kafelki w rzędzie</string>

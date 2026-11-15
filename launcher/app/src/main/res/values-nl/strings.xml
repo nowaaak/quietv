@@ -33,10 +33,6 @@
     <string name="settings_appearance">Weergave</string>
     <string name="settings_theme">Thema</string>
     <string name="theme_graphite">Grafiet</string>
-    <string name="theme_paper">Papier</string>
-    <string name="theme_midnight">Middernacht</string>
-    <string name="theme_slate">Leisteen</string>
-    <string name="theme_forest">Bos</string>
     <string name="theme_sand">Zand</string>
     <string name="theme_glass">Glas</string>
     <string name="theme_custom">%1$s, aangepast</string>
@@ -58,9 +54,11 @@
     <string name="picker_accent_title">Kies een accentkleur</string>
     <string name="picker_hint">OK om te kiezen, Terug om te annuleren</string>
     <string name="accent_custom">Eigen kleur</string>
-    <string name="accent_hue">Tint</string>
-    <string name="accent_saturation">Verzadiging</string>
-    <string name="accent_brightness">Helderheid</string>
+    <string name="accent_red">Rood</string>
+    <string name="accent_green">Groen</string>
+    <string name="accent_blue">Blauw</string>
+    <string name="picker_slider_hint">Links en rechts wijzigen, OK kiest, Terug annuleert</string>
+    <string name="tile_radius">Straal</string>
     <string name="accent_apply">Deze kleur gebruiken</string>
     <string name="accent_low_contrast">Slecht zichtbaar bij dit thema</string>
     <string name="settings_columns">Tegels per rij</string>

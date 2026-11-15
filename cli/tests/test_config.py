@@ -31,7 +31,7 @@ def test_valid_config_has_no_problems():
     assert config.validate(EXAMPLE) == []
     assert config.validate({}) == []
     appearance = {
-        "theme": "midnight",
+        "theme": "graphite",
         "colors": {"background": "#000000", "textMuted": "#A1A1A8"},
         "tileRadius": 0,
         "wallpaper": {"enabled": True, "dim": 80, "scene": "forest"},

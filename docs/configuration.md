@@ -38,7 +38,7 @@ More in [examples/](examples/).
 | `extraApps` | `[]` | Apps without a TV launcher entry to show anyway, such as Silk on Fire TV. Favourites are added automatically. |
 | `columns` | `5` | Tiles per row, 3 to 8. The tiles shrink to fit. |
 | `accent` | `"#6EE7B7"` | Focus ring, status dots and the "Selected" label, as `#RRGGBB`. |
-| `theme` | `"graphite"` | A bundled theme: `"graphite"`, `"paper"`, `"midnight"`, `"slate"`, `"forest"`, `"sand"` or `"glass"`. `"dark"` and `"light"` still work and mean Graphite and Paper. |
+| `theme` | `"graphite"` | A bundled theme: `"graphite"`, `"sand"` or `"glass"`. Older names still work: `"dark"`, `"midnight"`, `"slate"` and `"forest"` mean Graphite, `"light"` and `"paper"` mean Sand. |
 | `colors` | `{}` | Your own colours on top of the theme, each as `#RRGGBB`: `background`, `surface` (tiles, menus), `text`, `textMuted` (clock date, hints, labels) and `line`. Leave a key out to keep the theme's colour. See [themes.md](themes.md). |
 | `tileRadius` | `14` | Tile corner radius in dp, 0 (square) to 24. |
 | `wallpaper.enabled` | `false` | Show the wallpaper image. Set one with `quietv theme wallpaper`. Without an image this does nothing. |

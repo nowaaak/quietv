@@ -5,16 +5,28 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Removed
+
+- Themes Paper, Midnight, Slate and Forest. Configs and theme files that name them keep working:
+  `paper` (and `light`) become Sand, `midnight`, `slate` and `forest` become Graphite.
+
 ### Changed
 
 - Theme `glass` is now a neutral graphite: near black with a soft white light at the top left, grey
-  surfaces and lines, instead of indigo and violet. The light particles follow it and drift in white
-  and grey, tinted only by your accent colour.
+  surfaces and lines, instead of indigo and violet.
 - Settings, Theme opens a picker with a small picture of the home screen for every theme, instead
   of switching to the next theme on each press. You see what you get before you choose.
 - Settings, Accent colour opens a picker with twelve colours (six more than before) and a live
-  preview of the home screen. Custom colour offers sliders for hue, saturation and brightness, and
-  the picker warns when a colour is hard to see on the theme.
+  preview of the home screen. Custom colour offers a hex field (`#RRGGBB`) and sliders for red, green
+  and blue from 0 to 255, and the picker warns when a colour is hard to see on the theme.
+- Settings, Tile corners opens a slider from 0 to 24 dp with a live picture of the home screen,
+  instead of stepping through four fixed shapes.
+- Settings, Background opens a list with a live picture of the home screen and the dimming slider
+  below it, in 5 % steps up to 80 %, instead of stepping through both settings blind.
+- Glass switches between apps as smoothly as the other themes. Its background gradient is drawn
+  once into a picture, and on every theme the wallpaper dimming is drawn into the wallpaper itself,
+  so the TV draws one full-screen layer less per frame.
+- Menus and pickers on Glass are opaque, so nothing of the screen behind them shows through.
 
 ## [0.10.1] - 2026-11-16
 

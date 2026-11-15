@@ -42,8 +42,9 @@ LEGACY_REDIRECT_KEYS = {
     "showStockHomeTile": "showStockHomeTile",
 }
 COMPANION_KEYS = {"mode", "host", "port", "token"}
-THEMES = ("graphite", "paper", "midnight", "slate", "forest", "sand", "glass")
-LEGACY_THEMES = ("dark", "light")
+THEMES = ("graphite", "sand", "glass")
+# Removed or renamed themes, still accepted so older configs keep working.
+LEGACY_THEMES = ("dark", "light", "paper", "midnight", "slate", "forest")
 COLOR_KEYS = ("background", "surface", "text", "textMuted", "line")
 WALLPAPER_KEYS = {"enabled", "dim", "scene"}
 SCENES = ("mountains", "lake", "dunes", "forest")
