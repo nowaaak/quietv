@@ -197,8 +197,7 @@ class SettingsActivity : Activity() {
         return LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(padding, padding, padding, padding)
-            background = ThemeColors.card(palette, radius)
-            foreground = ThemeColors.outline(palette, radius, density.toInt().coerceAtLeast(1))
+            background = ThemeColors.liquid(palette, radius, density.toInt().coerceAtLeast(1))
             rows.addView(this)
         }
     }

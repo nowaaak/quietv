@@ -74,9 +74,6 @@ object ThemeColors {
         palette.surface
     }
 
-    fun outline(palette: Palette, radius: Float, width: Int): Drawable? =
-        if (palette.glass) rounded(Color.TRANSPARENT, radius, edge(palette), width) else null
-
     fun edge(palette: Palette): Int =
         if (palette.glass) Contrast.withAlpha(Color.WHITE, GLASS_EDGE_ALPHA) else palette.stroke
 
@@ -95,9 +92,16 @@ object ThemeColors {
 
     fun panel(palette: Palette, radius: Float, strokeWidth: Int): Drawable {
         if (!palette.glass) return rounded(palette.surface, radius, palette.stroke, strokeWidth)
-        val base = rounded(Contrast.withAlpha(palette.surface, GLASS_PANEL_ALPHA), radius, edge(palette), strokeWidth)
-        return LayerDrawable(arrayOf(base, sheen(radius)))
+        return LiquidGlass(radius, Contrast.withAlpha(palette.surface, GLASS_PANEL_ALPHA), rim(strokeWidth))
     }
+
+    fun liquid(palette: Palette, radius: Float, strokeWidth: Int, focusable: Boolean = false): LiquidGlass =
+        LiquidGlass(radius, surfaceFill(palette), rim(strokeWidth), focusedFill = if (focusable) palette.text else null)
+
+    fun liquidEdge(radius: Float, strokeWidth: Int): LiquidGlass =
+        LiquidGlass(radius, Color.TRANSPARENT, rim(strokeWidth), sheen = false)
+
+    private fun rim(strokeWidth: Int): Float = strokeWidth * GLASS_RIM
 
     fun pillContent(palette: Palette): ColorStateList = focusable(palette.onText, palette.text)
 
@@ -119,7 +123,8 @@ object ThemeColors {
 
     private const val GLASS_FROST = 0.5f
     private const val GLASS_FILL_ALPHA = 0x38
-    private const val GLASS_PANEL_ALPHA = 0xEB
+    private const val GLASS_PANEL_ALPHA = 0xE6
+    private const val GLASS_RIM = 1.25f
     private const val GLASS_EDGE_ALPHA = 0x38
     private const val GLASS_SHEEN_TOP_ALPHA = 0x1C
     private const val GLASS_SHEEN_BOTTOM_ALPHA = 0x03

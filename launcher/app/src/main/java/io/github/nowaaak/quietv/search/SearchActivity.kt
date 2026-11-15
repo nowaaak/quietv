@@ -41,7 +41,13 @@ class SearchActivity : Activity() {
         apps = AppCatalog(this).load(config, store.tileOrder).filter { !it.isStockHome }.sortedBy { it.label.lowercase() }
 
         val query = findViewById<EditText>(R.id.query)
-        query.backgroundTintList = ColorStateList.valueOf(ThemeColors.surfaceFill(palette))
+        if (palette.glass) {
+            val density = resources.displayMetrics.density
+            query.backgroundTintList = null
+            query.background = ThemeColors.liquid(palette, SEARCH_RADIUS_DP * density, density.toInt().coerceAtLeast(1))
+        } else {
+            query.backgroundTintList = ColorStateList.valueOf(palette.surface)
+        }
         query.setTextColor(palette.text)
         query.setHintTextColor(palette.textMuted)
         query.addTextChangedListener(object : TextWatcher {
@@ -86,5 +92,9 @@ class SearchActivity : Activity() {
     private fun open(entry: AppEntry) {
         AppLauncher.launch(this, entry)
         finish()
+    }
+
+    private companion object {
+        const val SEARCH_RADIUS_DP = 13f
     }
 }

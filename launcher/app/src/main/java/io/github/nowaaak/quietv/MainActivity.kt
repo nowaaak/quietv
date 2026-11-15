@@ -4,7 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
@@ -50,6 +53,7 @@ import io.github.nowaaak.quietv.search.SearchActivity
 import io.github.nowaaak.quietv.settings.SettingsActivity
 import io.github.nowaaak.quietv.ui.Contrast
 import io.github.nowaaak.quietv.ui.DropdownMenu
+import io.github.nowaaak.quietv.ui.LiquidGlass
 import io.github.nowaaak.quietv.ui.Palette
 import io.github.nowaaak.quietv.ui.ThemeColors
 import io.github.nowaaak.quietv.wallpaper.Scenes
@@ -96,6 +100,8 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private var assigningPkg: String? = null
     private var inputsRequested = false
     private var companionPending = false
+    private var glassBackdrop: Bitmap? = null
+    private val glassPills = mutableListOf<Pair<View, LiquidGlass>>()
     private var tileRadius = 0f
     private var wallpaperVersion = NO_WALLPAPER
     private var wallpaperSamples = IntArray(0)
@@ -312,16 +318,48 @@ class MainActivity : Activity(), TileAdapter.Listener {
         val content = ThemeColors.pillContent(palette)
         val pill = ThemeColors.pillBackground(palette)
         val hairline = density.toInt().coerceAtLeast(1)
+        glassPills.clear()
         listOf(R.id.btnSearch, R.id.btnWifi, R.id.btnInputs, R.id.btnSettings).forEach {
-            findViewById<View>(it).apply {
-                backgroundTintList = pill
-                foreground = ThemeColors.outline(palette, PILL_RADIUS_DP * density, hairline)
+            val button = findViewById<View>(it)
+            if (palette.glass) {
+                val glass = ThemeColors.liquid(palette, PILL_RADIUS_DP * density, hairline, focusable = true)
+                button.backgroundTintList = null
+                button.background = glass
+                glassPills += button to glass
+                button.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> placeBackdrop(button, glass) }
+            } else {
+                button.backgroundTintList = pill
             }
         }
         listOf(R.id.btnSearch, R.id.btnInputs, R.id.btnSettings, R.id.wifiIcon).forEach {
             findViewById<ImageView>(it).imageTintList = content
         }
         wifiLabel.setTextColor(content)
+    }
+
+    private fun refreshGlassBackdrop() {
+        if (!palette.glass || root.width == 0 || root.height == 0) return
+        val bitmap = Bitmap.createBitmap(
+            (root.width / BACKDROP_SCALE).coerceAtLeast(1),
+            (root.height / BACKDROP_SCALE).coerceAtLeast(1),
+            Bitmap.Config.ARGB_8888,
+        )
+        val canvas = Canvas(bitmap)
+        canvas.scale(1f / BACKDROP_SCALE, 1f / BACKDROP_SCALE)
+        ThemeColors.windowBackground(this, palette).apply { setBounds(0, 0, root.width, root.height) }.draw(canvas)
+        if (wallpaper.visibility == View.VISIBLE) wallpaper.draw(canvas)
+        if (scrim.visibility == View.VISIBLE) scrim.draw(canvas)
+        glassBackdrop = bitmap
+        glassPills.forEach { (view, glass) -> placeBackdrop(view, glass) }
+    }
+
+    private fun placeBackdrop(view: View, glass: LiquidGlass) {
+        val bitmap = glassBackdrop ?: return
+        if (view.width == 0) return
+        val r = Rect(0, 0, view.width, view.height)
+        root.offsetDescendantRectToMyCoords(view, r)
+        val s = BACKDROP_SCALE.toFloat()
+        glass.setBackdrop(bitmap, RectF(r.left / s, r.top / s, r.right / s, r.bottom / s))
     }
 
     private fun applyWallpaper() {
@@ -332,6 +370,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
             wallpaper.setImageDrawable(null)
             wallpaper.visibility = View.GONE
             scrim.visibility = View.GONE
+            root.post { refreshGlassBackdrop() }
             return
         }
         val version = if (scene != null) SCENE_VERSION - WallpaperConfig.SCENES.indexOf(scene) else wallpapers.version()
@@ -377,6 +416,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
             scrim.setBackgroundColor(Contrast.withAlpha(palette.background, alpha))
         }
         scrim.visibility = View.VISIBLE
+        root.post { refreshGlassBackdrop() }
     }
 
     private fun showCompanionMenu(anchor: View) {
@@ -706,6 +746,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
         const val MINUTE_MS = 60_000L
         const val NO_WALLPAPER = -1L
         const val SCENE_VERSION = -10L
+        const val BACKDROP_SCALE = 8
         val GLASS_SCRIM = listOf(1f, 0.45f, 0.25f, 0.7f, 1f)
         const val STARTUP_WINDOW_MS = 5 * 60_000L
         const val KEY_CAP_RADIUS_DP = 5f
