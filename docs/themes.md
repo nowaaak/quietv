@@ -100,9 +100,10 @@ it show through. Every particle is drawn by the graphics chip at the resolution 
 nothing is scaled up or looks washed out.
 
 It is made to stay light. It redraws at most 30 times a second and only while the home screen is in
-front: it stops as soon as an app, the screensaver or Settings opens. It stands still while you
-hold a direction key, so scrolling keeps the whole device. On TVs with little memory, and when
-animations are switched off in the developer options, it shows the particles without moving them.
+front: it stops as soon as an app, the screensaver or Settings opens. It pauses for a moment after
+every key press, so moving the focus and scrolling keep the whole device. On TVs with little memory,
+and when animations are switched off in the developer options, it shows the particles without moving
+them.
 
 ## Glass
 

@@ -577,7 +577,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.repeatCount > 0) particles.hold()
+        if (event.action == KeyEvent.ACTION_DOWN) particles.hold()
         if (event.action != KeyEvent.ACTION_DOWN || event.repeatCount != 0) return super.dispatchKeyEvent(event)
         val key = Shortcuts.keyName(event.keyCode)
         val pending = assigningPkg
