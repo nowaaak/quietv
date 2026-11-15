@@ -4,9 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.graphics.Outline
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import android.view.ViewOutlineProvider
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -22,6 +25,7 @@ import io.github.nowaaak.quietv.home.AppLauncher
 import io.github.nowaaak.quietv.home.Shortcuts
 import io.github.nowaaak.quietv.ui.Palette
 import io.github.nowaaak.quietv.ui.ThemeColors
+import io.github.nowaaak.quietv.ui.ThemePreview
 import io.github.nowaaak.quietv.wallpaper.Scenes
 import io.github.nowaaak.quietv.wallpaper.WallpaperStore
 
@@ -31,6 +35,7 @@ class SettingsActivity : Activity() {
     private lateinit var rows: LinearLayout
     private lateinit var palette: Palette
     private var group: LinearLayout? = null
+    private lateinit var preview: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         store = ConfigStore(this)
@@ -39,7 +44,19 @@ class SettingsActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         rows = findViewById(R.id.rows)
+        preview = findViewById(R.id.preview)
         findViewById<TextView>(R.id.title).setTextColor(palette.text)
+        findViewById<TextView>(R.id.subtitle).apply {
+            text = getString(R.string.settings_version, versionName())
+            setTextColor(palette.textMuted)
+        }
+        val density = resources.displayMetrics.density
+        preview.outlineProvider = object : ViewOutlineProvider() {
+            override fun getOutline(view: View, outline: Outline) {
+                outline.setRoundRect(0, 0, view.width, view.height, PREVIEW_RADIUS_DP * density)
+            }
+        }
+        preview.clipToOutline = true
     }
 
     override fun onResume() {
@@ -52,6 +69,8 @@ class SettingsActivity : Activity() {
         group = null
         val config = store.load()
         val catalog = AppCatalog(this)
+        // The picture on the left follows every change to theme, accent colour and tile corners.
+        preview.setImageDrawable(ThemePreview(palette, config.accent, config.tileRadius))
 
         section(R.string.settings_appearance)
         row(getString(R.string.settings_theme), themeName(config), rerender = false) { anchor ->
@@ -173,8 +192,10 @@ class SettingsActivity : Activity() {
         val view = layoutInflater.inflate(R.layout.item_settings_section, rows, false) as TextView
         view.setText(title)
         view.setTextColor(palette.textMuted)
+        // The list already starts below the top padding, so the first heading needs no more.
+        if (rows.childCount == 0) view.setPadding(view.paddingLeft, 0, view.paddingRight, view.paddingBottom)
         rows.addView(view)
-        group = if (palette.glass) glassGroup() else null
+        group = card()
     }
 
     private fun row(
@@ -213,14 +234,20 @@ class SettingsActivity : Activity() {
         parent.addView(view)
     }
 
-    private fun glassGroup(): LinearLayout {
+    /** Rows of one section sit on a card: a glass card on Glass, the theme's surface colour otherwise. */
+    private fun card(): LinearLayout {
         val density = resources.displayMetrics.density
         val radius = GROUP_RADIUS_DP * density
         val padding = (GROUP_PADDING_DP * density).toInt()
         return LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(padding, padding, padding, padding)
-            background = ThemeColors.edged(palette, radius, density.toInt().coerceAtLeast(1))
+            val hairline = density.toInt().coerceAtLeast(1)
+            background = if (palette.glass) {
+                ThemeColors.edged(palette, radius, hairline)
+            } else {
+                ThemeColors.rounded(palette.surface, radius, palette.stroke, hairline)
+            }
             rows.addView(this)
         }
     }
@@ -283,5 +310,6 @@ class SettingsActivity : Activity() {
         private const val MAX_COLUMNS_ON_TV = 6
         private const val GROUP_RADIUS_DP = 18f
         private const val GROUP_PADDING_DP = 5f
+        private const val PREVIEW_RADIUS_DP = 14f
     }
 }
