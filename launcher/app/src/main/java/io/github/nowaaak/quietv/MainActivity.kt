@@ -308,8 +308,12 @@ class MainActivity : Activity(), TileAdapter.Listener {
         }
         val content = ThemeColors.pillContent(palette)
         val pill = ThemeColors.pillBackground(palette)
+        val hairline = density.toInt().coerceAtLeast(1)
         listOf(R.id.btnSearch, R.id.btnWifi, R.id.btnInputs, R.id.btnSettings).forEach {
-            findViewById<View>(it).backgroundTintList = pill
+            findViewById<View>(it).apply {
+                backgroundTintList = pill
+                foreground = ThemeColors.outline(palette, PILL_RADIUS_DP * density, hairline)
+            }
         }
         listOf(R.id.btnSearch, R.id.btnInputs, R.id.btnSettings, R.id.wifiIcon).forEach {
             findViewById<ImageView>(it).imageTintList = content
@@ -687,6 +691,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
         const val NO_WALLPAPER = -1L
         const val STARTUP_WINDOW_MS = 5 * 60_000L
         const val KEY_CAP_RADIUS_DP = 5f
+        const val PILL_RADIUS_DP = 999f
         const val MAX_TILE_WIDTH_DP = 148f
         const val MIN_TILE_GAP_DP = 20f
         const val DOCK_MARGIN_DP = 64f

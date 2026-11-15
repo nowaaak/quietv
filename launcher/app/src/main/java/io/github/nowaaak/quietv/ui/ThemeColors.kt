@@ -68,8 +68,14 @@ object ThemeColors {
         return LayerDrawable(arrayOf(base, glow))
     }
 
-    fun surfaceFill(palette: Palette): Int =
-        if (palette.glass) Contrast.withAlpha(palette.surface, GLASS_FILL_ALPHA) else palette.surface
+    fun surfaceFill(palette: Palette): Int = if (palette.glass) {
+        Contrast.withAlpha(Contrast.blend(palette.surface, Color.WHITE, GLASS_FROST), GLASS_FILL_ALPHA)
+    } else {
+        palette.surface
+    }
+
+    fun outline(palette: Palette, radius: Float, width: Int): Drawable? =
+        if (palette.glass) rounded(Color.TRANSPARENT, radius, edge(palette), width) else null
 
     fun edge(palette: Palette): Int =
         if (palette.glass) Contrast.withAlpha(Color.WHITE, GLASS_EDGE_ALPHA) else palette.stroke
@@ -104,7 +110,8 @@ object ThemeColors {
     private fun focusable(focused: Int, normal: Int): ColorStateList =
         ColorStateList(arrayOf(FOCUSED, DEFAULT), intArrayOf(focused, normal))
 
-    private const val GLASS_FILL_ALPHA = 0x99
+    private const val GLASS_FROST = 0.5f
+    private const val GLASS_FILL_ALPHA = 0x38
     private const val GLASS_EDGE_ALPHA = 0x38
     private const val GLASS_SHEEN_TOP_ALPHA = 0x1C
     private const val GLASS_SHEEN_BOTTOM_ALPHA = 0x03
