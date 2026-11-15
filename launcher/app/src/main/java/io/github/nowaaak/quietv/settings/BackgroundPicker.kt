@@ -70,7 +70,9 @@ class BackgroundPicker(
         for (choice in choices) {
             val row = choiceRow(list, choice)
             if (choice == current) focus = row
-            list.addView(row, LinearLayout.LayoutParams(px(LIST_WIDTH_DP), ViewGroup.LayoutParams.WRAP_CONTENT))
+            // Keep the row height from its layout, only the width changes.
+            row.layoutParams = row.layoutParams.apply { width = px(LIST_WIDTH_DP) }
+            list.addView(row)
         }
         top.addView(list, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
             marginStart = px(GAP_DP)
