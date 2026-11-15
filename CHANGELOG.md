@@ -27,6 +27,9 @@ and the project uses [Semantic Versioning](https://semver.org).
   once into a picture, and on every theme the wallpaper dimming is drawn into the wallpaper itself,
   so the TV draws one full-screen layer less per frame.
 - Menus and pickers on Glass are opaque, so nothing of the screen behind them shows through.
+- Settings has a new layout: the title and a live picture of the home screen stay on the left, the
+  settings scroll on the right in cards on every theme, with room above and below and soft edges
+  while scrolling, so the focused row never sits at the edge of the screen.
 - On Glass the wallpaper dimming always shows. The darkening that keeps text readable now only
   applies behind the clock and the tiles, the middle of the screen follows the dimming setting. Before,
   a bright picture like Dunes needed more darkening than the setting allowed, so it changed nothing.
