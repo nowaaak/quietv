@@ -92,14 +92,19 @@ object ThemeColors {
 
     fun panel(palette: Palette, radius: Float, strokeWidth: Int): Drawable {
         if (!palette.glass) return rounded(palette.surface, radius, palette.stroke, strokeWidth)
-        return LiquidGlass(radius, Contrast.withAlpha(palette.surface, GLASS_PANEL_ALPHA), rim(strokeWidth))
+        return LightEdge(radius, Contrast.withAlpha(palette.surface, GLASS_PANEL_ALPHA), rim(strokeWidth))
     }
 
-    fun liquid(palette: Palette, radius: Float, strokeWidth: Int, focusable: Boolean = false): LiquidGlass =
-        LiquidGlass(radius, surfaceFill(palette), rim(strokeWidth), focusedFill = if (focusable) palette.text else null)
+    fun edged(palette: Palette, radius: Float, strokeWidth: Int): Drawable =
+        LightEdge(radius, surfaceFill(palette), rim(strokeWidth))
 
-    fun liquidEdge(radius: Float, strokeWidth: Int): LiquidGlass =
-        LiquidGlass(radius, Color.TRANSPARENT, rim(strokeWidth), sheen = false)
+    fun edgeOnly(radius: Float, strokeWidth: Int): Drawable = LightEdge(radius, Color.TRANSPARENT, rim(strokeWidth))
+
+    fun halo(palette: Palette, accent: Int, density: Float): Drawable =
+        FocusHalo(palette.text, Contrast.withAlpha(accent, HALO_ALPHA), HALO_DP * density)
+
+    fun topContent(palette: Palette): ColorStateList =
+        if (palette.glass) focusable(palette.onText, Contrast.withAlpha(palette.text, ICON_REST_ALPHA)) else pillContent(palette)
 
     private fun rim(strokeWidth: Int): Float = strokeWidth * GLASS_RIM
 
@@ -122,8 +127,11 @@ object ThemeColors {
         ColorStateList(arrayOf(FOCUSED, DEFAULT), intArrayOf(focused, normal))
 
     private const val GLASS_FROST = 0.5f
-    private const val GLASS_FILL_ALPHA = 0x38
-    private const val GLASS_PANEL_ALPHA = 0xE6
+    private const val GLASS_FILL_ALPHA = 0x1F
+    private const val GLASS_PANEL_ALPHA = 0xF2
+    private const val HALO_ALPHA = 0x59
+    private const val HALO_DP = 3f
+    private const val ICON_REST_ALPHA = 0xD9
     private const val GLASS_RIM = 1.25f
     private const val GLASS_EDGE_ALPHA = 0x38
     private const val GLASS_SHEEN_TOP_ALPHA = 0x1C
