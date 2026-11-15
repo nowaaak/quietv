@@ -54,6 +54,15 @@
     <string name="scene_forest">Orman</string>
     <string name="settings_wallpaper_dim">Duvar kâğıdını karart</string>
     <string name="settings_accent">Vurgu rengi</string>
+    <string name="picker_theme_title">Tema seçin</string>
+    <string name="picker_accent_title">Vurgu rengi seçin</string>
+    <string name="picker_hint">Seçmek için OK, iptal için Geri</string>
+    <string name="accent_custom">Özel renk</string>
+    <string name="accent_hue">Ton</string>
+    <string name="accent_saturation">Doygunluk</string>
+    <string name="accent_brightness">Parlaklık</string>
+    <string name="accent_apply">Bu rengi kullan</string>
+    <string name="accent_low_contrast">Bu temada zor görünür</string>
     <string name="settings_columns">Satır başına kutucuk</string>
     <string name="settings_apps">Uygulamalar</string>
     <string name="settings_reset_order">Kutucuk sırasını sıfırla</string>

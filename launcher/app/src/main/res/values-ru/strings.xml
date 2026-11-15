@@ -54,6 +54,15 @@
     <string name="scene_forest">Лес</string>
     <string name="settings_wallpaper_dim">Затемнение обоев</string>
     <string name="settings_accent">Цвет акцента</string>
+    <string name="picker_theme_title">Выберите тему</string>
+    <string name="picker_accent_title">Выберите цвет акцента</string>
+    <string name="picker_hint">OK — выбрать, Назад — отмена</string>
+    <string name="accent_custom">Свой цвет</string>
+    <string name="accent_hue">Оттенок</string>
+    <string name="accent_saturation">Насыщенность</string>
+    <string name="accent_brightness">Яркость</string>
+    <string name="accent_apply">Использовать этот цвет</string>
+    <string name="accent_low_contrast">Плохо видно в этой теме</string>
     <string name="settings_columns">Плиток в ряду</string>
     <string name="settings_apps">Приложения</string>
     <string name="settings_reset_order">Сбросить порядок плиток</string>

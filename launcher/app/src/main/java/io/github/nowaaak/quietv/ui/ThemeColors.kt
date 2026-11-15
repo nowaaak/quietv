@@ -12,6 +12,9 @@ import io.github.nowaaak.quietv.config.LauncherConfig
 
 object ThemeColors {
 
+    // Pairs: the same colour for dark and for light themes. The first one is the default. Every shade
+    // keeps 4.5:1 against the backgrounds of its themes (PaletteTest). Keep in sync with
+    // cli/src/quietv/themes.py. The accent picker sorts them by hue.
     val DARK_ACCENTS = intArrayOf(
         LauncherConfig.DEFAULT_ACCENT,
         0xFF7DD3FC.toInt(),
@@ -19,6 +22,12 @@ object ThemeColors {
         0xFFFCA5A5.toInt(),
         0xFFC4B5FD.toInt(),
         0xFFF3F4F6.toInt(),
+        0xFFFDBA74.toInt(),
+        0xFFBEF264.toInt(),
+        0xFF5EEAD4.toInt(),
+        0xFFA5B4FC.toInt(),
+        0xFFF0ABFC.toInt(),
+        0xFFF9A8D4.toInt(),
     )
 
     val LIGHT_ACCENTS = intArrayOf(
@@ -28,18 +37,18 @@ object ThemeColors {
         0xFFB91C1C.toInt(),
         0xFF6D28D9.toInt(),
         0xFF15171C.toInt(),
+        0xFF9A3412.toInt(),
+        0xFF3F6212.toInt(),
+        0xFF0F766E.toInt(),
+        0xFF4338CA.toInt(),
+        0xFFA21CAF.toInt(),
+        0xFFBE185D.toInt(),
     )
 
     private val FOCUSED = intArrayOf(android.R.attr.state_focused)
     private val DEFAULT = intArrayOf()
 
     fun accents(light: Boolean): IntArray = if (light) LIGHT_ACCENTS else DARK_ACCENTS
-
-    fun nextAccent(light: Boolean, current: Int): Int {
-        val list = accents(light)
-        val index = list.indexOf(current)
-        return list[(index + 1) % list.size]
-    }
 
     fun accentForTheme(current: Int, fromLight: Boolean, toLight: Boolean): Int {
         val index = accents(fromLight).indexOf(current)

@@ -17,8 +17,21 @@ quietv theme apply midnight
 | `sand` | Light, beige |
 | `glass` | Dark, in the style of Apple TV, see [Glass](#glass) |
 
+On the TV, Settings, Theme shows every theme as a small picture of the home screen, in its own
+colours and with your accent colour and tile corners. The dot marks the theme in use. OK picks the
+focused theme, Back leaves everything as it was.
+
 Switching themes keeps your accent colour. Between a dark and a light theme it picks the matching
 shade of the same colour.
+
+## Accent colour
+
+Settings, Accent colour offers twelve colours. Each has a shade for dark and one for light themes,
+and both are easy to read on every bundled theme. While you move between them, the picture above
+shows the home screen with the focused colour. Custom colour opens sliders for hue, saturation and
+brightness: left and right change the value, holding the key speeds it up. If a colour is hard to
+see on your theme, the picker says so, but lets you keep it. From your computer, set `accent` in the
+[config](configuration.md).
 
 ## Your own theme
 

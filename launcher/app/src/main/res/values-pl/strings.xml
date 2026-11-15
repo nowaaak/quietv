@@ -54,6 +54,15 @@
     <string name="scene_forest">Las</string>
     <string name="settings_wallpaper_dim">Przyciemnienie tapety</string>
     <string name="settings_accent">Kolor akcentu</string>
+    <string name="picker_theme_title">Wybierz motyw</string>
+    <string name="picker_accent_title">Wybierz kolor akcentu</string>
+    <string name="picker_hint">OK wybiera, Wstecz anuluje</string>
+    <string name="accent_custom">Własny kolor</string>
+    <string name="accent_hue">Odcień</string>
+    <string name="accent_saturation">Nasycenie</string>
+    <string name="accent_brightness">Jasność</string>
+    <string name="accent_apply">Użyj tego koloru</string>
+    <string name="accent_low_contrast">Słabo widoczny w tym motywie</string>
     <string name="settings_columns">Kafelki w rzędzie</string>
     <string name="settings_apps">Aplikacje</string>
     <string name="settings_reset_order">Przywróć kolejność kafelków</string>
