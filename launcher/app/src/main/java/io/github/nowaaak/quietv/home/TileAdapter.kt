@@ -107,12 +107,12 @@ class TileAdapter(
 
         init {
             card.background = ThemeColors.card(palette, cornerRadius)
-            card.foreground = ThemeColors.rounded(
-                Color.TRANSPARENT,
-                cornerRadius,
-                ThemeColors.edge(palette),
-                density.toInt().coerceAtLeast(1),
-            )
+            val hairline = density.toInt().coerceAtLeast(1)
+            card.foreground = if (palette.glass) {
+                ThemeColors.liquidEdge(cornerRadius, hairline)
+            } else {
+                ThemeColors.rounded(Color.TRANSPARENT, cornerRadius, ThemeColors.edge(palette), hairline)
+            }
             label.setTextColor(palette.text)
             name.setTextColor(palette.text)
             card.layoutParams = (card.layoutParams as FrameLayout.LayoutParams).apply {
@@ -184,7 +184,7 @@ class TileAdapter(
         private val SECTION_CHANGED = Any()
         const val FOCUS_SCALE = 1.06f
         const val GLASS_FOCUS_SCALE = 1.1f
-        const val GLASS_LIFT_DP = 18f
+        const val GLASS_LIFT_DP = 10f
         const val NAME_GAP_DP = 9f
         const val NAME_HEIGHT_DP = 22f
         const val VERTICAL_PADDING_DP = 8f

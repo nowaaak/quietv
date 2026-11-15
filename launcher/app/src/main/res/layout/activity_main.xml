@@ -116,7 +116,8 @@
         android:paddingStart="56dp"
         android:paddingEnd="56dp"
         android:paddingTop="32dp"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        android:clipChildren="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -198,9 +199,9 @@
                 <LinearLayout
                     android:id="@+id/btnWifi"
                     android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:paddingStart="14dp"
-                    android:paddingEnd="16dp"
+                    android:layout_height="36dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="14dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:background="@drawable/pill_bg"
@@ -210,8 +211,8 @@
 
                     <ImageView
                         android:id="@+id/wifiIcon"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:src="@drawable/ic_wifi"
                         android:duplicateParentState="true"
                         android:contentDescription="@null" />
@@ -220,10 +221,10 @@
                         android:id="@+id/wifiLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="9dp"
+                        android:layout_marginStart="8dp"
                         android:text="@string/wifi"
                         android:duplicateParentState="true"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         android:fontFamily="@font/geist"
                         android:fontVariationSettings="'wght' 500"
                         android:singleLine="true" />
@@ -256,7 +257,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/grid"
