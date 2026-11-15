@@ -13,13 +13,6 @@
         android:importantForAccessibility="no"
         android:contentDescription="@null" />
 
-    <io.github.nowaaak.quietv.wallpaper.ParticleView
-        android:id="@+id/particles"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:importantForAccessibility="no" />
-
     <View
         android:id="@+id/scrim"
         android:layout_width="match_parent"

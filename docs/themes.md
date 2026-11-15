@@ -86,24 +86,11 @@ setting.
 
 ## Background
 
-On the TV, Settings, Background switches between the theme's colour, four built-in landscapes, light
-particles and your own picture, once you have set one: Mountains (dusk), Mountain lake (night), Dunes (sunset) and
+On the TV, Settings, Background switches between the theme's colour, four built-in landscapes and
+your own picture, once you have set one: Mountains (dusk), Mountain lake (night), Dunes (sunset) and
 Forest (morning mist). The landscapes are drawn by the launcher, no download, no photo. A second
 row sets the dimming. In the config they are `wallpaper.scene`: `"mountains"`, `"lake"`, `"dunes"`
 or `"forest"`, with `wallpaper.enabled` set to `true`. An empty scene shows your own picture.
-
-### Light particles
-
-Light particles (`"particles"`) is the one moving background. Large soft lights in your accent
-colour and small sparks drift slowly over the theme's colour. It suits Glass best, whose tiles let
-it show through. Every particle is drawn by the graphics chip at the resolution of the screen, so
-nothing is scaled up or looks washed out.
-
-It is made to stay light. It redraws at most 30 times a second and only while the home screen is in
-front: it stops as soon as an app, the screensaver or Settings opens. It pauses for a moment after
-every key press, so moving the focus and scrolling keep the whole device. On TVs with little memory,
-and when animations are switched off in the developer options, it shows the particles without moving
-them.
 
 ## Glass
 

@@ -42,7 +42,7 @@ More in [examples/](examples/).
 | `colors` | `{}` | Your own colours on top of the theme, each as `#RRGGBB`: `background`, `surface` (tiles, menus), `text`, `textMuted` (clock date, hints, labels) and `line`. Leave a key out to keep the theme's colour. See [themes.md](themes.md). |
 | `tileRadius` | `14` | Tile corner radius in dp, 0 (square) to 24. |
 | `wallpaper.enabled` | `false` | Show the wallpaper image. Set one with `quietv theme wallpaper`. Without an image this does nothing. |
-| `wallpaper.scene` | `""` | A built-in landscape instead of your picture: `"mountains"`, `"lake"`, `"dunes"` or `"forest"`, or `"particles"` for slowly drifting lights, see [themes.md](themes.md#light-particles). Needs `wallpaper.enabled`. Empty shows the picture set with `quietv theme wallpaper`. `wallpaper.dim` does not apply to particles. |
+| `wallpaper.scene` | `""` | A built-in landscape instead of your picture: `"mountains"`, `"lake"`, `"dunes"` or `"forest"`. Needs `wallpaper.enabled`. Empty shows the picture set with `quietv theme wallpaper`. |
 | `wallpaper.dim` | `30` | How much the wallpaper is darkened (or lightened on a light theme), 0 to 80 percent. quietv dims more if text would be hard to read. |
 | `liveTvPackage` | `""` | The TV's tuner app, offered at the end of the Inputs menu. Empty hides the entry. HDMI entries open in this app first, so no "Open with" choice appears. |
 | `inputsKey` | `false` | Answer the remote's Input key with the quietv Inputs menu. For TVs whose Input key does nothing once the stock launcher is disabled. |
