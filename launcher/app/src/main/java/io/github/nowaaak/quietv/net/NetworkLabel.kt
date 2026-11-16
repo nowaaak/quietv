@@ -4,9 +4,14 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
+import androidx.annotation.DrawableRes
 import io.github.nowaaak.quietv.R
 
-data class NetworkStatus(val label: String, val online: Boolean)
+data class NetworkStatus(
+    val label: String,
+    val online: Boolean,
+    @DrawableRes val icon: Int = R.drawable.ic_wifi,
+)
 
 object NetworkLabel {
 
@@ -15,7 +20,7 @@ object NetworkLabel {
         val caps = cm?.activeNetwork?.let { cm.getNetworkCapabilities(it) }
             ?: return NetworkStatus(context.getString(R.string.offline), false)
         if (caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-            return NetworkStatus(context.getString(R.string.ethernet), true)
+            return NetworkStatus(context.getString(R.string.ethernet), true, R.drawable.ic_lan)
         }
         if (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
             return NetworkStatus(ssid(context) ?: context.getString(R.string.wifi), true)

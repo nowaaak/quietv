@@ -52,6 +52,6 @@ the launcherx-before-setupwraith restore order (issue #3578), the Private DNS no
 | What | Where | Licence |
 |---|---|---|
 | Geist typeface, by Vercel and basement.studio | `launcher/app/src/main/res/font/geist.ttf` | SIL Open Font License 1.1, see `launcher/FONT-LICENSE-OFL.txt` |
-| Material icons (Wi-Fi, settings, input, AV, live TV, search, dialpad), by Google | `launcher/app/src/main/res/drawable/ic_*.xml` | Apache License 2.0 |
+| Material icons (Wi-Fi, LAN, settings, input, AV, live TV, search, dialpad), by Google | `launcher/app/src/main/res/drawable/ic_*.xml` | Apache License 2.0 |
 | adb-shell, by Jeff Irion | dependency of `cli/` | Apache License 2.0 |
 | AndroidX RecyclerView and DynamicAnimation, by Google | dependencies of the launcher | Apache License 2.0 |

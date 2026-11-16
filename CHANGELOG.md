@@ -5,6 +5,10 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+
+- The network button shows a LAN icon on a wired connection instead of the Wi-Fi icon.
+
 ## [0.10.0] - 2026-11-15
 
 ### Added
