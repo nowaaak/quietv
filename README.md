@@ -19,11 +19,11 @@ and replaces the stock home screen with a small, fast launcher: your apps, your 
 |---|---|---|
 | ![App grid](docs/screenshots/apps.png) | ![Tile menu](docs/screenshots/tile-menu.png) | ![Inputs menu](docs/screenshots/inputs.png) |
 
-| Settings | Paper theme |
+| Settings | Themes |
 |---|---|
-| ![Settings](docs/screenshots/settings.png) | ![Paper theme](docs/screenshots/paper.png) |
+| ![Settings](docs/screenshots/settings.png) | ![Theme picker](docs/screenshots/themes.png) |
 
-Screenshots from a CHiQ AI PONT (Android TV 11), taken with `quietv screenshot`.
+Screenshots from a CHiQ AI PONT (Android TV 11) and a Fire TV stick, taken with `quietv screenshot`.
 
 ## Quick start
 
@@ -76,9 +76,11 @@ No computer? See [docs/phone-install.md](docs/phone-install.md).
 - Inputs menu with HDMI ports, AV and Live TV through the TV input framework. It remembers the last one.
 - Search your apps with the remote. Number and colour keys open your favourite apps.
 - A clock screensaver that moves a little every minute: `quietv screensaver on`.
-- Six themes, your own colours, tile corners and an optional wallpaper that stays readable.
+- Three themes (Graphite, Sand, Glass), your own colours, tile corners and an optional wallpaper that
+  stays readable.
   [Themes](docs/themes.md).
-- Settings on the TV: theme, accent colour, tile corners, tiles per row, wallpaper, hidden apps.
+- Settings on the TV, in categories: theme, accent colour (presets, or any colour by hex code or red,
+  green and blue), tile corners and background with a live preview, tiles per row, hidden apps.
 - Clock, date and greeting in [Geist](https://vercel.com/font). English, German, French, Spanish, Italian, Dutch, Polish, Portuguese, Russian, Turkish and Arabic, with right-to-left layouts.
 
 Everything is configurable on the TV. To set up many TVs the same way, keep a JSON file and push it:

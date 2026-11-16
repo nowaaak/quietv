@@ -10,7 +10,7 @@ quietv config push my-tv.json     # apply and bring the launcher to the front
 ```
 
 `push` replaces the whole config. Keys you leave out fall back to their defaults. Tile order is stored
-separately and survives a push. Reset it in Settings.
+separately and survives a push. Reset it in Settings, Apps.
 
 ## Example
 

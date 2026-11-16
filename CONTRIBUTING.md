@@ -40,6 +40,12 @@ quietv install --apk app/build/outputs/apk/debug/app-debug.apk
 
 You need JDK 17 and the Android SDK with platform 36 and build tools 36.
 
+CI uploads the debug APK of every run as the artifact `quietv-debug`. If the repository secret
+`QUIETV_DEBUG_KEYSTORE_BASE64` is set, CI signs debug builds with that key (a base64 PKCS12 keystore
+with the alias `androiddebugkey` and the password `android`), so a newer CI build installs over an
+older one with `quietv update --apk`. Without the secret, as in forks, every run makes its own key
+and a new build needs `adb uninstall` first. Debug and release builds always have different keys.
+
 Ideas that fit: themes, a screensaver, app search, translations, remote key shortcuts.
 Ideas that do not fit: recommendation rows, content feeds, ads, telemetry.
 
