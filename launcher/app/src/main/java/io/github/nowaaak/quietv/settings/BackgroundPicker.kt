@@ -1,10 +1,10 @@
 package io.github.nowaaak.quietv.settings
 
 import android.app.Activity
-import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Outline
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.view.View
 import android.view.ViewGroup
@@ -77,7 +77,7 @@ class BackgroundPicker(
         top.addView(list, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
             marginStart = px(GAP_DP)
         })
-        column.addView(top)
+        column.addView(top, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT))
 
         dimRow = SliderRow(
             activity, column, palette, activity.getString(R.string.settings_wallpaper_dim),
@@ -108,7 +108,7 @@ class BackgroundPicker(
         row.findViewById<View>(R.id.swatch).apply {
             // A dot marks the background in use.
             visibility = if (choice == current) View.VISIBLE else View.INVISIBLE
-            backgroundTintList = ColorStateList.valueOf(config.accent)
+            (background.mutate() as GradientDrawable).setColor(config.accent)
         }
         row.setOnFocusChangeListener { _, focused ->
             if (focused && selected != choice) {
