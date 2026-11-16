@@ -76,6 +76,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
     private lateinit var heroEyebrow: TextView
     private lateinit var heroLine: View
     private lateinit var greeting: TextView
+    private lateinit var wifiIcon: ImageView
     private lateinit var wifiLabel: TextView
     private lateinit var wifiDot: View
     private lateinit var wallpaper: ImageView
@@ -132,6 +133,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
         heroEyebrow = findViewById(R.id.heroEyebrow)
         heroLine = findViewById(R.id.heroLine)
         greeting = findViewById(R.id.greeting)
+        wifiIcon = findViewById(R.id.wifiIcon)
         wifiLabel = findViewById(R.id.wifiLabel)
         wifiDot = findViewById(R.id.wifiDot)
         grid = findViewById(R.id.grid)
@@ -697,6 +699,7 @@ class MainActivity : Activity(), TileAdapter.Listener {
 
     private fun updateNetwork() {
         val status = NetworkLabel.read(this)
+        wifiIcon.setImageResource(status.icon)
         wifiLabel.text = status.label
         wifiDot.visibility = if (status.online) View.VISIBLE else View.GONE
     }
