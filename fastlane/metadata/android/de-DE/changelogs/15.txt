@@ -1,0 +1,1 @@
+Bei Kabelverbindung zeigt der Netzwerk-Button ein LAN-Symbol.

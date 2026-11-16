@@ -1,0 +1,1 @@
+The network button shows a LAN icon on wired connections.
