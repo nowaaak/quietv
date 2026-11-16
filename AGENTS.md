@@ -66,4 +66,6 @@ with it.
 - Everything a user might change belongs in the runtime config, not in code or resources.
 - The config format is implemented twice: `launcher/.../config/LauncherConfig.kt` and `cli/src/quietv/config.py`.
   Change both together and update [docs/configuration.md](docs/configuration.md).
+- Keep your own TVs, their addresses and which ones may be used for tests in `CLAUDE.local.md` in the
+  repository root. Git ignores it, and Claude Code reads it in every local session.
 - Commit messages follow Conventional Commits: `feat: ...`, `fix: ...`, `docs: ...`.

@@ -22,3 +22,6 @@ dist/
 
 backups/
 *.apk
+
+# Your own devices and test rules for Claude Code, see AGENTS.md
+CLAUDE.local.md
