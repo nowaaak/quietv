@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Outline
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.provider.Settings
 import android.view.KeyEvent
@@ -351,7 +352,7 @@ class SettingsActivity : Activity() {
         if (swatch == null) {
             swatchView.visibility = View.GONE
         } else {
-            swatchView.backgroundTintList = ColorStateList.valueOf(swatch)
+            (swatchView.background.mutate() as GradientDrawable).setColor(swatch)
         }
         view.isFocusable = focusable
         view.isClickable = focusable
