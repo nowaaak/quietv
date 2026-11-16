@@ -5,6 +5,8 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-11-16
+
 ### Removed
 
 - Themes Paper, Midnight, Slate and Forest. Configs and theme files that name them keep working:

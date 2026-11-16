@@ -1,0 +1,1 @@
+New Settings with categories and a live preview, pickers for theme, accent colour, tile corners and background. Three themes: Graphite, Sand and Glass.
