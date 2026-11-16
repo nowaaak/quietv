@@ -14,15 +14,16 @@ and the project uses [Semantic Versioning](https://semver.org).
 
 - Theme `glass` is now a neutral graphite: near black with a soft white light at the top left, grey
   surfaces and lines, instead of indigo and violet.
-- Settings, Appearance, Theme opens a picker with a small picture of the home screen for every theme, instead
-  of switching to the next theme on each press. You see what you get before you choose.
-- Settings, Appearance, Accent colour opens a picker with twelve colours (six more than before) and a live
-  preview of the home screen. Custom colour offers a hex field (`#RRGGBB`) and sliders for red, green
-  and blue from 0 to 255, and the picker warns when a colour is hard to see on the theme.
-- Settings, Appearance, Tile corners opens a slider from 0 to 24 dp with a live picture of the home screen,
-  instead of stepping through four fixed shapes.
-- Settings, Appearance, Background opens a list with a live picture of the home screen and the dimming slider
-  below it, in 5 % steps up to 80 %, instead of stepping through both settings blind.
+- Settings, Appearance, Theme opens a picker with a small picture of the home screen for every
+  theme, instead of switching to the next theme on each press. You see what you get before you
+  choose.
+- Settings, Appearance, Accent colour opens a picker with twelve colours (six more than before) and
+  a live preview of the home screen. Custom colour offers a hex field (`#RRGGBB`) and sliders for
+  red, green and blue from 0 to 255, and the picker warns when a colour is hard to see on the theme.
+- Settings, Appearance, Tile corners opens a slider from 0 to 24 dp with a live picture of the home
+  screen, instead of stepping through four fixed shapes.
+- Settings, Appearance, Background opens a list with a live picture of the home screen and the
+  dimming slider below it, in 5 % steps up to 80 %, instead of stepping through both settings blind.
 - Glass switches between apps as smoothly as the other themes. Its background gradient is drawn
   once into a picture, and on every theme the wallpaper dimming is drawn into the wallpaper itself,
   so the TV draws one full-screen layer less per frame.
